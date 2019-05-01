@@ -1,0 +1,12 @@
+useGas
+getCaller
+getCallDataSize
+callDataCopy
+revert
+finish
+storageStore
+storageLoad
+printMemHex
+printStorageHex
+
+mul256
