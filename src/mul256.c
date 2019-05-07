@@ -97,6 +97,10 @@ void mul256(uint32_t *u_in, uint32_t* v_in, uint32_t* out){
   out[1]=w[1];
   out[2]=w[2];
   out[3]=w[3];
+  out[4]=w[4];
+  out[5]=w[5];
+  out[6]=w[6];
+  out[7]=w[7];
 
   //return out;
 
@@ -107,8 +111,6 @@ void mul256(uint32_t *u_in, uint32_t* v_in, uint32_t* out){
 i32ptr x[] = {0,0,0,0,0,0,0,0};
 i32ptr y[] = {0,0,0,0,0,0,0,0};
 i32ptr out[] = {0,0,0,0,0,0,0,0};
-//{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-
 
 // ewasm entry point
 void _main(){

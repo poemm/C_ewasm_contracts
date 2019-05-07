@@ -86,8 +86,8 @@ void printMemHex(i32ptr* offset, i32 length);
 void printStorageHex(i32ptr* key);
 
 // testing experimental
-#define BIGINT false
-#if BIGINT
+#define BIGINT true
+#if BIGINT==true
 void mul256(i32ptr* x, i32ptr* y, i32ptr* out);
 #endif
 

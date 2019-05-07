@@ -43,8 +43,8 @@
 export PROJECT := sha1_rhash
 
 # paths to tools
-export LLVM := /home/user/repos/llvm9/llvm-project/build/bin/
-#export LLVM := llvm-project/build/bin
+#export LLVM := /home/user/repos/llvm9/llvm-project/build/bin/
+export LLVM := llvm-project/build/bin
 export WABT_DIR := wabt/build/
 export PYWEBASSEMBLY_DIR := pywebassembly/
 export BINARYEN_DIR := binaryen/build/bin/
@@ -52,6 +52,7 @@ export BINARYEN_DIR := binaryen/build/bin/
 export OPTIMIZATION_CLANG := -O0	#-Oz, -Os, -O0, -O1, -O2, or -O3
 export OPTIMIZATION_OPT := -O0		#-Oz, -Os, -O0, -O1, -O2, or -O3
 export OPTIMIZATION_LLC := -O0		#          -O0, -O1, -O2, or -O3
+export OPTIMIZATION_WASM_LD := -O0	#          -O0, -O1, or -O2 # see docs, this has to do with string merging, dont think it affects wasm
 export OPTIMIZATION_BINARYEN := -O0	#-Oz, -Os, -O0, -O1, -O2, or -O3
 
 
@@ -138,8 +139,14 @@ wasm-dis: wasm-dis-check
 # postprocess imports/exports and size reductions
 ewasmify: ewasmify-check wasm2wat-check wasm-dis-check
 	PYTHONPATH="$(PYTHONPATH):$(PYWEBASSEMBLY_DIR)" python3 $(PYWEBASSEMBLY_DIR)examples/ewasmify.py $(PROJECT).wasm
-	$(WABT_DIR)wasm2wat $(PROJECT)_ewasmified.wasm > $(PROJECT)_ewasmified.wat
 	$(BINARYEN_DIR)wasm-opt ${OPTIMIZATION_BINARYEN} $(PROJECT)_ewasmified.wasm -o $(PROJECT)_ewasmified.wasm
+	$(WABT_DIR)wasm2wat $(PROJECT)_ewasmified.wasm > $(PROJECT)_ewasmified.wat
+	# next, some extra steps to transform import name for new bigint module, TODO: automate this with pywebassembly
+ifeq ($(PROJECT), mul256_bigint)
+	$(WABT_DIR)wasm2wat mul256_bigint_ewasmified.wasm > mul256_bigint_ewasmified.wat
+	sed -i -e 's/"ethereum" "mul256"/"bigint" "mul256"/g' mul256_bigint_ewasmified.wat
+	$(WABT_DIR)wat2wasm mul256_bigint_ewasmified.wat
+endif
 
 
 
@@ -155,7 +162,7 @@ wasm/blake2b_floodyberry.wasm: src/blake2b_floodyberry.c
 	OPTIMIZATION_CLANG=-O3 \
 	OPTIMIZATION_OPT=-O3 \
 	OPTIMIZATION_LLC=-O3 \
-	OPTIMIZATION_BINARYEN=-O3
+	OPTIMIZATION_BINARYEN=-O0
 
 wasm/blake2b_mjosref.wasm: src/blake2b_mjosref.c
 	make project PROJECT=blake2b_mjosref \
@@ -170,14 +177,14 @@ wasm/blake2b_openssl.wasm: src/blake2b_openssl.c
 	OPTIMIZATION_CLANG=-O3 \
 	OPTIMIZATION_OPT=-O3 \
 	OPTIMIZATION_LLC=-O3 \
-	OPTIMIZATION_BINARYEN=-O3
+	OPTIMIZATION_BINARYEN=-O0
 
 wasm/blake2b_ref.wasm: src/blake2b_ref.c
 	make project PROJECT=blake2b_ref \
 	OPTIMIZATION_CLANG=-O3 \
 	OPTIMIZATION_OPT=-O3 \
 	OPTIMIZATION_LLC=-O3 \
-	OPTIMIZATION_BINARYEN=-O3
+	OPTIMIZATION_BINARYEN=-O0
 
 wasm/blake2b_ref_small.wasm: src/blake2b_ref_small.c
 	make project PROJECT=blake2b_ref_small \
@@ -192,35 +199,43 @@ wasm/ed25519verify_tweetnacl.wasm: src/ed25519verify_tweetnacl.c
 	OPTIMIZATION_CLANG=-O3 \
 	OPTIMIZATION_OPT=-O3 \
 	OPTIMIZATION_LLC=-O3 \
-	OPTIMIZATION_BINARYEN=-O3
+	OPTIMIZATION_BINARYEN=-O0
 
 wasm/keccak256_rhash.wasm: src/keccak256_rhash.c
 	make project PROJECT=keccak256_rhash \
 	OPTIMIZATION_CLANG=-O3 \
 	OPTIMIZATION_OPT=-O3 \
 	OPTIMIZATION_LLC=-O3 \
-	OPTIMIZATION_BINARYEN=-O3
+	OPTIMIZATION_BINARYEN=-O0
 
 wasm/mul256.wasm: src/mul256.c
 	make project PROJECT=mul256 \
 	OPTIMIZATION_CLANG=-O3 \
 	OPTIMIZATION_OPT=-O3 \
 	OPTIMIZATION_LLC=-O3 \
+	OPTIMIZATION_BINARYEN=-O0
+
+wasm/mul256_bigint.wasm: src/mul256_bigint.c
+	make project PROJECT=mul256 \
+	OPTIMIZATION_CLANG=-O3 \
+	OPTIMIZATION_OPT=-O3 \
+	OPTIMIZATION_LLC=-O3 \
 	OPTIMIZATION_BINARYEN=-O3
+	
 
 wasm/polynomial_evaluation_32bit.wasm: src/polynomial_evaluation_32bit.c
 	make project PROJECT=polynomial_evaluation_32bit \
 	OPTIMIZATION_CLANG=-O3 \
 	OPTIMIZATION_OPT=-O3 \
 	OPTIMIZATION_LLC=-O3 \
-	OPTIMIZATION_BINARYEN=-O3
+	OPTIMIZATION_BINARYEN=-O0
 
 wasm/sha1_bcon.wasm: src/sha1_bcon.c
 	make project PROJECT=sha1_bcon \
 	OPTIMIZATION_CLANG=-O3 \
 	OPTIMIZATION_OPT=-O3 \
 	OPTIMIZATION_LLC=-O3 \
-	OPTIMIZATION_BINARYEN=-O3
+	OPTIMIZATION_BINARYEN=-O0
 
 wasm/sha1_bcon_small.wasm: src/sha1_bcon_small.c
 	make project PROJECT=sha1_bcon_small \
@@ -230,12 +245,19 @@ wasm/sha1_bcon_small.wasm: src/sha1_bcon_small.c
 	OPTIMIZATION_BINARYEN=-O3
 	# these optimization flags produced the smallest wasm, there were some ties
 
+wasm/sha1_ref.wasm: src/sha1_ref.c
+	make project PROJECT=sha1_ref \
+	OPTIMIZATION_CLANG=-O3 \
+	OPTIMIZATION_OPT=-O3 \
+	OPTIMIZATION_LLC=-O3 \
+	OPTIMIZATION_BINARYEN=-O0
+
 wasm/sha1_rhash.wasm: src/sha1_rhash.c
 	make project PROJECT=sha1_rhash \
 	OPTIMIZATION_CLANG=-O3 \
 	OPTIMIZATION_OPT=-O3 \
 	OPTIMIZATION_LLC=-O3 \
-	OPTIMIZATION_BINARYEN=-O3
+	OPTIMIZATION_BINARYEN=-O0
 
 wasm/sha1_rhash_small.wasm: src/sha1_rhash_small.c
 	make project PROJECT=sha1_rhash_small \
@@ -275,7 +297,7 @@ wasm/wrc20.wasm: src/wrc20.c
 	# these optimization flags produced the smallest wasm, there were some ties
 
 
-all: wasm/blake2b_floodyberry.wasm wasm/blake2b_mjosref.wasm wasm/blake2b_openssl.wasm wasm/blake2b_ref.wasm wasm/blake2b_ref_small.wasm wasm/ed25519verify_tweetnacl.wasm wasm/keccak256_rhash.wasm wasm/mul256.wasm wasm/polynomial_evaluation_32bit.wasm wasm/sha1_bcon.wasm wasm/sha1_bcon_small.wasm wasm/sha1_rhash.wasm wasm/sha1_rhash_small.wasm wasm/sha256_bcon.wasm wasm/sha256_nacl.wasm wasm/sha256_rhash.wasm wasm/wrc20.wasm
+all: wasm/blake2b_floodyberry.wasm wasm/blake2b_mjosref.wasm wasm/blake2b_openssl.wasm wasm/blake2b_ref.wasm wasm/blake2b_ref_small.wasm wasm/ed25519verify_tweetnacl.wasm wasm/keccak256_rhash.wasm wasm/mul256.wasm wasm/mul256_bigint.wasm wasm/polynomial_evaluation_32bit.wasm wasm/sha1_bcon.wasm wasm/sha1_bcon_small.wasm wasm/sha1_ref.wasm wasm/sha1_rhash.wasm wasm/sha1_rhash_small.wasm wasm/sha256_bcon.wasm wasm/sha256_nacl.wasm wasm/sha256_rhash.wasm wasm/wrc20.wasm
 
 
 
