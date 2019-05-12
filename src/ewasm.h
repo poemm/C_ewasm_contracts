@@ -88,7 +88,7 @@ void printStorageHex(i32ptr* key);
 // testing experimental
 #define BIGINT true
 #if BIGINT==true
-void mul256(i32ptr* x, i32ptr* y, i32ptr* out);
+void mul256(i32ptr* out, i32ptr* x, i32ptr* y);
 #endif
 
 
@@ -237,3 +237,9 @@ i64 reverse_bytes_64(i64 a){
   b |= (a & 0x00000000000000ff)<<56;
   return b;
 }
+
+
+
+// for testing, can export start fuction
+//void _start(){  _main(); }
+
