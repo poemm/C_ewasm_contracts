@@ -27,8 +27,8 @@ export PROJECT := sha1_rhash
 export SRC_DIR := src/
 
 # paths to tools
-#export LLVM := /home/user/repos/llvm9/llvm-project/build/bin/
-export LLVM := llvm-project/build/bin
+export LLVM := /home/user/repos/llvm9/llvm-project/build/bin/
+#export LLVM := llvm-project/build/bin
 export WABT_DIR := wabt/build/
 export PYWEBASSEMBLY_DIR := pywebassembly/
 export BINARYEN_DIR := binaryen/build/bin/
@@ -73,17 +73,17 @@ llvm-install:
 install: wabt-install binaryen-install pywebassembly-install
 	#WARNING: this does not include llvm-install because this should be done manually
 
-wasm2wat-check:
+wabt-check:
 ifeq (, $(shell which $(WABT_DIR)/wasm2wat))
 	$(error "ERROR: Could not find wabt with wasm2wat, install it yourself and adjust path WABT_DIR in this makefile, or just install it with `make wabt-install`, and try again.")
 endif
 
-wasm-dis-check:
+binaryen-check:
 ifeq (, $(shell which $(BINARYEN_DIR)wasm-dis))
 	$(error "ERROR: Could not find binaryen with wasm-dis, install it yourself and adjust path BINARYEN_DIR in this makefile, or just install it with `make binaryen-install`, and try again.")
 endif
 
-ewasmify-check:
+pywebassembly-check:
 ifeq (, $(shell if [ -e $(PYWEBASSEMBLY_DIR)examples/ewasmify.py ] ; then echo blah ; fi;))
 	$(error "ERROR: Could not find ewasmify.py, install it yourself and adjust path EWASMIFY_DIR in this makefile, or just install it with make pywebassembly-install, and try again.")) 
 endif
@@ -117,17 +117,17 @@ compile: llvm-check
 
 
 # Convert the binary format .wasm to equivalent text format .wat
-wasm2wat: wasm2wat-check
+wasm2wat: wabt-check
 	$(WABT_DIR)wasm2wat ${PROJECT}.wasm > ${PROJECT}.wat
 
 
 # Convert the binary format .wasm to equivalent text format .wat
-wasm-dis: wasm-dis-check
+wasm-dis: binaryen-check
 	$(BINARYEN_DIR)wasm-dis ${PROJECT}.wasm > ${PROJECT}.wat
 
 
 # postprocess imports/exports and size reductions
-ewasmify: ewasmify-check wasm2wat-check wasm-dis-check
+ewasmify: pywebassembly-check wabt-check binaryen-check
 	PYTHONPATH="$(PYTHONPATH):$(PYWEBASSEMBLY_DIR)" python3 $(PYWEBASSEMBLY_DIR)examples/ewasmify.py $(PROJECT).wasm
 	$(BINARYEN_DIR)wasm-opt ${OPTIMIZATION_BINARYEN} $(PROJECT)_ewasmified.wasm -o $(PROJECT)_ewasmified.wasm
 	$(WABT_DIR)wasm2wat $(PROJECT)_ewasmified.wasm > $(PROJECT)_ewasmified.wat
