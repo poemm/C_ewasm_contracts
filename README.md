@@ -43,4 +43,4 @@ make clean
 
 WARNING: Ewasm is not yet finalized. This toolchain is changing. There are experiments in the src directory.
 
-NOTE ABOUT C++: Basic things like `std::vector` require a the standard library for system calls for memory managment. Ewasm doesn't support these system calls, so this memory management must be written custom for Ewasm. So far, a custom `malloc()` is in `ewasm.h`, other things are needed, then we can write a find a way to compile against the C++ standard library without requiring system calls.
+NOTE ABOUT C++: Basic things like `std::vector` require memory managment, which most standard C++ libraries implement as system calls. Ewasm doesn't support system calls, so memory management must be done in Wasm. So far, a custom `malloc()` is in `ewasm.h`, but other things are still needed before we can try to compile against C++ standard library without requiring system calls.
