@@ -1,14 +1,21 @@
 
 
-This test framework is source language agnostic -- works for Ewasm contracts written in any source language. It is in this repository because this is how the C-based contracts were tested, and the Makefile has hard-coded recipes for the C-based contracts.
+This test framework is source language agnostic -- works for Ewasm contracts written in any source language. This is how the C-based contracts were tested, and the Makefile has hard-coded recipes for the C-based contracts.
 
 
 Install test framework.
 ```
-# Dependencies are hera, testeth, a tests repository, and lllc.
-# Install dependencies manually as follows, or install them elsewhere and hard-code paths in the Makefile or as arguments to make.
-# (these commands will download and install everything locally to this directory. It is recommended to just copy thse commands from their recipes in Makefile.)
+# Install all dependencies.
+# (these commands will download and install everything locally to this directory.
 make install
+
+# Or install dependencies individually as follows.
+make testeth-install
+make hera-install
+make tests-install
+mkae lllc-install
+
+# One can also install these elsewhere copying the recipe in the Makefile and hard-code paths in the Makefile or as arguments to make.
 ```
 
 Use test framework.
@@ -39,7 +46,7 @@ wrc20_tester/	test filler generator specific to wrc20
 
 ```
 
-DETAILS AND WARNING: This test framework uses testeth and hera. The author of this test Makefile and scripts often struggles with testeth and hera. Debugging Ewasm contracts may be difficlut using these tools. A better Ewasm testing/debugging framework is needed. Some details about how we use testeth follow. In testeth, to "fill" a test means to convert it from a <name>Filler.yml to <name>.json. We use a script to generate <name>Filler.yml for a given wasm blob and test vectors. The act of filling also performs the test, so filling may be sufficient for testing. If you also wish to run a filled .json test, see the Makefile recipe for test.
+DETAILS AND WARNING: This test framework uses testeth and hera. The author of this repository often struggles with testeth and hera. Debugging Ewasm contracts may be difficlut using these tools unless one is familiar with them. A better Ewasm testing/debugging framework is needed. Some details about testeth follow. In testeth, to "fill" a test means to convert it from a <name>Filler.yml to <name>.json. We use a script to generate <name>Filler.yml for a given wasm blob and test vectors. The act of filling also performs the test, so filling may be sufficient for testing. If you also wish to run a filled .json test, see the Makefile recipe called `test`.
 
 BONUS: We have experimental support for benchmarks, see the Makefile. But our tools are not optimized for speed. See the Makefile recipe for test.
 
