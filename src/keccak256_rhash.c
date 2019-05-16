@@ -103,7 +103,6 @@ void rhash_swap_copy_str_to_u32(void* to, int index, const void* from, size_t le
 
 
 
-
 // from librhash/sha3.h
 
 #define sha3_224_hash_size  28
@@ -506,17 +505,41 @@ void rhash_keccak_final(sha3_ctx *ctx, unsigned char* result)
 
 
 
+/*
+This is awkward for now. 
+LLVM generated Wasm has a stack which grows down. We want to avoid things being put on this stack.
+So we generate a buffer in global scope, which gets mapped by LLVM to Wasm memory.
+In May 2019, LLVM to wasm does not yet support global arrays which are not initialized like this, see:
+https://github.com/llvm-mirror/llvm/blob/c44c327530160e1567da37e2e5877d03d8af4c8a/lib/MC/MCWasmStreamer.cpp#L137-L149
+*/
+uint8_t buffer[] = { //432 total bytes, enough for out and sha3_ctx
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+};
+
 void _main(){
 
   int length = getCallDataSize(); //length in bytes
-  unsigned char* in = (unsigned char*) malloc( length * sizeof(unsigned char));
+  unsigned char* in = (unsigned char*) malloc(length);
   callDataCopy( (i32ptr*)in, 0, length ); //get data to hash into memory
-  unsigned char out[32];
+  unsigned char* out = buffer;
 
-  sha3_ctx ctx;
-  rhash_keccak_256_init(&ctx);
-  rhash_keccak_update(&ctx, in, length);
-  rhash_keccak_final(&ctx, out);
+  sha3_ctx* ctx = (sha3_ctx*) buffer+32;
+  rhash_keccak_256_init(ctx);
+  rhash_keccak_update(ctx, in, length);
+  rhash_keccak_final(ctx, out);
 
   finish((i32ptr*)out,32);
 

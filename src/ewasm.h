@@ -126,10 +126,10 @@ sample uses:
 
 __attribute__ ((noinline))
 void* malloc(const size_t size){
-
   /*
-    It seems (in April 2019) that LLVM->Wasm starts data_end at 1024 then adds anything that is statically stored in memory at compile-time. So our heap starts at data_end and grows upwards.
     Our malloc is naive: we only append to the end of the previous allocation, starting at data_end. This is tuned for short runtimes where memory management cost is expensive, not many things are allocated, or not many things are freed.
+    It seems (in May 2019) that LLVM->Wasm starts data_end at 1024 plus anything that is statically stored in memory at compile-time. So our heap starts at data_end and grows upwards.
+    WARNING: There is a bug. LLVM may output code which uses a stack which grows down from `heap_base`. If this is the case, then heap and stack can collide. We are still evaluating our options, but for now, we leave this because it is memory efficient.
   */
 
   // this heap pointer starts at data_end and always increments upward

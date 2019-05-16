@@ -150,7 +150,7 @@ endif
 # Build a single project.
 project: compile wasm2wat ewasmify
 	cp $(PROJECT)_ewasmified.wasm wasm/$(PROJECT).wasm
-	cp $(PROJECT)_ewasmified.wat wat/$(PROJECT).wat
+	cp $(PROJECT).wat wat/$(PROJECT).wat
 
 
 
