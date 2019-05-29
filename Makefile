@@ -27,8 +27,9 @@ export PROJECT := sha1_rhash
 export SRC_DIR := src/
 
 # paths to tools
-export LLVM := /home/user/repos/llvm9/llvm-project/build/bin/
+#export LLVM := /home/user/repos/llvm9/llvm-project/build/bin/
 #export LLVM := llvm-project/build/bin
+export LLVM := 
 export WABT_DIR := wabt/build/
 export PYWEBASSEMBLY_DIR := pywebassembly/
 export BINARYEN_DIR := binaryen/build/bin/

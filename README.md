@@ -5,9 +5,9 @@ Get dependencies.
 ```
 # hopefully you have llvm 8+, check:
 clang --version
-# if not
-make llvm-install	# should do this manually since it may need a restart. Copy the Makefile recipe or see LLVM getting started website.
-# Note: LLVM version 8+ support Wasm by default. Earlier versions must be compiled with experimental wasm flag, and have different linker. We use the linker from LLVM 8+.
+# if not, the following command will install it, but you should do this manually compilation may take several restarts. Just copy the Makefile recipe or see LLVM getting started website.
+make llvm-install
+# Note: LLVM versions 8+ support Wasm by default. Earlier versions must be compiled with experimental wasm flag, and have different linker which we do not support.
 
 # install everything else
 make install
@@ -34,7 +34,7 @@ make blake2b_ref
 make PROJECT=my_contract SRC_DIR=path/to/my_contract/src/dir
 
 # compile with custom tool directories
-make WABT_DIR=path/to/wabt/build/ LLVM_DIR=path/to/llvm/binaries PROJECT=mul256
+make WABT_DIR=path/to/wabt/build/ LLVM_DIR=path/to/llvm/binaries/ PROJECT=mul256
 
 # clean up
 make clean

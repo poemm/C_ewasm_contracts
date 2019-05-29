@@ -29,7 +29,7 @@
 
 
 # paths to tools
-export HERA_DIR := hera_may7/
+export HERA_DIR := hera/
 export TESTETH_DIR := aleth/
 export TESTS_DIR := tests/
 export LLLC_DIR := ./lllc/
@@ -125,7 +125,7 @@ fill: testeth-check hera-check tests-check lllc-check
 ifeq (, $(shell if [ -e $(WASM_DIR)/$(PROJECT).wasm ] ; then echo blah ; fi;))
 	$(error "ERROR: Could not find $(WASM_DIR)$(PROJECT).wasm.")) 
 endif
-	${HERA_DIR}build/deps/bin/wasm-dis $(WASM_DIR)/$(PROJECT).wasm > $(PROJECT).wat
+	${HERA_DIR}build/deps/bin/wasm-dis $(WASM_DIR)$(PROJECT).wasm > $(PROJECT).wat
 	python3 scripts/ewasm_filler_generator.py $(PROJECT) $(PROJECT).wat $(TEST_VECTORS)
 	cp $(PROJECT)Filler.yml $(TESTS_DIR)src/GeneralStateTestsFiller/stEWASMTests/
 	ETHEREUM_TEST_PATH=$(TESTS_DIR) $(TESTETH_DIR)bin/testeth -t GeneralStateTests/stEWASMTests -- --filltests --vm $(HERA_DIR)build/src/libhera.so --evmc engine=wabt benchmark=true --singlenet "Byzantium" --singletest $(PROJECT)

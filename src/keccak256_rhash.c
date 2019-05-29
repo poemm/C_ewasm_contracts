@@ -544,3 +544,20 @@ void _main(){
   finish((i32ptr*)out,32);
 
 }
+/*
+void _main(){
+
+  int length = getCallDataSize(); //length in bytes
+  unsigned char* in = (unsigned char*) malloc( length * sizeof(unsigned char));
+  callDataCopy( (i32ptr*)in, 0, length ); //get data to hash into memory
+  unsigned char out[32];
+
+  sha3_ctx ctx;
+  rhash_keccak_256_init(&ctx);
+  rhash_keccak_update(&ctx, in, length);
+  rhash_keccak_final(&ctx, out);
+
+  finish((i32ptr*)out,32);
+
+}
+*/
