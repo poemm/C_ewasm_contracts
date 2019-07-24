@@ -1,0 +1,32 @@
+beacon_state:
+  execution_scripts:
+    - blake2b_floodyberry.wasm
+    - blake2b_mjosref.wasm
+    - blake2b_openssl.wasm
+    - blake2b_ref.wasm
+    - blake2b_ref_small.wasm
+shard_pre_state:
+  exec_env_states:
+    - "0000000000000000000000000000000000000000000000000000000000000000"
+    - "0000000000000000000000000000000000000000000000000000000000000000"
+    - "0000000000000000000000000000000000000000000000000000000000000000"
+    - "0000000000000000000000000000000000000000000000000000000000000000"
+    - "0000000000000000000000000000000000000000000000000000000000000000"
+shard_blocks:
+  - env: 0
+    data: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  - env: 1
+    data: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  - env: 2
+    data: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  - env: 3
+    data: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  - env: 4
+    data: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+shard_post_state:
+  exec_env_states:
+    - "6d980369d4efd1eb39b4bfe66f82339b569a4f3d20157c990619058e831b9ded"
+    - "6d980369d4efd1eb39b4bfe66f82339b569a4f3d20157c990619058e831b9ded"
+    - "6d980369d4efd1eb39b4bfe66f82339b569a4f3d20157c990619058e831b9ded"
+    - "6d980369d4efd1eb39b4bfe66f82339b569a4f3d20157c990619058e831b9ded"
+    - "6d980369d4efd1eb39b4bfe66f82339b569a4f3d20157c990619058e831b9ded"

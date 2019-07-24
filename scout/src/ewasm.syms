@@ -1,0 +1,5 @@
+eth2_loadPreStateRoot
+eth2_blockDataSize
+eth2_blockDataCopy
+eth2_savePostStateRoot
+eth2_pushNewDeposit

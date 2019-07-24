@@ -1,0 +1,14 @@
+beacon_state:
+  execution_scripts:
+    - keccak256_rhash.wasm
+shard_pre_state:
+  exec_env_states:
+    - "0000000000000000000000000000000000000000000000000000000000000000"
+shard_blocks:
+  - env: 0
+    data: ""
+  - env: 0
+    data: ""
+shard_post_state:
+  exec_env_states:
+    - "C5D2460186F7233C927E7DB2DCC703C0E500B653CA82273B7BFAD8045D85A470"
