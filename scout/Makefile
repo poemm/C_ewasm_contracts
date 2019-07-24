@@ -108,7 +108,7 @@ endif
 
 
 test: scout-check
-	cd wasm; ../${SCOUT_DIR}phase2-scout ../test/helloworld.yaml
+	cd wasm; ../${SCOUT_DIR}phase2-scout ../tests/helloworld.yaml
 
 
 
