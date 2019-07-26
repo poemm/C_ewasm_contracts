@@ -13,7 +13,7 @@
     (local i32 i32)
     memory.size
     local.set 2
-    i32.const 10000
+    i32.const 1024
     i32.load
     local.get 0
     i32.add
@@ -23,21 +23,21 @@
     i32.shl
     i32.gt_u
     if  ;; label = @1
-      i32.const 0
-      local.get 1
-      i32.const 65535
-      i32.and
-      i32.sub
       local.get 1
       i32.const 16
       i32.shr_u
-      i32.ne
       local.get 2
       i32.sub
+      local.get 1
+      i32.const 65535
+      i32.and
+      i32.const 0
+      i32.ne
+      i32.add
       memory.grow
       drop
     end
-    i32.const 10000
+    i32.const 1024
     local.get 1
     i32.store
     local.get 1
@@ -409,7 +409,7 @@
       i64.xor
       local.tee 28
       local.get 1
-      i32.const 10640
+      i32.const 1664
       i32.add
       i64.load
       i64.xor
@@ -858,6 +858,8 @@
       i32.const 49999
       i32.add
       local.get 3
+      i32.const 1
+      i32.add
       i32.div_s
       local.tee 5
       i32.const 1
@@ -872,14 +874,14 @@
       i32.ge_u
       if  ;; label = @2
         loop  ;; label = @3
-          i32.const 22816
+          i32.const 13840
           i32.const 400
           call $memset
           local.set 4
-          i32.const 23208
+          i32.const 14232
           local.get 7
           i32.store
-          i32.const 23212
+          i32.const 14236
           i32.const 136
           i32.store
           local.get 6
@@ -897,9 +899,9 @@
                 local.set 0
                 br 1 (;@5;)
               end
-              i32.const 23016
+              i32.const 14040
               local.set 0
-              i32.const 23016
+              i32.const 14040
               local.get 1
               i32.const 136
               call $memcpy
@@ -922,36 +924,36 @@
           end
           local.get 2
           if  ;; label = @4
-            i32.const 23016
+            i32.const 14040
             local.get 1
             local.get 2
             call $memcpy
           end
           i32.const 100
-          i32.const 23212
+          i32.const 14236
           i32.load
           local.tee 1
           i32.const 1
           i32.shr_u
           i32.sub
           local.set 2
-          i32.const 23208
+          i32.const 14232
           i32.load
           local.tee 0
           i32.const 0
           i32.ge_s
           if  ;; label = @4
             local.get 0
-            i32.const 23016
+            i32.const 14040
             i32.add
             local.get 1
             local.get 0
             i32.sub
             call $memset
             drop
-            i32.const 23208
+            i32.const 14232
             i32.load
-            i32.const 23016
+            i32.const 14040
             i32.add
             local.tee 0
             local.get 0
@@ -960,7 +962,7 @@
             i32.or
             i32.store8
             local.get 1
-            i32.const 23015
+            i32.const 14039
             i32.add
             local.tee 0
             local.get 0
@@ -969,14 +971,14 @@
             i32.or
             i32.store8
             local.get 4
-            i32.const 23016
+            i32.const 14040
             local.get 1
             call $rhash_sha3_process_block
-            i32.const 23208
+            i32.const 14232
             i32.const -2147483648
             i32.store
           end
-          i32.const 10016
+          i32.const 1040
           local.get 4
           local.get 2
           call $memcpy
@@ -991,16 +993,16 @@
         br 1 (;@1;)
       end
       loop  ;; label = @2
-        i32.const 22816
+        i32.const 13840
         i32.const 400
         call $memset
         local.set 2
-        i32.const 23208
+        i32.const 14232
         local.get 7
         i32.store
         i32.const 136
         local.set 1
-        i32.const 23212
+        i32.const 14236
         i32.const 136
         i32.store
         block  ;; label = @3
@@ -1014,19 +1016,19 @@
               local.set 0
               br 1 (;@4;)
             end
-            i32.const 23016
+            i32.const 14040
             local.get 6
             local.get 3
             call $memcpy
             i32.const 100
-            i32.const 23212
+            i32.const 14236
             i32.load
             local.tee 1
             i32.const 1
             i32.shr_u
             i32.sub
             local.set 4
-            i32.const 23208
+            i32.const 14232
             i32.load
             local.tee 0
             i32.const 0
@@ -1034,16 +1036,16 @@
             br_if 1 (;@3;)
           end
           local.get 0
-          i32.const 23016
+          i32.const 14040
           i32.add
           local.get 1
           local.get 0
           i32.sub
           call $memset
           drop
-          i32.const 23208
+          i32.const 14232
           i32.load
-          i32.const 23016
+          i32.const 14040
           i32.add
           local.tee 0
           local.get 0
@@ -1052,7 +1054,7 @@
           i32.or
           i32.store8
           local.get 1
-          i32.const 23015
+          i32.const 14039
           i32.add
           local.tee 0
           local.get 0
@@ -1061,14 +1063,14 @@
           i32.or
           i32.store8
           local.get 2
-          i32.const 23016
+          i32.const 14040
           local.get 1
           call $rhash_sha3_process_block
-          i32.const 23208
+          i32.const 14232
           i32.const -2147483648
           i32.store
         end
-        i32.const 10016
+        i32.const 1040
         local.get 2
         local.get 4
         call $memcpy
@@ -1079,14 +1081,14 @@
         br_if 0 (;@2;)
       end
     end
-    i32.const 10016
+    i32.const 1040
     call $eth2_savePostStateRoot)
-  (memory (;0;) 1)
-  (global (;0;) i32 (i32.const 10640))
-  (global (;1;) i32 (i32.const 10640))
+  (memory (;0;) 2)
+  (global (;0;) i32 (i32.const 67200))
+  (global (;1;) i32 (i32.const 1664))
   (export "memory" (memory 0))
   (export "__heap_base" (global 0))
   (export "__data_end" (global 1))
   (export "main" (func $_main))
-  (data (;0;) (i32.const 10000) "\90)")
-  (data (;1;) (i32.const 10448) "\01\00\00\00\00\00\00\00\82\80\00\00\00\00\00\00\8a\80\00\00\00\00\00\80\00\80\00\80\00\00\00\80\8b\80\00\00\00\00\00\00\01\00\00\80\00\00\00\00\81\80\00\80\00\00\00\80\09\80\00\00\00\00\00\80\8a\00\00\00\00\00\00\00\88\00\00\00\00\00\00\00\09\80\00\80\00\00\00\00\0a\00\00\80\00\00\00\00\8b\80\00\80\00\00\00\00\8b\00\00\00\00\00\00\80\89\80\00\00\00\00\00\80\03\80\00\00\00\00\00\80\02\80\00\00\00\00\00\80\80\00\00\00\00\00\00\80\0a\80\00\00\00\00\00\00\0a\00\00\80\00\00\00\80\81\80\00\80\00\00\00\80\80\80\00\00\00\00\00\80\01\00\00\80\00\00\00\00\08\80\00\80\00\00\00\80"))
+  (data (;0;) (i32.const 1024) "\80\06\01")
+  (data (;1;) (i32.const 1472) "\01\00\00\00\00\00\00\00\82\80\00\00\00\00\00\00\8a\80\00\00\00\00\00\80\00\80\00\80\00\00\00\80\8b\80\00\00\00\00\00\00\01\00\00\80\00\00\00\00\81\80\00\80\00\00\00\80\09\80\00\00\00\00\00\80\8a\00\00\00\00\00\00\00\88\00\00\00\00\00\00\00\09\80\00\80\00\00\00\00\0a\00\00\80\00\00\00\00\8b\80\00\80\00\00\00\00\8b\00\00\00\00\00\00\80\89\80\00\00\00\00\00\80\03\80\00\00\00\00\00\80\02\80\00\00\00\00\00\80\80\00\00\00\00\00\00\80\0a\80\00\00\00\00\00\00\0a\00\00\80\00\00\00\80\81\80\00\80\00\00\00\80\80\80\00\00\00\00\00\80\01\00\00\80\00\00\00\00\08\80\00\80\00\00\00\80"))

@@ -311,7 +311,7 @@ void _main(){
   eth2_blockDataCopy( (i32ptr*)in, 0, length ); //get data to hash into memory
   unsigned char out[32];
 #if 1   // for benchmarking
-  int loop_iters = (50000 + (length - 1)) / length;
+  int loop_iters = (50000 + (length - 1)) / (length + 1);
   int ret;
   for (int i=0; i<loop_iters; i++)
     crypto_hash(out,in,length);

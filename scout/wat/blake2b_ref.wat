@@ -14,7 +14,7 @@
     (local i32 i32)
     memory.size
     local.set 2
-    i32.const 10000
+    i32.const 1024
     i32.load
     local.get 0
     i32.add
@@ -24,21 +24,21 @@
     i32.shl
     i32.gt_u
     if  ;; label = @1
-      i32.const 0
-      local.get 1
-      i32.const 65535
-      i32.and
-      i32.sub
       local.get 1
       i32.const 16
       i32.shr_u
-      i32.ne
       local.get 2
       i32.sub
+      local.get 1
+      i32.const 65535
+      i32.and
+      i32.const 0
+      i32.ne
+      i32.add
       memory.grow
       drop
     end
-    i32.const 10000
+    i32.const 1024
     local.get 1
     i32.store
     local.get 1
@@ -4074,7 +4074,7 @@
         i32.add
         i32.const 0
         i32.const 64
-        i32.const 10004
+        i32.const 1028
         i32.load
         call_indirect (type 0)
         drop
@@ -4102,6 +4102,8 @@
     i32.const 49999
     i32.add
     local.get 0
+    i32.const 1
+    i32.add
     i32.div_s
     local.tee 2
     i32.const 1
@@ -4126,14 +4128,14 @@
     i32.sub
     global.set 0)
   (table (;0;) 2 2 funcref)
-  (memory (;0;) 1)
-  (global (;0;) (mut i32) (i32.const 10000))
-  (global (;1;) i32 (i32.const 10008))
-  (global (;2;) i32 (i32.const 10008))
+  (memory (;0;) 2)
+  (global (;0;) (mut i32) (i32.const 66576))
+  (global (;1;) i32 (i32.const 66576))
+  (global (;2;) i32 (i32.const 1032))
   (export "memory" (memory 0))
   (export "__heap_base" (global 1))
   (export "__data_end" (global 2))
   (export "main" (func $_main))
   (elem (;0;) (i32.const 1) $memset)
-  (data (;0;) (i32.const 10000) "\18'")
-  (data (;1;) (i32.const 10004) "\01"))
+  (data (;0;) (i32.const 1024) "\10\04\01")
+  (data (;1;) (i32.const 1028) "\01"))

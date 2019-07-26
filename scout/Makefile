@@ -28,9 +28,9 @@ export SRC_DIR := src/
 
 
 # paths to tools
-#export LLVM := /home/user/repos/llvm9/llvm-project/build/bin/
+export LLVM := /home/user/repos/llvm9/llvm-project/build/bin/
 #export LLVM := llvm-project/build/bin
-export LLVM := 
+#export LLVM := 
 export WABT_DIR := wabt/build/
 export BINARYEN_DIR := binaryen/build/bin/
 export SCOUT_DIR := scout/target/release/
@@ -118,7 +118,7 @@ project:
 	$(LLVM)clang -cc1 ${OPTIMIZATION_CLANG} -emit-llvm -triple=wasm32-unknown-unknown-wasm ${SRC_DIR}${PROJECT}.c -o ${PROJECT}.ll
 	$(LLVM)opt ${OPTIMIZATION_OPT} ${PROJECT}.ll -o ${PROJECT}.ll
 	$(LLVM)llc ${OPTIMIZATION_LLC} -filetype=obj ${PROJECT}.ll -o ${PROJECT}.o
-	$(LLVM)wasm-ld ${PROJECT}.o -o ${PROJECT}.wasm --no-entry -allow-undefined-file=src/ewasm.syms -export=_main --stack-first -z stack-size=10000
+	$(LLVM)wasm-ld ${PROJECT}.o -o ${PROJECT}.wasm --no-entry -allow-undefined-file=src/ewasm.syms -export=_main #--stack-first -z stack-size=10000
 	# done compiling, optimize with Wasm-specific optimizer
 	$(BINARYEN_DIR)wasm-opt ${OPTIMIZATION_BINARYEN} ${PROJECT}.wasm -o ${PROJECT}.wasm -g #-g keeps function names
 	# hack so that we export "main" instead of "_main"

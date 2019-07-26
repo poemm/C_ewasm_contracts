@@ -14,7 +14,7 @@
     (local i32 i32)
     memory.size
     local.set 2
-    i32.const 10000
+    i32.const 1024
     i32.load
     local.get 0
     i32.add
@@ -24,21 +24,21 @@
     i32.shl
     i32.gt_u
     if  ;; label = @1
-      i32.const 0
-      local.get 1
-      i32.const 65535
-      i32.and
-      i32.sub
       local.get 1
       i32.const 16
       i32.shr_u
-      i32.ne
       local.get 2
       i32.sub
+      local.get 1
+      i32.const 65535
+      i32.and
+      i32.const 0
+      i32.ne
+      i32.add
       memory.grow
       drop
     end
-    i32.const 10000
+    i32.const 1024
     local.get 1
     i32.store
     local.get 1
@@ -155,8 +155,8 @@
       end
     end)
   (func $blake2b_blocks_bootup (type 0) (param i32 i32 i32 i32)
-    i32.const 10004
-    i32.const 10080
+    i32.const 1028
+    i32.const 1104
     i32.store
     local.get 0
     local.get 1
@@ -4248,6 +4248,8 @@
       i32.const 49999
       i32.add
       local.get 2
+      i32.const 1
+      i32.add
       i32.div_s
       local.tee 9
       i32.const 1
@@ -4261,28 +4263,28 @@
       i32.const 128
       i32.le_u
       if  ;; label = @2
-        i32.const 10072
+        i32.const 1096
         i64.load
         local.set 18
-        i32.const 10064
+        i32.const 1088
         i64.load
         local.set 19
-        i32.const 10056
+        i32.const 1080
         i64.load
         local.set 20
-        i32.const 10048
+        i32.const 1072
         i64.load
         local.set 21
-        i32.const 10040
+        i32.const 1064
         i64.load
         local.set 22
-        i32.const 10032
+        i32.const 1056
         i64.load
         local.set 23
-        i32.const 10024
+        i32.const 1048
         i64.load
         local.set 24
-        i32.const 10016
+        i32.const 1040
         i64.load
         local.set 25
         loop  ;; label = @3
@@ -4363,7 +4365,7 @@
           local.get 8
           local.get 2
           i32.const 0
-          i32.const 10004
+          i32.const 1028
           i32.load
           i32.load offset=8
           call_indirect (type 0)
@@ -4437,28 +4439,28 @@
       i32.and
       i32.eqz
       if  ;; label = @2
-        i32.const 10072
+        i32.const 1096
         i64.load
         local.set 18
-        i32.const 10064
+        i32.const 1088
         i64.load
         local.set 19
-        i32.const 10056
+        i32.const 1080
         i64.load
         local.set 20
-        i32.const 10048
+        i32.const 1072
         i64.load
         local.set 21
-        i32.const 10040
+        i32.const 1064
         i64.load
         local.set 22
-        i32.const 10032
+        i32.const 1056
         i64.load
         local.set 23
-        i32.const 10024
+        i32.const 1048
         i64.load
         local.set 24
-        i32.const 10016
+        i32.const 1040
         i64.load
         local.set 25
         loop  ;; label = @3
@@ -4536,7 +4538,7 @@
           local.get 8
           local.get 2
           i32.const 128
-          i32.const 10004
+          i32.const 1028
           i32.load
           i32.load offset=8
           call_indirect (type 0)
@@ -4549,7 +4551,7 @@
           local.get 11
           local.get 10
           i32.const 0
-          i32.const 10004
+          i32.const 1028
           i32.load
           i32.load offset=8
           call_indirect (type 0)
@@ -4607,40 +4609,40 @@
       end
       local.get 2
       if  ;; label = @2
-        i32.const 10072
+        i32.const 1096
         i64.load
         local.set 18
         local.get 0
         i32.const 120
         i32.add
         local.set 6
-        i32.const 10064
+        i32.const 1088
         i64.load
         local.set 19
         local.get 0
         i32.const 112
         i32.add
         local.set 7
-        i32.const 10056
+        i32.const 1080
         i64.load
         local.set 20
         local.get 0
         i32.const 104
         i32.add
         local.set 12
-        i32.const 10048
+        i32.const 1072
         i64.load
         local.set 21
-        i32.const 10040
+        i32.const 1064
         i64.load
         local.set 22
-        i32.const 10032
+        i32.const 1056
         i64.load
         local.set 23
-        i32.const 10024
+        i32.const 1048
         i64.load
         local.set 24
-        i32.const 10016
+        i32.const 1040
         i64.load
         local.set 25
         loop  ;; label = @3
@@ -4729,7 +4731,7 @@
             i32.add
             local.get 5
             i32.const 128
-            i32.const 10004
+            i32.const 1028
             i32.load
             i32.load offset=8
             call_indirect (type 0)
@@ -4752,7 +4754,7 @@
           local.get 11
           local.get 10
           i32.const 0
-          i32.const 10004
+          i32.const 1028
           i32.load
           i32.load offset=8
           call_indirect (type 0)
@@ -4810,28 +4812,28 @@
         end
         br 1 (;@1;)
       end
-      i32.const 10072
+      i32.const 1096
       i64.load
       local.set 18
-      i32.const 10064
+      i32.const 1088
       i64.load
       local.set 19
-      i32.const 10056
+      i32.const 1080
       i64.load
       local.set 20
-      i32.const 10048
+      i32.const 1072
       i64.load
       local.set 21
-      i32.const 10040
+      i32.const 1064
       i64.load
       local.set 22
-      i32.const 10032
+      i32.const 1056
       i64.load
       local.set 23
-      i32.const 10024
+      i32.const 1048
       i64.load
       local.set 24
-      i32.const 10016
+      i32.const 1040
       i64.load
       local.set 25
       loop  ;; label = @2
@@ -4912,7 +4914,7 @@
         local.get 11
         local.get 10
         i32.const 0
-        i32.const 10004
+        i32.const 1028
         i32.load
         i32.load offset=8
         call_indirect (type 0)
@@ -4974,15 +4976,15 @@
     i32.add
     global.set 0)
   (table (;0;) 3 3 funcref)
-  (memory (;0;) 1)
-  (global (;0;) (mut i32) (i32.const 10000))
-  (global (;1;) i32 (i32.const 10115))
-  (global (;2;) i32 (i32.const 10115))
+  (memory (;0;) 2)
+  (global (;0;) (mut i32) (i32.const 66688))
+  (global (;1;) i32 (i32.const 66688))
+  (global (;2;) i32 (i32.const 1139))
   (export "memory" (memory 0))
   (export "__heap_base" (global 1))
   (export "__data_end" (global 2))
   (export "main" (func $_main))
   (elem (;0;) (i32.const 1) $blake2b_blocks_ref $blake2b_blocks_bootup)
-  (data (;0;) (i32.const 10000) "\83'\00\00l'")
-  (data (;1;) (i32.const 10016) "H\c9\bd\f2g\e6\09j;\a7\ca\84\85\aeg\bb+\f8\94\fer\f3n<\f16\1d_:\f5O\a5\d1\82\e6\ad\7fR\0eQ\1fl>+\8ch\05\9bk\bdA\fb\ab\d9\83\1fy!~\13\19\cd\e0[\00\00\00\00x'\00\00\01")
-  (data (;2;) (i32.const 10100) "\02\00\00\00generic/64"))
+  (data (;0;) (i32.const 1024) "\80\04\01\00\5c\04")
+  (data (;1;) (i32.const 1040) "H\c9\bd\f2g\e6\09j;\a7\ca\84\85\aeg\bb+\f8\94\fer\f3n<\f16\1d_:\f5O\a5\d1\82\e6\ad\7fR\0eQ\1fl>+\8ch\05\9bk\bdA\fb\ab\d9\83\1fy!~\13\19\cd\e0[\00\00\00\00h\04\00\00\01")
+  (data (;2;) (i32.const 1124) "\02\00\00\00generic/64"))

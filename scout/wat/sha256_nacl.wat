@@ -14,7 +14,7 @@
     (local i32 i32)
     memory.size
     local.set 2
-    i32.const 10000
+    i32.const 1024
     i32.load
     local.get 0
     i32.add
@@ -24,21 +24,21 @@
     i32.shl
     i32.gt_u
     if  ;; label = @1
-      i32.const 0
-      local.get 1
-      i32.const 65535
-      i32.and
-      i32.sub
       local.get 1
       i32.const 16
       i32.shr_u
-      i32.ne
       local.get 2
       i32.sub
+      local.get 1
+      i32.const 65535
+      i32.and
+      i32.const 0
+      i32.ne
+      i32.add
       memory.grow
       drop
     end
-    i32.const 10000
+    i32.const 1024
     local.get 1
     i32.store
     local.get 1
@@ -164,21 +164,21 @@
     local.get 3
     i32.const 144
     i32.add
-    i32.const 10032
+    i32.const 1056
     i64.load
     i64.store
     local.get 3
     i32.const 152
     i32.add
-    i32.const 10040
+    i32.const 1064
     i64.load
     i64.store
     local.get 3
-    i32.const 10016
+    i32.const 1040
     i64.load
     i64.store offset=128
     local.get 3
-    i32.const 10024
+    i32.const 1048
     i64.load
     i64.store offset=136
     local.get 3
@@ -6078,6 +6078,8 @@
     i32.const 49999
     i32.add
     local.get 0
+    i32.const 1
+    i32.add
     i32.div_s
     local.tee 2
     i32.const 1
@@ -6104,13 +6106,13 @@
     i32.const 32
     i32.add
     global.set 0)
-  (memory (;0;) 1)
-  (global (;0;) (mut i32) (i32.const 10000))
-  (global (;1;) i32 (i32.const 10048))
-  (global (;2;) i32 (i32.const 10048))
+  (memory (;0;) 2)
+  (global (;0;) (mut i32) (i32.const 66608))
+  (global (;1;) i32 (i32.const 66608))
+  (global (;2;) i32 (i32.const 1072))
   (export "memory" (memory 0))
   (export "__heap_base" (global 1))
   (export "__data_end" (global 2))
   (export "main" (func $_main))
-  (data (;0;) (i32.const 10000) "@'")
-  (data (;1;) (i32.const 10016) "j\09\e6g\bbg\ae\85<n\f3r\a5O\f5:Q\0eR\7f\9b\05h\8c\1f\83\d9\ab[\e0\cd\19"))
+  (data (;0;) (i32.const 1024) "0\04\01")
+  (data (;1;) (i32.const 1040) "j\09\e6g\bbg\ae\85<n\f3r\a5O\f5:Q\0eR\7f\9b\05h\8c\1f\83\d9\ab[\e0\cd\19"))

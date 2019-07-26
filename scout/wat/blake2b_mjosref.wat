@@ -14,7 +14,7 @@
     (local i32 i32)
     memory.size
     local.set 2
-    i32.const 10000
+    i32.const 1024
     i32.load
     local.get 0
     i32.add
@@ -24,21 +24,21 @@
     i32.shl
     i32.gt_u
     if  ;; label = @1
-      i32.const 0
-      local.get 1
-      i32.const 65535
-      i32.and
-      i32.sub
       local.get 1
       i32.const 16
       i32.shr_u
-      i32.ne
       local.get 2
       i32.sub
+      local.get 1
+      i32.const 65535
+      i32.and
+      i32.const 0
+      i32.ne
+      i32.add
       memory.grow
       drop
     end
-    i32.const 10000
+    i32.const 1024
     local.get 1
     i32.store
     local.get 1
@@ -245,7 +245,7 @@
     loop  ;; label = @1
       local.get 2
       local.get 1
-      i32.const 10086
+      i32.const 1110
       i32.add
       i32.load8_u
       i32.const 3
@@ -259,7 +259,7 @@
       local.tee 5
       local.get 2
       local.get 1
-      i32.const 10087
+      i32.const 1111
       i32.add
       i32.load8_u
       i32.const 3
@@ -298,7 +298,7 @@
       local.tee 6
       local.get 2
       local.get 1
-      i32.const 10084
+      i32.const 1108
       i32.add
       i32.load8_u
       i32.const 3
@@ -312,7 +312,7 @@
       local.tee 10
       local.get 2
       local.get 1
-      i32.const 10085
+      i32.const 1109
       i32.add
       i32.load8_u
       i32.const 3
@@ -338,7 +338,7 @@
       local.tee 14
       local.get 2
       local.get 1
-      i32.const 10092
+      i32.const 1116
       i32.add
       i32.load8_u
       i32.const 3
@@ -350,7 +350,7 @@
       local.tee 10
       local.get 2
       local.get 1
-      i32.const 10093
+      i32.const 1117
       i32.add
       i32.load8_u
       i32.const 3
@@ -362,7 +362,7 @@
       local.get 10
       local.get 2
       local.get 1
-      i32.const 10082
+      i32.const 1106
       i32.add
       i32.load8_u
       i32.const 3
@@ -376,7 +376,7 @@
       local.tee 6
       local.get 2
       local.get 1
-      i32.const 10083
+      i32.const 1107
       i32.add
       i32.load8_u
       i32.const 3
@@ -411,7 +411,7 @@
       local.tee 6
       local.get 2
       local.get 1
-      i32.const 10080
+      i32.const 1104
       i32.add
       i32.load8_u
       i32.const 3
@@ -425,7 +425,7 @@
       local.tee 10
       local.get 2
       local.get 1
-      i32.const 10081
+      i32.const 1105
       i32.add
       i32.load8_u
       i32.const 3
@@ -494,7 +494,7 @@
       local.tee 8
       local.get 2
       local.get 1
-      i32.const 10090
+      i32.const 1114
       i32.add
       i32.load8_u
       i32.const 3
@@ -507,7 +507,7 @@
       local.tee 15
       local.get 2
       local.get 1
-      i32.const 10091
+      i32.const 1115
       i32.add
       i32.load8_u
       i32.const 3
@@ -555,7 +555,7 @@
       local.tee 11
       local.get 2
       local.get 1
-      i32.const 10088
+      i32.const 1112
       i32.add
       i32.load8_u
       i32.const 3
@@ -568,7 +568,7 @@
       local.tee 5
       local.get 2
       local.get 1
-      i32.const 10089
+      i32.const 1113
       i32.add
       i32.load8_u
       i32.const 3
@@ -607,7 +607,7 @@
       local.set 11
       local.get 2
       local.get 1
-      i32.const 10094
+      i32.const 1118
       i32.add
       i32.load8_u
       i32.const 3
@@ -626,7 +626,7 @@
       local.tee 9
       local.get 2
       local.get 1
-      i32.const 10095
+      i32.const 1119
       i32.add
       i32.load8_u
       i32.const 3
@@ -739,43 +739,43 @@
     local.get 3
     i32.const 192
     i32.add
-    i32.const 10072
+    i32.const 1096
     i64.load
     i64.store
     local.get 3
     i32.const 184
     i32.add
-    i32.const 10064
+    i32.const 1088
     i64.load
     i64.store
     local.get 3
     i32.const 176
     i32.add
-    i32.const 10056
+    i32.const 1080
     i64.load
     i64.store
     local.get 3
     i32.const 168
     i32.add
-    i32.const 10048
+    i32.const 1072
     i64.load
     i64.store
     local.get 3
     i32.const 160
     i32.add
-    i32.const 10040
+    i32.const 1064
     i64.load
     i64.store
     local.get 3
     i32.const 152
     i32.add
-    i32.const 10032
+    i32.const 1056
     i64.load
     i64.store
     local.get 3
     i32.const 144
     i32.add
-    i32.const 10024
+    i32.const 1048
     i64.load
     i64.store
     local.get 3
@@ -979,6 +979,8 @@
     i32.const 49999
     i32.add
     local.get 0
+    i32.const 1
+    i32.add
     i32.div_s
     local.tee 2
     i32.const 1
@@ -1002,13 +1004,13 @@
     i32.const -64
     i32.sub
     global.set 0)
-  (memory (;0;) 1)
-  (global (;0;) (mut i32) (i32.const 10000))
-  (global (;1;) i32 (i32.const 10272))
-  (global (;2;) i32 (i32.const 10272))
+  (memory (;0;) 2)
+  (global (;0;) (mut i32) (i32.const 66832))
+  (global (;1;) i32 (i32.const 66832))
+  (global (;2;) i32 (i32.const 1296))
   (export "memory" (memory 0))
   (export "__heap_base" (global 1))
   (export "__data_end" (global 2))
   (export "main" (func $_main))
-  (data (;0;) (i32.const 10000) " (")
-  (data (;1;) (i32.const 10016) "\08\c9\bc\f3g\e6\09j;\a7\ca\84\85\aeg\bb+\f8\94\fer\f3n<\f16\1d_:\f5O\a5\d1\82\e6\ad\7fR\0eQ\1fl>+\8ch\05\9bk\bdA\fb\ab\d9\83\1fy!~\13\19\cd\e0[\00\01\02\03\04\05\06\07\08\09\0a\0b\0c\0d\0e\0f\0e\0a\04\08\09\0f\0d\06\01\0c\00\02\0b\07\05\03\0b\08\0c\00\05\02\0f\0d\0a\0e\03\06\07\01\09\04\07\09\03\01\0d\0c\0b\0e\02\06\05\0a\04\00\0f\08\09\00\05\07\02\04\0a\0f\0e\01\0b\0c\06\08\03\0d\02\0c\06\0a\00\0b\08\03\04\0d\07\05\0f\0e\01\09\0c\05\01\0f\0e\0d\04\0a\00\07\06\03\09\02\08\0b\0d\0b\07\0e\0c\01\03\09\05\00\0f\04\08\06\02\0a\06\0f\0e\09\0b\03\00\08\0c\02\0d\07\01\04\0a\05\0a\02\08\04\07\06\01\05\0f\0b\09\0e\03\0c\0d\00\00\01\02\03\04\05\06\07\08\09\0a\0b\0c\0d\0e\0f\0e\0a\04\08\09\0f\0d\06\01\0c\00\02\0b\07\05\03"))
+  (data (;0;) (i32.const 1024) "\10\05\01")
+  (data (;1;) (i32.const 1040) "\08\c9\bc\f3g\e6\09j;\a7\ca\84\85\aeg\bb+\f8\94\fer\f3n<\f16\1d_:\f5O\a5\d1\82\e6\ad\7fR\0eQ\1fl>+\8ch\05\9bk\bdA\fb\ab\d9\83\1fy!~\13\19\cd\e0[\00\01\02\03\04\05\06\07\08\09\0a\0b\0c\0d\0e\0f\0e\0a\04\08\09\0f\0d\06\01\0c\00\02\0b\07\05\03\0b\08\0c\00\05\02\0f\0d\0a\0e\03\06\07\01\09\04\07\09\03\01\0d\0c\0b\0e\02\06\05\0a\04\00\0f\08\09\00\05\07\02\04\0a\0f\0e\01\0b\0c\06\08\03\0d\02\0c\06\0a\00\0b\08\03\04\0d\07\05\0f\0e\01\09\0c\05\01\0f\0e\0d\04\0a\00\07\06\03\09\02\08\0b\0d\0b\07\0e\0c\01\03\09\05\00\0f\04\08\06\02\0a\06\0f\0e\09\0b\03\00\08\0c\02\0d\07\01\04\0a\05\0a\02\08\04\07\06\01\05\0f\0b\09\0e\03\0c\0d\00\00\01\02\03\04\05\06\07\08\09\0a\0b\0c\0d\0e\0f\0e\0a\04\08\09\0f\0d\06\01\0c\00\02\0b\07\05\03"))

@@ -537,7 +537,7 @@ void _main(){
   unsigned char* out = buffer;
 
 #if 1	// for benchmarking
-  int loop_iters = (50000 + (length - 1)) / length;
+  int loop_iters = (50000 + (length - 1)) / (length + 1);
   int ret;
   for (int i=0; i<loop_iters; i++){
     sha3_ctx* ctx = (sha3_ctx*) buffer+32;

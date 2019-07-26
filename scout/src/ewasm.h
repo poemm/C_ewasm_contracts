@@ -21,6 +21,8 @@
 #define EWASM_H
 
 
+
+
 ///////////
 // Types //
 ///////////
@@ -38,7 +40,7 @@ typedef long long int64_t;
 typedef short int16_t;
 typedef int int32_t;
 
-#define NULL (void*)0	//TODO: check how libc defines NULL, I think this affects many things
+#define NULL (void*)0
 
 typedef unsigned long size_t;
 
@@ -132,18 +134,30 @@ __attribute__ ((noinline))
 void* malloc(const size_t size){
   //  Our malloc is naive: we only append to the end of the previous allocation, starting at data_end. This is tuned for short runtimes where memory management cost is expensive, not many things are allocated, or not many things are freed.
   //  It seems (in May 2019) that LLVM->Wasm starts data_end at 1024 plus anything that is statically stored in memory at compile-time. So our heap starts at data_end and grows upwards.
-  //  WARNING: There is a bug. LLVM may output code which uses a stack which grows down from `heap_base`. If this is the case, then heap and stack can collide. We are still evaluating our options, but for now, we leave this because it is memory efficient.
+  // LLVM backend uses the following conventions:
+  //   - Static memory is in byte 0 through __data_end.
+  //   - There is a "shadow stack" which "shadows" function calls and stores local variables if there are too many
+  //     This shadow stack grows down from __heap_base
+  //   - The optional heap grows up from __heap_base, may eventually need memory.grow
+  //   - LLVM stores these memory offsets as globals. For example:
+  //        (global (;0;) (mut i32) (i32.const 66576))	;; current heap pointer
+  //        (global (;1;) i32 (i32.const 66576))	;; __heap_base
+  //        (global (;2;) i32 (i32.const 1032))		;; static memory from byte 0 through 1032
+  //        (export "__heap_base" (global 1))		;; allow memory management externally
+  //        (export "__data_end" (global 2))		;; allow memory management externally
+  // WARNING: There is a bug. The shadow stack has a limit, and can collide with static memory. It may to precompute the maximum shadow stack size needed, and give it to `wasm-ld` with `-z stack-size=10000`.
+  // One last thing. `wasm-ld` will take argument `--stack-first` to put the shadow stack before the static memory.
 
-  // this heap pointer starts at data_end and always increments upward
-  static uint8_t* heap_ptr = &__data_end;
+  // this heap pointer starts at heap_base and always increments upward
+  static uint8_t* heap_ptr = &__heap_base;
 
   uint32_t total_bytes_needed = ((uint32_t)heap_ptr)+size;
   // check whether we have enough memory, and handle if we don't
   if (total_bytes_needed > __builtin_wasm_memory_size(0)*PAGE_SIZE){ // if exceed current memory size
     #if GROWABLE_MEMORY==true
-      uint32_t total_pages_needed = total_bytes_needed/PAGE_SIZE + (total_bytes_needed%PAGE_SIZE)?1:0;
+      uint32_t total_pages_needed = (total_bytes_needed/PAGE_SIZE) + ((total_bytes_needed%PAGE_SIZE)?1:0);
       __builtin_wasm_memory_grow(0, total_pages_needed - __builtin_wasm_memory_size(0));
-      // note: if we go over the limit of 2^32 bytes of memory, then this memory_grow will trap
+      // note: memory grow is non-deterministic, could fail at different total memory for different implementations
     #else
       // for conciseness, we do nothing here, but if we access memory outside of bounds, then it will trap
     #endif
