@@ -330,10 +330,21 @@ void _main(){
   eth2_blockDataCopy( (i32ptr*)in, 0, length ); //get data to hash into memory
   unsigned char out[32];
 
+#if 1   // for benchmarking
+  int loop_iters = (50000 + (length - 1)) / length;
+  int ret;
+  for (int i=0; i<loop_iters; i++){
+    sha256_ctx ctx;
+    rhash_sha256_init(&ctx);
+    rhash_sha256_update(&ctx, in, length);
+    rhash_sha256_final(&ctx, out);
+  }
+#else
   sha256_ctx ctx;
   rhash_sha256_init(&ctx);
   rhash_sha256_update(&ctx, in, length);
   rhash_sha256_final(&ctx, out);
+#endif
 
   eth2_savePostStateRoot((i32ptr*)out);
 

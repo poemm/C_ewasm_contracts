@@ -6061,27 +6061,46 @@
     i32.shr_u
     i32.store8 offset=28)
   (func $_main (type 5)
-    (local i32 i32 i32)
+    (local i32 i32 i32 i32 i64)
     global.get 0
     i32.const 32
     i32.sub
-    local.tee 0
+    local.tee 1
     global.set 0
     call $eth2_blockDataSize
-    local.tee 1
+    local.tee 0
     call $malloc
-    local.tee 2
+    local.tee 3
     i32.const 0
-    local.get 1
+    local.get 0
     call $eth2_blockDataCopy
     local.get 0
-    local.get 2
+    i32.const 49999
+    i32.add
+    local.get 0
+    i32.div_s
+    local.tee 2
+    i32.const 1
+    i32.ge_s
+    if  ;; label = @1
+      local.get 0
+      i64.extend_i32_s
+      local.set 4
+      loop  ;; label = @2
+        local.get 1
+        local.get 3
+        local.get 4
+        call $crypto_hash
+        local.get 2
+        i32.const -1
+        i32.add
+        local.tee 2
+        br_if 0 (;@2;)
+      end
+    end
     local.get 1
-    i64.extend_i32_s
-    call $crypto_hash
-    local.get 0
     call $eth2_savePostStateRoot
-    local.get 0
+    local.get 1
     i32.const 32
     i32.add
     global.set 0)

@@ -3,9 +3,9 @@
   (type (;1;) (func (param i32 i32 i32)))
   (type (;2;) (func (param i32)))
   (type (;3;) (func (param i32) (result i32)))
-  (type (;4;) (func (param i32 i32)))
-  (type (;5;) (func))
-  (type (;6;) (func (param i32 i32 i32)))
+  (type (;4;) (func (param i32 i32 i32) (result i32)))
+  (type (;5;) (func (param i32 i32)))
+  (type (;6;) (func))
   (type (;7;) (func (param i32 i32)))
   (import "env" "eth2_blockDataSize" (func $eth2_blockDataSize (type 0)))
   (import "env" "eth2_blockDataCopy" (func $eth2_blockDataCopy (type 1)))
@@ -44,16 +44,23 @@
     local.get 1
     local.get 0
     i32.sub)
-  (func $memcpy (type 6) (param i32 i32 i32)
-    (local i32)
-    local.get 2
-    i32.const 8
-    i32.ge_u
-    if  ;; label = @1
+  (func $memcpy (type 4) (param i32 i32 i32) (result i32)
+    (local i32 i32)
+    block  ;; label = @1
       local.get 2
-      local.set 3
-      loop  ;; label = @2
+      i32.const 8
+      i32.lt_u
+      if  ;; label = @2
         local.get 0
+        local.set 3
+        br 1 (;@1;)
+      end
+      local.get 0
+      local.set 3
+      local.get 2
+      local.set 4
+      loop  ;; label = @2
+        local.get 3
         local.get 1
         i64.load
         i64.store
@@ -61,14 +68,14 @@
         i32.const 8
         i32.add
         local.set 1
-        local.get 0
+        local.get 3
         i32.const 8
         i32.add
-        local.set 0
-        local.get 3
+        local.set 3
+        local.get 4
         i32.const -8
         i32.add
-        local.tee 3
+        local.tee 4
         i32.const 7
         i32.gt_u
         br_if 0 (;@2;)
@@ -81,14 +88,14 @@
     local.get 2
     if  ;; label = @1
       loop  ;; label = @2
-        local.get 0
+        local.get 3
         local.get 1
         i32.load8_u
         i32.store8
-        local.get 0
+        local.get 3
         i32.const 1
         i32.add
-        local.set 0
+        local.set 3
         local.get 1
         i32.const 1
         i32.add
@@ -99,7 +106,8 @@
         local.tee 2
         br_if 0 (;@2;)
       end
-    end)
+    end
+    local.get 0)
   (func $memset (type 7) (param i32 i32)
     (local i32)
     local.get 1
@@ -146,7 +154,7 @@
         br_if 0 (;@2;)
       end
     end)
-  (func $rhash_sha256_process_block (type 4) (param i32 i32)
+  (func $rhash_sha256_process_block (type 5) (param i32 i32)
     (local i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32)
     local.get 1
     i32.load
@@ -2671,7 +2679,7 @@
     local.get 23
     i32.add
     i32.store)
-  (func $rhash_sha256_final (type 4) (param i32 i32)
+  (func $rhash_sha256_final (type 5) (param i32 i32)
     (local i32 i32 i32 i64)
     local.get 0
     local.get 0
@@ -2907,159 +2915,457 @@
         br_if 0 (;@2;)
       end
     end)
-  (func $_main (type 5)
-    (local i32 i32 i32 i32 i32)
+  (func $_main (type 6)
+    (local i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i64 i64 i64 i64 i64)
     global.get 0
     i32.const 144
     i32.sub
     local.tee 0
     global.set 0
     call $eth2_blockDataSize
-    local.tee 2
+    local.tee 3
     call $malloc
-    local.tee 1
+    local.tee 6
     i32.const 0
-    local.get 2
+    local.get 3
     call $eth2_blockDataCopy
-    local.get 0
-    i32.const 80
-    i32.add
-    i32.const 10024
-    i64.load
-    i64.store
-    local.get 0
-    i32.const 88
-    i32.add
-    i32.const 10032
-    i64.load
-    i64.store
-    local.get 0
-    i32.const 96
-    i32.add
-    i32.const 10040
-    i64.load
-    i64.store
-    local.get 0
-    i32.const 32
-    i32.store offset=104
-    local.get 0
-    i32.const 10016
-    i64.load
-    i64.store offset=72
-    local.get 0
-    local.get 2
-    i64.extend_i32_u
-    i64.store offset=64
-    local.get 2
-    i32.const 64
-    i32.ge_u
-    if  ;; label = @1
+    block  ;; label = @1
+      local.get 3
+      i32.const 49999
+      i32.add
+      local.get 3
+      i32.div_s
+      local.tee 5
+      i32.const 1
+      i32.lt_s
+      br_if 0 (;@1;)
+      local.get 3
+      i64.extend_i32_u
+      local.set 17
       local.get 0
       i32.const 72
       i32.add
-      local.set 4
-      local.get 2
-      local.set 3
-      loop  ;; label = @2
-        local.get 4
-        local.get 1
-        i32.const 3
-        i32.and
-        if (result i32)  ;; label = @3
-          local.get 0
-          i32.const 56
-          i32.add
-          local.get 1
-          i32.const 56
-          i32.add
-          i64.load align=1
-          i64.store
-          local.get 0
-          i32.const 48
-          i32.add
-          local.get 1
-          i32.const 48
-          i32.add
-          i64.load align=1
-          i64.store
-          local.get 0
-          i32.const 40
-          i32.add
-          local.get 1
-          i32.const 40
-          i32.add
-          i64.load align=1
-          i64.store
-          local.get 0
-          i32.const 32
-          i32.add
-          local.get 1
-          i32.const 32
-          i32.add
-          i64.load align=1
-          i64.store
-          local.get 0
-          i32.const 24
-          i32.add
-          local.get 1
-          i32.const 24
-          i32.add
-          i64.load align=1
-          i64.store
-          local.get 0
-          i32.const 16
-          i32.add
-          local.get 1
-          i32.const 16
-          i32.add
-          i64.load align=1
-          i64.store
-          local.get 0
-          i32.const 8
-          i32.add
-          local.get 1
-          i32.const 8
-          i32.add
-          i64.load align=1
-          i64.store
-          local.get 0
-          local.get 1
-          i64.load align=1
-          i64.store
-          local.get 0
-        else
-          local.get 1
-        end
-        call $rhash_sha256_process_block
-        local.get 1
-        i32.const -64
-        i32.sub
-        local.set 1
+      local.set 2
+      local.get 3
+      i32.const 63
+      i32.le_u
+      if  ;; label = @2
         local.get 3
-        i32.const -64
+        if  ;; label = @3
+          i32.const 10016
+          i64.load
+          local.set 13
+          local.get 2
+          i32.const 8
+          i32.add
+          local.set 7
+          i32.const 10024
+          i64.load
+          local.set 14
+          local.get 2
+          i32.const 16
+          i32.add
+          local.set 4
+          i32.const 10032
+          i64.load
+          local.set 15
+          local.get 2
+          i32.const 24
+          i32.add
+          local.set 1
+          i32.const 10040
+          i64.load
+          local.set 16
+          loop  ;; label = @4
+            local.get 2
+            local.get 13
+            i64.store
+            local.get 7
+            local.get 14
+            i64.store
+            local.get 4
+            local.get 15
+            i64.store
+            local.get 1
+            local.get 16
+            i64.store
+            local.get 0
+            i32.const 32
+            i32.store offset=104
+            local.get 0
+            local.get 17
+            i64.store offset=64
+            local.get 0
+            local.get 6
+            local.get 3
+            call $memcpy
+            local.tee 8
+            local.get 8
+            i32.const 112
+            i32.add
+            call $rhash_sha256_final
+            local.get 5
+            i32.const -1
+            i32.add
+            local.tee 5
+            br_if 0 (;@4;)
+          end
+          br 2 (;@1;)
+        end
+        i32.const 10016
+        i64.load
+        local.set 13
+        local.get 2
+        i32.const 8
         i32.add
-        local.tee 3
-        i32.const 63
-        i32.gt_u
-        br_if 0 (;@2;)
+        local.set 6
+        i32.const 10024
+        i64.load
+        local.set 14
+        local.get 2
+        i32.const 16
+        i32.add
+        local.set 1
+        i32.const 10032
+        i64.load
+        local.set 15
+        local.get 2
+        i32.const 24
+        i32.add
+        local.set 8
+        i32.const 10040
+        i64.load
+        local.set 16
+        loop  ;; label = @3
+          local.get 2
+          local.get 13
+          i64.store
+          local.get 6
+          local.get 14
+          i64.store
+          local.get 1
+          local.get 15
+          i64.store
+          local.get 8
+          local.get 16
+          i64.store
+          local.get 0
+          i32.const 32
+          i32.store offset=104
+          local.get 0
+          local.get 17
+          i64.store offset=64
+          local.get 0
+          local.get 0
+          i32.const 112
+          i32.add
+          call $rhash_sha256_final
+          local.get 5
+          i32.const -1
+          i32.add
+          local.tee 5
+          br_if 0 (;@3;)
+        end
+        br 1 (;@1;)
       end
-      local.get 2
+      local.get 3
       i32.const 63
       i32.and
-      local.set 2
-    end
-    local.get 2
-    if  ;; label = @1
-      local.get 0
-      local.get 1
+      local.tee 12
+      if  ;; label = @2
+        i32.const 10016
+        i64.load
+        local.set 13
+        local.get 2
+        i32.const 8
+        i32.add
+        local.set 10
+        i32.const 10024
+        i64.load
+        local.set 14
+        local.get 2
+        i32.const 16
+        i32.add
+        local.set 11
+        i32.const 10032
+        i64.load
+        local.set 15
+        local.get 2
+        i32.const 24
+        i32.add
+        local.set 7
+        i32.const 10040
+        i64.load
+        local.set 16
+        loop  ;; label = @3
+          local.get 2
+          local.get 13
+          i64.store
+          local.get 10
+          local.get 14
+          i64.store
+          local.get 11
+          local.get 15
+          i64.store
+          local.get 7
+          local.get 16
+          i64.store
+          local.get 0
+          i32.const 32
+          i32.store offset=104
+          local.get 0
+          local.get 17
+          i64.store offset=64
+          local.get 6
+          local.set 1
+          local.get 3
+          local.set 4
+          loop  ;; label = @4
+            local.get 2
+            local.get 1
+            i32.const 3
+            i32.and
+            if (result i32)  ;; label = @5
+              local.get 0
+              i32.const 56
+              i32.add
+              local.get 1
+              i32.const 56
+              i32.add
+              i64.load align=1
+              i64.store
+              local.get 0
+              i32.const 48
+              i32.add
+              local.get 1
+              i32.const 48
+              i32.add
+              i64.load align=1
+              i64.store
+              local.get 0
+              i32.const 40
+              i32.add
+              local.get 1
+              i32.const 40
+              i32.add
+              i64.load align=1
+              i64.store
+              local.get 0
+              i32.const 32
+              i32.add
+              local.get 1
+              i32.const 32
+              i32.add
+              i64.load align=1
+              i64.store
+              local.get 0
+              i32.const 24
+              i32.add
+              local.get 1
+              i32.const 24
+              i32.add
+              i64.load align=1
+              i64.store
+              local.get 0
+              i32.const 16
+              i32.add
+              local.get 1
+              i32.const 16
+              i32.add
+              i64.load align=1
+              i64.store
+              local.get 0
+              i32.const 8
+              i32.add
+              local.get 1
+              i32.const 8
+              i32.add
+              i64.load align=1
+              i64.store
+              local.get 0
+              local.get 1
+              i64.load align=1
+              i64.store
+              local.get 0
+            else
+              local.get 1
+            end
+            call $rhash_sha256_process_block
+            local.get 1
+            i32.const -64
+            i32.sub
+            local.set 1
+            local.get 4
+            i32.const -64
+            i32.add
+            local.tee 4
+            i32.const 63
+            i32.gt_u
+            br_if 0 (;@4;)
+          end
+          local.get 0
+          local.get 1
+          local.get 12
+          call $memcpy
+          local.tee 8
+          local.get 8
+          i32.const 112
+          i32.add
+          call $rhash_sha256_final
+          local.get 9
+          i32.const 1
+          i32.add
+          local.tee 9
+          local.get 5
+          i32.ne
+          br_if 0 (;@3;)
+        end
+        br 1 (;@1;)
+      end
+      i32.const 10016
+      i64.load
+      local.set 13
       local.get 2
-      call $memcpy
+      i32.const 8
+      i32.add
+      local.set 10
+      i32.const 10024
+      i64.load
+      local.set 14
+      local.get 2
+      i32.const 16
+      i32.add
+      local.set 11
+      i32.const 10032
+      i64.load
+      local.set 15
+      local.get 2
+      i32.const 24
+      i32.add
+      local.set 7
+      i32.const 10040
+      i64.load
+      local.set 16
+      loop  ;; label = @2
+        local.get 2
+        local.get 13
+        i64.store
+        local.get 10
+        local.get 14
+        i64.store
+        local.get 11
+        local.get 15
+        i64.store
+        local.get 7
+        local.get 16
+        i64.store
+        local.get 0
+        i32.const 32
+        i32.store offset=104
+        local.get 0
+        local.get 17
+        i64.store offset=64
+        local.get 6
+        local.set 1
+        local.get 3
+        local.set 4
+        loop  ;; label = @3
+          local.get 2
+          local.get 1
+          i32.const 3
+          i32.and
+          if (result i32)  ;; label = @4
+            local.get 0
+            i32.const 56
+            i32.add
+            local.get 1
+            i32.const 56
+            i32.add
+            i64.load align=1
+            i64.store
+            local.get 0
+            i32.const 48
+            i32.add
+            local.get 1
+            i32.const 48
+            i32.add
+            i64.load align=1
+            i64.store
+            local.get 0
+            i32.const 40
+            i32.add
+            local.get 1
+            i32.const 40
+            i32.add
+            i64.load align=1
+            i64.store
+            local.get 0
+            i32.const 32
+            i32.add
+            local.get 1
+            i32.const 32
+            i32.add
+            i64.load align=1
+            i64.store
+            local.get 0
+            i32.const 24
+            i32.add
+            local.get 1
+            i32.const 24
+            i32.add
+            i64.load align=1
+            i64.store
+            local.get 0
+            i32.const 16
+            i32.add
+            local.get 1
+            i32.const 16
+            i32.add
+            i64.load align=1
+            i64.store
+            local.get 0
+            i32.const 8
+            i32.add
+            local.get 1
+            i32.const 8
+            i32.add
+            i64.load align=1
+            i64.store
+            local.get 0
+            local.get 1
+            i64.load align=1
+            i64.store
+            local.get 0
+          else
+            local.get 1
+          end
+          call $rhash_sha256_process_block
+          local.get 1
+          i32.const -64
+          i32.sub
+          local.set 1
+          local.get 4
+          i32.const -64
+          i32.add
+          local.tee 4
+          i32.const 63
+          i32.gt_u
+          br_if 0 (;@3;)
+        end
+        local.get 0
+        local.get 0
+        i32.const 112
+        i32.add
+        call $rhash_sha256_final
+        local.get 9
+        i32.const 1
+        i32.add
+        local.tee 9
+        local.get 5
+        i32.ne
+        br_if 0 (;@2;)
+      end
     end
-    local.get 0
-    local.get 0
-    i32.const 112
-    i32.add
-    call $rhash_sha256_final
     local.get 0
     i32.const 112
     i32.add

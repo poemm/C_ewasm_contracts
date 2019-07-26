@@ -695,94 +695,145 @@
     i32.load
     i32.store8 offset=31)
   (func $_main (type 5)
-    (local i32 i32 i32 i32)
+    (local i32 i32 i32 i32 i32 i32 i32 i32)
     global.get 0
     i32.const 144
     i32.sub
     local.tee 0
     global.set 0
     call $eth2_blockDataSize
-    local.tee 2
+    local.tee 1
     call $malloc
-    local.tee 3
+    local.tee 7
     i32.const 0
-    local.get 2
+    local.get 1
     call $eth2_blockDataCopy
-    local.get 0
-    i32.const 104
-    i32.add
-    i64.const 6620516960021240235
-    i64.store
-    local.get 0
-    i32.const 96
-    i32.add
-    i64.const -7276294671082564993
-    i64.store
-    local.get 0
-    i32.const 88
-    i32.add
-    i64.const -6534734903820487822
-    i64.store
-    local.get 0
-    i64.const -4942790177982912921
-    i64.store offset=80
-    local.get 0
-    i64.const 0
-    i64.store offset=72
-    local.get 0
-    i32.const 0
-    i32.store offset=64
-    local.get 2
-    if  ;; label = @1
-      loop  ;; label = @2
-        local.get 0
-        local.get 1
-        i32.add
-        local.get 3
-        i32.load8_u
-        i32.store8
-        local.get 0
-        local.get 0
-        i32.load offset=64
-        i32.const 1
-        i32.add
-        local.tee 1
-        i32.store offset=64
-        local.get 1
-        i32.const 64
-        i32.eq
-        if  ;; label = @3
+    block  ;; label = @1
+      local.get 1
+      i32.const 49999
+      i32.add
+      local.get 1
+      i32.div_s
+      local.tee 3
+      i32.const 1
+      i32.lt_s
+      br_if 0 (;@1;)
+      local.get 1
+      if  ;; label = @2
+        loop  ;; label = @3
           local.get 0
+          i64.const 6620516960021240235
+          i64.store offset=104
           local.get 0
-          call $sha256_transform
+          i64.const -7276294671082564993
+          i64.store offset=96
+          local.get 0
+          i64.const -6534734903820487822
+          i64.store offset=88
+          local.get 0
+          i64.const -4942790177982912921
+          i64.store offset=80
+          local.get 0
+          i64.const 0
+          i64.store offset=72
           local.get 0
           i32.const 0
           i32.store offset=64
-          local.get 0
-          local.get 0
-          i64.load offset=72
-          i64.const 512
-          i64.add
-          i64.store offset=72
+          local.get 7
+          local.set 4
+          local.get 1
+          local.set 6
           i32.const 0
-          local.set 1
+          local.set 2
+          loop  ;; label = @4
+            local.get 0
+            local.get 2
+            i32.add
+            local.get 4
+            i32.load8_u
+            i32.store8
+            local.get 0
+            local.get 0
+            i32.load offset=64
+            i32.const 1
+            i32.add
+            local.tee 2
+            i32.store offset=64
+            local.get 2
+            i32.const 64
+            i32.eq
+            if  ;; label = @5
+              local.get 0
+              local.get 0
+              call $sha256_transform
+              local.get 0
+              i32.const 0
+              i32.store offset=64
+              local.get 0
+              local.get 0
+              i64.load offset=72
+              i64.const 512
+              i64.add
+              i64.store offset=72
+              i32.const 0
+              local.set 2
+            end
+            local.get 4
+            i32.const 1
+            i32.add
+            local.set 4
+            local.get 6
+            i32.const -1
+            i32.add
+            local.tee 6
+            br_if 0 (;@4;)
+          end
+          local.get 0
+          local.get 0
+          i32.const 112
+          i32.add
+          call $sha256_final
+          local.get 5
+          i32.const 1
+          i32.add
+          local.tee 5
+          local.get 3
+          i32.ne
+          br_if 0 (;@3;)
         end
-        local.get 3
-        i32.const 1
+        br 1 (;@1;)
+      end
+      loop  ;; label = @2
+        local.get 0
+        i64.const 6620516960021240235
+        i64.store offset=104
+        local.get 0
+        i64.const -7276294671082564993
+        i64.store offset=96
+        local.get 0
+        i64.const -6534734903820487822
+        i64.store offset=88
+        local.get 0
+        i64.const -4942790177982912921
+        i64.store offset=80
+        local.get 0
+        i64.const 0
+        i64.store offset=72
+        local.get 0
+        i32.const 0
+        i32.store offset=64
+        local.get 0
+        local.get 0
+        i32.const 112
         i32.add
-        local.set 3
-        local.get 2
+        call $sha256_final
+        local.get 3
         i32.const -1
         i32.add
-        local.tee 2
+        local.tee 3
         br_if 0 (;@2;)
       end
     end
-    local.get 0
-    local.get 0
-    i32.const 112
-    i32.add
-    call $sha256_final
     local.get 0
     i32.const 112
     i32.add

@@ -899,7 +899,13 @@ void _main(){
   eth2_blockDataCopy( (i32ptr*)in, 0, length ); //get data to hash into memory
   unsigned char out[64];
 
+#if 1   // for benchmarking
+  int loop_iters = (50000 + (length - 1)) / length;
+  for (int i=0; i<loop_iters; i++)
+    blake2b(out, in, length);
+#else
   blake2b(out, in, length);
+#endif
 
   eth2_savePostStateRoot((i32ptr*)out);
 

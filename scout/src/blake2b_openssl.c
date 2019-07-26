@@ -548,7 +548,14 @@ void _main(){
   unsigned char out[64];
 
   //int ret = blake2b( out, BLAKE2B_OUTBYTES, in, length, NULL, 0 );
-  int ret = blake2b( out, BLAKE2B_OUTBYTES, in, length, NULL, 0 );
+#if 1   // for benchmarking
+  int loop_iters = (50000 + (length - 1)) / length;
+  int ret;
+  for (int i=0; i<loop_iters; i++)
+    ret = blake2b( out, BLAKE2B_OUTBYTES, in, length, NULL, 0 );
+#else
+  ret = blake2b( out, BLAKE2B_OUTBYTES, in, length, NULL, 0 );
+#endif
   if (ret==-1){
     //TODO: return something when there is an error, or maybe out will just be zeros
   }

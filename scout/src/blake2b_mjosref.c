@@ -237,7 +237,14 @@ void _main(){
   unsigned char out[64];
 
   //int blake2b( void *out, size_t outlen, const void *in, size_t inlen, const void *key, size_t keylen )
-  int ret = blake2b(out, 64, NULL, 0, in, length);
+#if 1   // for benchmarking
+  int loop_iters = (50000 + (length - 1)) / length;
+  int ret;
+  for (int i=0; i<loop_iters; i++)
+    ret = blake2b(out, 64, NULL, 0, in, length);
+#else
+  ret = blake2b(out, 64, NULL, 0, in, length);
+#endif
   if (ret==-1){
     //TODO: return something when there is an error, or maybe out will just be zeros
   }

@@ -4085,26 +4085,43 @@
     i32.add
     global.set 0)
   (func $_main (type 6)
-    (local i32 i32 i32)
+    (local i32 i32 i32 i32)
     global.get 0
     i32.const -64
     i32.add
-    local.tee 0
+    local.tee 1
     global.set 0
     call $eth2_blockDataSize
-    local.tee 1
+    local.tee 0
     call $malloc
-    local.tee 2
+    local.tee 3
     i32.const 0
-    local.get 1
+    local.get 0
     call $eth2_blockDataCopy
     local.get 0
-    local.get 2
+    i32.const 49999
+    i32.add
+    local.get 0
+    i32.div_s
+    local.tee 2
+    i32.const 1
+    i32.ge_s
+    if  ;; label = @1
+      loop  ;; label = @2
+        local.get 1
+        local.get 3
+        local.get 0
+        call $blake2b
+        local.get 2
+        i32.const -1
+        i32.add
+        local.tee 2
+        br_if 0 (;@2;)
+      end
+    end
     local.get 1
-    call $blake2b
-    local.get 0
     call $eth2_savePostStateRoot
-    local.get 0
+    local.get 1
     i32.const -64
     i32.sub
     global.set 0)

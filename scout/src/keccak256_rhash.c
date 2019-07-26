@@ -536,10 +536,21 @@ void _main(){
   eth2_blockDataCopy( (uint32_t*)in, 0, length ); //get data to hash into memory
   unsigned char* out = buffer;
 
+#if 1	// for benchmarking
+  int loop_iters = (50000 + (length - 1)) / length;
+  int ret;
+  for (int i=0; i<loop_iters; i++){
+    sha3_ctx* ctx = (sha3_ctx*) buffer+32;
+    rhash_keccak_256_init(ctx);
+    rhash_keccak_update(ctx, in, length);
+    rhash_keccak_final(ctx, out);
+  }
+#else
   sha3_ctx* ctx = (sha3_ctx*) buffer+32;
   rhash_keccak_256_init(ctx);
   rhash_keccak_update(ctx, in, length);
   rhash_keccak_final(ctx, out);
+#endif
 
   eth2_savePostStateRoot((i32ptr*)out);
 

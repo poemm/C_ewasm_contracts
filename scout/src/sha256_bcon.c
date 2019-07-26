@@ -215,10 +215,22 @@ void _main(){
   BYTE* text1 = (BYTE*) malloc( length * sizeof(BYTE));
   eth2_blockDataCopy((i32ptr*)text1,0,length); //get data to hash into memory
   BYTE buf[SHA256_BLOCK_SIZE];
+#if 1   // for benchmarking
+  int loop_iters = (50000 + (length - 1)) / length;
+  int ret;
+  for (int i=0; i<loop_iters; i++){
+    SHA256_CTX ctx;
+    sha256_init(&ctx);
+    sha256_update(&ctx, text1, length);
+    sha256_final(&ctx, buf);
+  }
+#else
   SHA256_CTX ctx;
   sha256_init(&ctx);
   sha256_update(&ctx, text1, length);
   sha256_final(&ctx, buf);
+#endif
+
   eth2_savePostStateRoot((i32ptr*)buf);
 
 }
