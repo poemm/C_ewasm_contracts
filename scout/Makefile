@@ -204,6 +204,13 @@ sha256_bcon: src/sha256_bcon.c
         OPTIMIZATION_LLC=-O3 \
         OPTIMIZATION_BINARYEN=-O3
 
+sha256_mbedtls: src/sha256_mbedtls.c
+	make project PROJECT=sha256_mbedtls\
+        OPTIMIZATION_CLANG=-O3 \
+        OPTIMIZATION_OPT=-O3 \
+        OPTIMIZATION_LLC=-O3 \
+        OPTIMIZATION_BINARYEN=-O3
+
 sha256_nacl: src/sha256_nacl.c
 	make project PROJECT=sha256_nacl \
         OPTIMIZATION_CLANG=-O3 \
