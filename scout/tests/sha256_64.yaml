@@ -4,8 +4,10 @@ beacon_state:
     - sha256_nacl.wasm
     - sha256_rhash.wasm
     - sha256_mbedtls.wasm
+    - sha256_trezor.wasm
 shard_pre_state:
   exec_env_states:
+    - "0000000000000000000000000000000000000000000000000000000000000000"
     - "0000000000000000000000000000000000000000000000000000000000000000"
     - "0000000000000000000000000000000000000000000000000000000000000000"
     - "0000000000000000000000000000000000000000000000000000000000000000"
@@ -19,8 +21,11 @@ shard_blocks:
     data: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
   - env: 3
     data: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  - env: 4
+    data: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 shard_post_state:
   exec_env_states:
+    - "693e5f0f347a5d70acbb7baaab9beb988301b3e9588e32c73d7dcdfb7b2c4604"
     - "693e5f0f347a5d70acbb7baaab9beb988301b3e9588e32c73d7dcdfb7b2c4604"
     - "693e5f0f347a5d70acbb7baaab9beb988301b3e9588e32c73d7dcdfb7b2c4604"
     - "693e5f0f347a5d70acbb7baaab9beb988301b3e9588e32c73d7dcdfb7b2c4604"

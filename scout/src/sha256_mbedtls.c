@@ -35,7 +35,8 @@ void assert(int in){}
 void mbedtls_platform_zeroize( void *buf, size_t len ){}
 
 
-// config.h
+
+
 
 //  mbedtls/include/mbedtls/platform_util.h 
 
@@ -61,6 +62,11 @@ void mbedtls_platform_zeroize( void *buf, size_t len ){}
 } while( 0 )
 
 
+
+
+
+
+
 // mbedtls/sha256.h
 
 #define MBEDTLS_ERR_SHA256_BAD_INPUT_DATA -0x0074 /**< SHA-256 input data was malformed. */
@@ -75,6 +81,10 @@ typedef struct mbedtls_sha256_context
                                      0: Use SHA-256, or 1: Use SHA-224. */
 }
 mbedtls_sha256_context;
+
+
+
+
 
 
 

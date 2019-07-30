@@ -225,6 +225,12 @@ sha256_rhash: src/sha256_rhash.c
         OPTIMIZATION_LLC=-O3 \
         OPTIMIZATION_BINARYEN=-O3
 
+sha256_trezor: src/sha256_trezor.c
+	make project PROJECT=sha256_trezor \
+        OPTIMIZATION_CLANG=-O3 \
+        OPTIMIZATION_OPT=-O3 \
+        OPTIMIZATION_LLC=-O3 \
+        OPTIMIZATION_BINARYEN=-O3
 
 
 all: blake2b helloworld keccak256_rhash sha256 
