@@ -28,12 +28,15 @@ export SRC_DIR := src/
 
 
 # paths to tools
-export LLVM := /home/user/repos/llvm9/llvm-project/build/bin/
-#export LLVM := llvm-project/build/bin
-#export LLVM := 
-export WABT_DIR := wabt/build/
-export BINARYEN_DIR := binaryen/build/bin/
-export SCOUT_DIR := scout/target/release/
+export LLVM_DIR := 
+export WABT_DIR := 
+export BINARYEN_DIR := 
+export SCOUT_DIR := 
+#export LLVM_DIR := llvm-project/build/bin
+#export WABT_DIR := wabt/build/
+#export BINARYEN_DIR := binaryen/build/bin/
+#export SCOUT_DIR := scout/target/release/
+
 
 
 # compiler options
@@ -115,20 +118,20 @@ test: scout-check
 # Build, convert, optimize
 project:
 	# compile
-	$(LLVM)clang -cc1 ${OPTIMIZATION_CLANG} -emit-llvm -triple=wasm32-unknown-unknown-wasm ${SRC_DIR}${PROJECT}.c -o ${PROJECT}.ll
-	$(LLVM)opt ${OPTIMIZATION_OPT} ${PROJECT}.ll -o ${PROJECT}.ll
-	$(LLVM)llc ${OPTIMIZATION_LLC} -filetype=obj ${PROJECT}.ll -o ${PROJECT}.o
+	$(LLVM_DIR)clang -cc1 ${OPTIMIZATION_CLANG} -emit-llvm -triple=wasm32-unknown-unknown-wasm ${SRC_DIR}${PROJECT}.c -o ${PROJECT}.ll
+	$(LLVM_DIR)opt ${OPTIMIZATION_OPT} ${PROJECT}.ll -o ${PROJECT}.ll
+	$(LLVM_DIR)llc ${OPTIMIZATION_LLC} -filetype=obj ${PROJECT}.ll -o ${PROJECT}.o
 	# get builtin __multi3() to link against
 ifeq ($(PROJECT), ecrecover_libsecp256k1)
 ifeq (, $(shell if [ -e lib/wasi/libclang_rt.builtins-wasm32.a ] ; then echo blah ; fi;))
 	wget https://github.com/CraneStation/wasi-sdk/releases/download/wasi-sdk-5/libclang_rt.builtins-wasm32-wasi-5.0.tar.gz
 	tar -xvzf libclang_rt.builtins-wasm32-wasi-5.0.tar.gz
 endif
-	$(LLVM)wasm-ld $(OPTIMIZATION_WASM_LD) ${PROJECT}.o -o ${PROJECT}.wasm --no-entry -allow-undefined-file=src/ewasm.syms -export=_main lib/wasi/libclang_rt.builtins-wasm32.a 
+	$(LLVM_DIR)wasm-ld $(OPTIMIZATION_WASM_LD) ${PROJECT}.o -o ${PROJECT}.wasm --no-entry -allow-undefined-file=src/ewasm.syms -export=_main lib/wasi/libclang_rt.builtins-wasm32.a 
 else ifeq ($(PROJECT), keccak256_rhash_init_update_final)
-	$(LLVM)wasm-ld $(OPTIMIZATION_WASM_LD) ${PROJECT}.o -o ${PROJECT}.wasm --no-entry -allow-undefined-file=src/ewasm.syms -export=_main -export=rhash_keccak_init -export=rhash_keccak_update -export=rhash_keccak_final
+	$(LLVM_DIR)wasm-ld $(OPTIMIZATION_WASM_LD) ${PROJECT}.o -o ${PROJECT}.wasm --no-entry -allow-undefined-file=src/ewasm.syms -export=_main -export=rhash_keccak_init -export=rhash_keccak_update -export=rhash_keccak_final
 else
-	$(LLVM)wasm-ld $(OPTIMIZATION_WASM_LD) ${PROJECT}.o -o ${PROJECT}.wasm --no-entry -allow-undefined-file=src/ewasm.syms -export=_main #--stack-first -z stack-size=10000
+	$(LLVM_DIR)wasm-ld $(OPTIMIZATION_WASM_LD) ${PROJECT}.o -o ${PROJECT}.wasm --no-entry -allow-undefined-file=src/ewasm.syms -export=_main #--stack-first -z stack-size=10000
 endif
 	# done compiling, optimize with Wasm-specific optimizer
 	$(BINARYEN_DIR)wasm-opt ${OPTIMIZATION_BINARYEN} ${PROJECT}.wasm -o ${PROJECT}.wasm -g #-g keeps function names
