@@ -16,7 +16,7 @@ Once dependencies are available, update paths in Makefile variables `LLVM_DIR`, 
 make blake2b_ref
 
 # same as above, but with custom paths to tools, if you don't want to set paths in Makefile
-make blake2b_ref WABT_DIR=wabt/build/ BINARYAN_DIR=binaryen/build/bin/ LLVM_DIR=llvm-project/build/bin
+make blake2b_ref WABT_DIR=wabt/build/ BINARYAN_DIR=binaryen/build/bin/ LLVM_DIR=llvm-project/build/bin/
 
 # compile a custom my_contract.c
 make PROJECT=my_contract SRC_DIR=path/to/my_contract/src/dir/
