@@ -31,7 +31,6 @@ export SRC_DIR := src/
 #export LLVM := llvm-project/build/bin
 export LLVM := 
 export WABT_DIR := wabt/build/
-export PYWEBASSEMBLY_DIR := pywebassembly/
 export BINARYEN_DIR := binaryen/build/bin/
 
 # compiler options
@@ -61,9 +60,6 @@ binaryen-install:
 	cd binaryen/build; cmake ..
 	cd binaryen/build; make -j4
 
-pywebassembly-install:
-	git clone https://github.com/poemm/pywebassembly.git
-
 llvm-install:
 	# WARNING: should do this manually. Downloads a lot, requires a lot of system resources, and takes a long time. Might require restarting with `make` again if compilation has an error.
 	git clone https://github.com/llvm/llvm-project.git
@@ -71,7 +67,7 @@ llvm-install:
 	cd llvm-project/build; cmake -G 'Unix Makefiles' -DLLVM_ENABLE_PROJECTS="clang;libcxx;libcxxabi;lld" ../llvm
 	cd llvm-project/build; make -j4
 
-install: wabt-install binaryen-install pywebassembly-install
+install: wabt-install binaryen-install
 	#WARNING: this does not include llvm-install because this should be done manually
 
 wabt-check:
@@ -82,11 +78,6 @@ endif
 binaryen-check:
 ifeq (, $(shell which $(BINARYEN_DIR)wasm-dis))
 	$(error "ERROR: Could not find binaryen with wasm-dis, install it yourself and adjust path BINARYEN_DIR in this makefile, or just install it with `make binaryen-install`, and try again.")
-endif
-
-pywebassembly-check:
-ifeq (, $(shell if [ -e $(PYWEBASSEMBLY_DIR)examples/ewasmify.py ] ; then echo blah ; fi;))
-	$(error "ERROR: Could not find ewasmify.py, install it yourself and adjust path EWASMIFY_DIR in this makefile, or just install it with make pywebassembly-install, and try again.")) 
 endif
 
 export LLVM_ERROR := "ERROR: Could not find llvm8+, install it yourself and adjust path LLVM_DIR in this makefile. It can also be found in some repositories. Install it yourself with `make llvm-install`, but this may fail and you should do it manually. WARNNG: 600MB+ download size, needs lots of RAM/disk to compile, compilation may fail the first try so need to restart multiple times.")
@@ -128,18 +119,18 @@ wasm-dis: binaryen-check
 
 
 # postprocess imports/exports and size reductions
-ewasmify: pywebassembly-check wabt-check binaryen-check
+ewasmify: wabt-check binaryen-check
 	PYTHONPATH="$(PYTHONPATH):$(PYWEBASSEMBLY_DIR)" python3 $(PYWEBASSEMBLY_DIR)examples/ewasmify.py $(PROJECT).wasm
 	$(BINARYEN_DIR)wasm-opt ${OPTIMIZATION_BINARYEN} $(PROJECT)_ewasmified.wasm -o $(PROJECT)_ewasmified.wasm
 	$(WABT_DIR)wasm2wat $(PROJECT)_ewasmified.wasm > $(PROJECT)_ewasmified.wat
 ifeq ($(PROJECT), mul256_bignum)
-	# next, some extra steps to transform import name for new bignum module, TODO: automate this with pywebassembly
+	# next, some extra steps to transform import name for new bigint module
 	$(WABT_DIR)wasm2wat $(PROJECT)_ewasmified.wasm > $(PROJECT)_ewasmified.wat
 	sed -i -e 's/"ethereum" "mul256"/"bignum" "mul256"/g' $(PROJECT)_ewasmified.wat
 	$(WABT_DIR)wat2wasm $(PROJECT)_ewasmified.wat
 endif
 ifeq ($(PROJECT), mul256_bignum_640000)
-	# next, some extra steps to transform import name for new bignum module, TODO: automate this with pywebassembly
+	# next, some extra steps to transform import name for new bigint module
 	$(WABT_DIR)wasm2wat $(PROJECT)_ewasmified.wasm > $(PROJECT)_ewasmified.wat
 	sed -i -e 's/"ethereum" "mul256"/"bignum" "mul256"/g' $(PROJECT)_ewasmified.wat
 	$(WABT_DIR)wat2wasm $(PROJECT)_ewasmified.wat
@@ -211,6 +202,8 @@ keccak256_rhash: src/keccak256_rhash.c
 	OPTIMIZATION_LLC=-O3 \
 	OPTIMIZATION_BINARYEN=-O3
 
+mul256_all: mul256 mul256_bignum mul256_640000 mul256_bignum_640000
+
 mul256: src/mul256.c
 	make project PROJECT=mul256 \
 	OPTIMIZATION_CLANG=-O3 \
@@ -219,12 +212,25 @@ mul256: src/mul256.c
 	OPTIMIZATION_BINARYEN=-O3
 
 mul256_bignum: src/mul256_bignum.c
-	make project PROJECT=mul256 \
+	make project PROJECT=mul256_bignum \
 	OPTIMIZATION_CLANG=-O3 \
 	OPTIMIZATION_OPT=-O3 \
 	OPTIMIZATION_LLC=-O3 \
 	OPTIMIZATION_BINARYEN=-O3
 	
+mul256_640000: src/mul256_640000.c
+	make project PROJECT=mul256_640000 \
+	OPTIMIZATION_CLANG=-O3 \
+	OPTIMIZATION_OPT=-O3 \
+	OPTIMIZATION_LLC=-O3 \
+	OPTIMIZATION_BINARYEN=-O3
+
+mul256_bignum_640000: src/mul256_bignum_640000.c
+	make project PROJECT=mul256_bignum_640000 \
+	OPTIMIZATION_CLANG=-O3 \
+	OPTIMIZATION_OPT=-O3 \
+	OPTIMIZATION_LLC=-O3 \
+	OPTIMIZATION_BINARYEN=-O3
 
 polynomial_evaluation_32bit: src/polynomial_evaluation_32bit.c
 	make project PROJECT=polynomial_evaluation_32bit \
@@ -300,7 +306,7 @@ wrc20: src/wrc20.c
 	# these optimization flags produced the smallest wasm, there were some ties
 
 
-all: blake2b_floodyberry blake2b_mjosref blake2b_openssl blake2b_ref blake2b_ref_small ed25519verify_tweetnacl keccak256_rhash mul256 mul256_bignum polynomial_evaluation_32bit sha1_bcon sha1_bcon_small sha1_ref sha1_rhash sha1_rhash_small sha256_bcon sha256_nacl sha256_rhash wrc20
+all: blake2b_floodyberry blake2b_mjosref blake2b_openssl blake2b_ref blake2b_ref_small ed25519verify_tweetnacl keccak256_rhash mul256_all polynomial_evaluation_32bit sha1_bcon sha1_bcon_small sha1_ref sha1_rhash sha1_rhash_small sha256_bcon sha256_nacl sha256_rhash wrc20
 
 
 

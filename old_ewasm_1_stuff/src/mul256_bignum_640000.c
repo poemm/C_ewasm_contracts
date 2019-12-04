@@ -40,7 +40,7 @@ void _main(){
   callDataCopy(x, 4, 32);
   callDataCopy(y, 36, 32);
 
-  for( int i=0; i<1000000; ++i ){
+  for( int i=0; i<100000; ++i ){
     mul256(y,x,z); mul256(y,z,x); mul256(y,x,z); mul256(y,z,x);
     mul256(y,x,z); mul256(y,z,x); mul256(y,x,z); mul256(y,z,x);
     mul256(y,x,z); mul256(y,z,x); mul256(y,x,z); mul256(y,z,x);
