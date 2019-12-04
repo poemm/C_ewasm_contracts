@@ -1,0 +1,37 @@
+beacon_state:
+  execution_scripts:
+    - keccak256_rhash.wasm
+    - keccak256_libkeccak-tiny.wasm
+    - keccak256_libkeccak-tiny-unrolled.wasm
+    - keccak256_ref_readable_and_compact.wasm
+    - keccak256_openssl.wasm
+    - keccak256_ref.wasm
+shard_pre_state:
+  exec_env_states:
+    - "0000000000000000000000000000000000000000000000000000000000000000"
+    - "0000000000000000000000000000000000000000000000000000000000000000"
+    - "0000000000000000000000000000000000000000000000000000000000000000"
+    - "0000000000000000000000000000000000000000000000000000000000000000"
+    - "0000000000000000000000000000000000000000000000000000000000000000"
+    - "0000000000000000000000000000000000000000000000000000000000000000"
+shard_blocks:
+  - env: 0
+    data: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  - env: 1
+    data: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  - env: 2
+    data: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  - env: 3
+    data: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  - env: 4
+    data: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  - env: 5
+    data: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+shard_post_state:
+  exec_env_states:
+    - "57dac4ea3b836efe165e0e3069b76bfb21907926c9da47fb246e45095a4747fa"
+    - "57dac4ea3b836efe165e0e3069b76bfb21907926c9da47fb246e45095a4747fa"
+    - "57dac4ea3b836efe165e0e3069b76bfb21907926c9da47fb246e45095a4747fa"
+    - "57dac4ea3b836efe165e0e3069b76bfb21907926c9da47fb246e45095a4747fa"
+    - "57dac4ea3b836efe165e0e3069b76bfb21907926c9da47fb246e45095a4747fa"
+    - "57dac4ea3b836efe165e0e3069b76bfb21907926c9da47fb246e45095a4747fa"

@@ -3,9 +3,10 @@
   (type (;1;) (func (param i32 i32 i32)))
   (type (;2;) (func (param i32)))
   (type (;3;) (func (param i32) (result i32)))
-  (type (;4;) (func))
-  (type (;5;) (func (param i32 i32 i32)))
-  (type (;6;) (func (param i32 i32) (result i32)))
+  (type (;4;) (func (param i32 i32 i32) (result i32)))
+  (type (;5;) (func (param i32 i32)))
+  (type (;6;) (func))
+  (type (;7;) (func (param i32 i32) (result i32)))
   (import "env" "eth2_blockDataSize" (func $eth2_blockDataSize (type 0)))
   (import "env" "eth2_blockDataCopy" (func $eth2_blockDataCopy (type 1)))
   (import "env" "eth2_savePostStateRoot" (func $eth2_savePostStateRoot (type 2)))
@@ -43,16 +44,23 @@
     local.get 1
     local.get 0
     i32.sub)
-  (func $memcpy (type 5) (param i32 i32 i32)
-    (local i32)
-    local.get 2
-    i32.const 8
-    i32.ge_u
-    if  ;; label = @1
+  (func $memcpy (type 4) (param i32 i32 i32) (result i32)
+    (local i32 i32)
+    block  ;; label = @1
       local.get 2
-      local.set 3
-      loop  ;; label = @2
+      i32.const 8
+      i32.lt_u
+      if  ;; label = @2
         local.get 0
+        local.set 3
+        br 1 (;@1;)
+      end
+      local.get 0
+      local.set 3
+      local.get 2
+      local.set 4
+      loop  ;; label = @2
+        local.get 3
         local.get 1
         i64.load
         i64.store
@@ -60,14 +68,14 @@
         i32.const 8
         i32.add
         local.set 1
-        local.get 0
+        local.get 3
         i32.const 8
         i32.add
-        local.set 0
-        local.get 3
+        local.set 3
+        local.get 4
         i32.const -8
         i32.add
-        local.tee 3
+        local.tee 4
         i32.const 7
         i32.gt_u
         br_if 0 (;@2;)
@@ -80,14 +88,14 @@
     local.get 2
     if  ;; label = @1
       loop  ;; label = @2
-        local.get 0
+        local.get 3
         local.get 1
         i32.load8_u
         i32.store8
-        local.get 0
+        local.get 3
         i32.const 1
         i32.add
-        local.set 0
+        local.set 3
         local.get 1
         i32.const 1
         i32.add
@@ -98,8 +106,9 @@
         local.tee 2
         br_if 0 (;@2;)
       end
-    end)
-  (func $memset (type 6) (param i32 i32) (result i32)
+    end
+    local.get 0)
+  (func $memset (type 7) (param i32 i32) (result i32)
     (local i32)
     local.get 1
     i32.const 9
@@ -146,6 +155,119 @@
       end
     end
     local.get 0)
+  (func $rhash_keccak_init (type 5) (param i32 i32)
+    local.get 0
+    i32.const 400
+    call $memset
+    i32.const 1600
+    local.get 1
+    i32.const 1
+    i32.shl
+    i32.sub
+    i32.const 3
+    i32.shr_u
+    i32.store offset=396)
+  (func $rhash_keccak_update (type 1) (param i32 i32 i32)
+    (local i32 i32 i32 i32)
+    block  ;; label = @1
+      local.get 0
+      i32.load offset=392
+      local.tee 3
+      i32.const 0
+      i32.lt_s
+      br_if 0 (;@1;)
+      local.get 0
+      local.get 2
+      local.get 3
+      i32.add
+      local.get 0
+      i32.load offset=396
+      local.tee 4
+      i32.rem_u
+      i32.store offset=392
+      local.get 3
+      if  ;; label = @2
+        local.get 0
+        i32.const 200
+        i32.add
+        local.tee 5
+        local.get 3
+        i32.add
+        local.get 1
+        local.get 2
+        local.get 4
+        local.get 3
+        i32.sub
+        local.tee 3
+        local.get 3
+        local.get 2
+        i32.gt_u
+        local.tee 6
+        select
+        call $memcpy
+        drop
+        local.get 6
+        br_if 1 (;@1;)
+        local.get 0
+        local.get 5
+        local.get 4
+        call $rhash_sha3_process_block
+        local.get 2
+        local.get 3
+        i32.sub
+        local.set 2
+        local.get 1
+        local.get 3
+        i32.add
+        local.set 1
+      end
+      local.get 2
+      local.get 4
+      i32.ge_u
+      if  ;; label = @2
+        local.get 0
+        i32.const 200
+        i32.add
+        local.set 5
+        loop  ;; label = @3
+          local.get 0
+          local.get 1
+          i32.const 7
+          i32.and
+          if (result i32)  ;; label = @4
+            local.get 5
+            local.get 1
+            local.get 4
+            call $memcpy
+          else
+            local.get 1
+          end
+          local.get 4
+          call $rhash_sha3_process_block
+          local.get 1
+          local.get 4
+          i32.add
+          local.set 1
+          local.get 2
+          local.get 4
+          i32.sub
+          local.tee 2
+          local.get 4
+          i32.ge_u
+          br_if 0 (;@3;)
+        end
+      end
+      local.get 2
+      i32.eqz
+      br_if 0 (;@1;)
+      local.get 0
+      i32.const 200
+      i32.add
+      local.get 1
+      local.get 2
+      call $memcpy
+      drop
+    end)
   (func $rhash_sha3_process_block (type 1) (param i32 i32 i32)
     (local i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64)
     local.get 0
@@ -409,7 +531,7 @@
       i64.xor
       local.tee 28
       local.get 1
-      i32.const 1664
+      i32.const 1680
       i32.add
       i64.load
       i64.xor
@@ -844,251 +966,99 @@
     local.get 0
     local.get 8
     i64.store offset=24)
-  (func $_main (type 4)
-    (local i32 i32 i32 i32 i32 i32 i32 i32 i32)
-    call $eth2_blockDataSize
-    local.tee 3
-    call $malloc
-    local.tee 6
+  (func $rhash_keccak_final (type 5) (param i32 i32)
+    (local i32 i32 i32)
+    local.get 0
+    i32.load offset=396
+    local.set 3
+    local.get 0
+    i32.load offset=392
+    local.tee 2
     i32.const 0
-    local.get 3
-    call $eth2_blockDataCopy
-    block  ;; label = @1
-      local.get 3
-      i32.const 49999
+    i32.ge_s
+    if  ;; label = @1
+      local.get 0
+      i32.const 200
+      i32.add
+      local.tee 4
+      local.get 2
       i32.add
       local.get 3
-      i32.const 1
+      local.get 2
+      i32.sub
+      call $memset
+      drop
+      local.get 4
+      local.get 0
+      i32.load offset=392
       i32.add
-      i32.div_s
-      local.tee 5
+      local.tee 2
+      local.get 2
+      i32.load8_u
       i32.const 1
-      i32.lt_s
-      br_if 0 (;@1;)
+      i32.or
+      i32.store8
       local.get 3
-      i32.const 136
-      i32.rem_u
-      local.set 7
+      local.get 4
+      i32.add
+      i32.const -1
+      i32.add
+      local.tee 2
+      local.get 2
+      i32.load8_u
+      i32.const 128
+      i32.or
+      i32.store8
+      local.get 0
+      local.get 4
       local.get 3
-      i32.const 136
-      i32.ge_u
-      if  ;; label = @2
-        loop  ;; label = @3
-          i32.const 13840
-          i32.const 400
-          call $memset
-          local.set 4
-          i32.const 14232
-          local.get 7
-          i32.store
-          i32.const 14236
-          i32.const 136
-          i32.store
-          local.get 6
-          local.set 1
-          local.get 3
-          local.set 2
-          loop  ;; label = @4
-            block  ;; label = @5
-              local.get 1
-              i32.const 7
-              i32.and
-              i32.eqz
-              if  ;; label = @6
-                local.get 1
-                local.set 0
-                br 1 (;@5;)
-              end
-              i32.const 14040
-              local.set 0
-              i32.const 14040
-              local.get 1
-              i32.const 136
-              call $memcpy
-            end
-            local.get 4
-            local.get 0
-            i32.const 136
-            call $rhash_sha3_process_block
-            local.get 1
-            i32.const 136
-            i32.add
-            local.set 1
-            local.get 2
-            i32.const -136
-            i32.add
-            local.tee 2
-            i32.const 135
-            i32.gt_u
-            br_if 0 (;@4;)
-          end
-          local.get 2
-          if  ;; label = @4
-            i32.const 14040
-            local.get 1
-            local.get 2
-            call $memcpy
-          end
-          i32.const 100
-          i32.const 14236
-          i32.load
-          local.tee 1
-          i32.const 1
-          i32.shr_u
-          i32.sub
-          local.set 2
-          i32.const 14232
-          i32.load
-          local.tee 0
-          i32.const 0
-          i32.ge_s
-          if  ;; label = @4
-            local.get 0
-            i32.const 14040
-            i32.add
-            local.get 1
-            local.get 0
-            i32.sub
-            call $memset
-            drop
-            i32.const 14232
-            i32.load
-            i32.const 14040
-            i32.add
-            local.tee 0
-            local.get 0
-            i32.load8_u
-            i32.const 1
-            i32.or
-            i32.store8
-            local.get 1
-            i32.const 14039
-            i32.add
-            local.tee 0
-            local.get 0
-            i32.load8_u
-            i32.const 128
-            i32.or
-            i32.store8
-            local.get 4
-            i32.const 14040
-            local.get 1
-            call $rhash_sha3_process_block
-            i32.const 14232
-            i32.const -2147483648
-            i32.store
-          end
-          i32.const 1040
-          local.get 4
-          local.get 2
-          call $memcpy
-          local.get 8
-          i32.const 1
-          i32.add
-          local.tee 8
-          local.get 5
-          i32.ne
-          br_if 0 (;@3;)
-        end
-        br 1 (;@1;)
-      end
-      loop  ;; label = @2
-        i32.const 13840
-        i32.const 400
-        call $memset
-        local.set 2
-        i32.const 14232
-        local.get 7
-        i32.store
-        i32.const 136
-        local.set 1
-        i32.const 14236
-        i32.const 136
-        i32.store
-        block  ;; label = @3
-          block  ;; label = @4
-            local.get 3
-            i32.eqz
-            if  ;; label = @5
-              i32.const 32
-              local.set 4
-              i32.const 0
-              local.set 0
-              br 1 (;@4;)
-            end
-            i32.const 14040
-            local.get 6
-            local.get 3
-            call $memcpy
-            i32.const 100
-            i32.const 14236
-            i32.load
-            local.tee 1
-            i32.const 1
-            i32.shr_u
-            i32.sub
-            local.set 4
-            i32.const 14232
-            i32.load
-            local.tee 0
-            i32.const 0
-            i32.lt_s
-            br_if 1 (;@3;)
-          end
-          local.get 0
-          i32.const 14040
-          i32.add
-          local.get 1
-          local.get 0
-          i32.sub
-          call $memset
-          drop
-          i32.const 14232
-          i32.load
-          i32.const 14040
-          i32.add
-          local.tee 0
-          local.get 0
-          i32.load8_u
-          i32.const 1
-          i32.or
-          i32.store8
-          local.get 1
-          i32.const 14039
-          i32.add
-          local.tee 0
-          local.get 0
-          i32.load8_u
-          i32.const 128
-          i32.or
-          i32.store8
-          local.get 2
-          i32.const 14040
-          local.get 1
-          call $rhash_sha3_process_block
-          i32.const 14232
-          i32.const -2147483648
-          i32.store
-        end
-        i32.const 1040
-        local.get 2
-        local.get 4
-        call $memcpy
-        local.get 5
-        i32.const -1
-        i32.add
-        local.tee 5
-        br_if 0 (;@2;)
-      end
+      call $rhash_sha3_process_block
+      local.get 0
+      i32.const -2147483648
+      i32.store offset=392
     end
+    local.get 1
+    if  ;; label = @1
+      local.get 1
+      local.get 0
+      i32.const 100
+      local.get 3
+      i32.const 1
+      i32.shr_u
+      i32.sub
+      call $memcpy
+      drop
+    end)
+  (func $_main (type 6)
+    (local i32 i32)
+    call $eth2_blockDataSize
+    local.tee 0
+    call $malloc
+    local.tee 1
+    i32.const 0
+    local.get 0
+    call $eth2_blockDataCopy
+    i32.const 1072
+    i32.const 256
+    call $rhash_keccak_init
+    i32.const 1072
+    local.get 1
+    local.get 0
+    call $rhash_keccak_update
+    i32.const 1072
+    i32.const 1040
+    call $rhash_keccak_final
     i32.const 1040
     call $eth2_savePostStateRoot)
   (memory (;0;) 2)
-  (global (;0;) i32 (i32.const 67200))
-  (global (;1;) i32 (i32.const 1664))
+  (global (;0;) i32 (i32.const 67216))
+  (global (;1;) i32 (i32.const 1680))
   (export "memory" (memory 0))
   (export "__heap_base" (global 0))
   (export "__data_end" (global 1))
+  (export "rhash_keccak_init" (func $rhash_keccak_init))
+  (export "rhash_keccak_update" (func $rhash_keccak_update))
+  (export "rhash_keccak_final" (func $rhash_keccak_final))
   (export "main" (func $_main))
-  (data (;0;) (i32.const 1024) "\80\06\01")
-  (data (;1;) (i32.const 1472) "\01\00\00\00\00\00\00\00\82\80\00\00\00\00\00\00\8a\80\00\00\00\00\00\80\00\80\00\80\00\00\00\80\8b\80\00\00\00\00\00\00\01\00\00\80\00\00\00\00\81\80\00\80\00\00\00\80\09\80\00\00\00\00\00\80\8a\00\00\00\00\00\00\00\88\00\00\00\00\00\00\00\09\80\00\80\00\00\00\00\0a\00\00\80\00\00\00\00\8b\80\00\80\00\00\00\00\8b\00\00\00\00\00\00\80\89\80\00\00\00\00\00\80\03\80\00\00\00\00\00\80\02\80\00\00\00\00\00\80\80\00\00\00\00\00\00\80\0a\80\00\00\00\00\00\00\0a\00\00\80\00\00\00\80\81\80\00\80\00\00\00\80\80\80\00\00\00\00\00\80\01\00\00\80\00\00\00\00\08\80\00\80\00\00\00\80"))
+  (data (;0;) (i32.const 1024) "\90\06\01")
+  (data (;1;) (i32.const 1488) "\01\00\00\00\00\00\00\00\82\80\00\00\00\00\00\00\8a\80\00\00\00\00\00\80\00\80\00\80\00\00\00\80\8b\80\00\00\00\00\00\00\01\00\00\80\00\00\00\00\81\80\00\80\00\00\00\80\09\80\00\00\00\00\00\80\8a\00\00\00\00\00\00\00\88\00\00\00\00\00\00\00\09\80\00\80\00\00\00\00\0a\00\00\80\00\00\00\00\8b\80\00\80\00\00\00\00\8b\00\00\00\00\00\00\80\89\80\00\00\00\00\00\80\03\80\00\00\00\00\00\80\02\80\00\00\00\00\00\80\80\00\00\00\00\00\00\80\0a\80\00\00\00\00\00\00\0a\00\00\80\00\00\00\80\81\80\00\80\00\00\00\80\80\80\00\00\00\00\00\80\01\00\00\80\00\00\00\00\08\80\00\80\00\00\00\80"))

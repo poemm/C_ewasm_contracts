@@ -506,7 +506,6 @@ void rhash_keccak_final(sha3_ctx *ctx, unsigned char* result)
 
 
 /*
-This is awkward for now. 
 LLVM generated Wasm has a stack which grows down. We want to avoid things being put on this stack.
 So we generate a buffer in global scope, which gets mapped by LLVM to Wasm memory.
 In May 2019, LLVM to wasm does not yet support global arrays which are not initialized like this, see:
@@ -527,34 +526,54 @@ uint8_t buffer[] = { //432 total bytes, enough for out and sha3_ctx
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+// some extra just-in-case unsigned is bigger than 32-bits
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 };
+
+/* in main:
+  unsigned char* out = buffer;
+  sha3_ctx* ctx = (sha3_ctx*) (buffer+32);
+  rhash_keccak_256_init(ctx);
+  rhash_keccak_update(ctx, in, length);
+  rhash_keccak_final(ctx, out);
+*/
+
 
 void _main(){
 
   int length = eth2_blockDataSize(); //length in bytes
   unsigned char* in = (unsigned char*) malloc(length);
   eth2_blockDataCopy( (uint32_t*)in, 0, length ); //get data to hash into memory
-  unsigned char* out = buffer;
+  //unsigned char out[32];
 
-#if 1	// for benchmarking
+#if 0	// for benchmarking
   int loop_iters = (50000 + (length - 1)) / (length + 1);
   int ret;
   for (int i=0; i<loop_iters; i++){
-    sha3_ctx* ctx = (sha3_ctx*) buffer+32;
+    sha3_ctx* ctx = (sha3_ctx*) (buffer+32);
     rhash_keccak_256_init(ctx);
     rhash_keccak_update(ctx, in, length);
     rhash_keccak_final(ctx, out);
   }
 #else
-  sha3_ctx* ctx = (sha3_ctx*) buffer+32;
+/*
+  sha3_ctx ctx; // = (sha3_ctx*) (buffer+32);
+  rhash_keccak_256_init(&ctx);
+  rhash_keccak_update(&ctx, in, length);
+  rhash_keccak_final(&ctx, out);
+*/
+#endif
+
+  unsigned char* out = buffer;
+  sha3_ctx* ctx = (sha3_ctx*) (buffer+32);
   rhash_keccak_256_init(ctx);
   rhash_keccak_update(ctx, in, length);
   rhash_keccak_final(ctx, out);
-#endif
 
   eth2_savePostStateRoot((i32ptr*)out);
 
 }
+
 /*
 void _main(){
 
@@ -569,6 +588,5 @@ void _main(){
   rhash_keccak_final(&ctx, out);
 
   finish((i32ptr*)out,32);
-
 }
 */

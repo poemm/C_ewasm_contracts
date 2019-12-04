@@ -118,7 +118,18 @@ project:
 	$(LLVM)clang -cc1 ${OPTIMIZATION_CLANG} -emit-llvm -triple=wasm32-unknown-unknown-wasm ${SRC_DIR}${PROJECT}.c -o ${PROJECT}.ll
 	$(LLVM)opt ${OPTIMIZATION_OPT} ${PROJECT}.ll -o ${PROJECT}.ll
 	$(LLVM)llc ${OPTIMIZATION_LLC} -filetype=obj ${PROJECT}.ll -o ${PROJECT}.o
-	$(LLVM)wasm-ld ${PROJECT}.o -o ${PROJECT}.wasm --no-entry -allow-undefined-file=src/ewasm.syms -export=_main #--stack-first -z stack-size=10000
+	# get builtin __multi3() to link against
+ifeq ($(PROJECT), ecrecover_libsecp256k1)
+ifeq (, $(shell if [ -e lib/wasi/libclang_rt.builtins-wasm32.a ] ; then echo blah ; fi;))
+	wget https://github.com/CraneStation/wasi-sdk/releases/download/wasi-sdk-5/libclang_rt.builtins-wasm32-wasi-5.0.tar.gz
+	tar -xvzf libclang_rt.builtins-wasm32-wasi-5.0.tar.gz
+endif
+	$(LLVM)wasm-ld $(OPTIMIZATION_WASM_LD) ${PROJECT}.o -o ${PROJECT}.wasm --no-entry -allow-undefined-file=src/ewasm.syms -export=_main lib/wasi/libclang_rt.builtins-wasm32.a 
+else ifeq ($(PROJECT), keccak256_rhash_init_update_final)
+	$(LLVM)wasm-ld $(OPTIMIZATION_WASM_LD) ${PROJECT}.o -o ${PROJECT}.wasm --no-entry -allow-undefined-file=src/ewasm.syms -export=_main -export=rhash_keccak_init -export=rhash_keccak_update -export=rhash_keccak_final
+else
+	$(LLVM)wasm-ld $(OPTIMIZATION_WASM_LD) ${PROJECT}.o -o ${PROJECT}.wasm --no-entry -allow-undefined-file=src/ewasm.syms -export=_main #--stack-first -z stack-size=10000
+endif
 	# done compiling, optimize with Wasm-specific optimizer
 	$(BINARYEN_DIR)wasm-opt ${OPTIMIZATION_BINARYEN} ${PROJECT}.wasm -o ${PROJECT}.wasm -g #-g keeps function names
 	# hack so that we export "main" instead of "_main"
@@ -157,7 +168,7 @@ blake2b_openssl: src/blake2b_openssl.c
 	make project PROJECT=blake2b_openssl \
 	OPTIMIZATION_CLANG=-O3 \
 	OPTIMIZATION_OPT=-O3 \
-	OPTIMIZATION_LLC=-O3 \
+	OPTIMIZATION_LLC=-O0 \
 	OPTIMIZATION_BINARYEN=-O3
 
 blake2b_ref: src/blake2b_ref.c
@@ -186,13 +197,75 @@ helloworld: src/helloworld.c
 
 
 
+keccak256: keccak256_ref keccak256_ref_readable_and_compact keccak256_rhash keccak256_libkeccak-tiny keccak256_libkeccak-tiny-unrolled
+
+keccak256_ref: src/keccak256_ref.c
+	make project PROJECT=keccak256_ref \
+        OPTIMIZATION_CLANG=-O0 \
+        OPTIMIZATION_OPT=-O0 \
+        OPTIMIZATION_LLC=-O0 \
+        OPTIMIZATION_BINARYEN=-O0
+
+keccak256_ref_readable_and_compact: src/keccak256_ref_readable_and_compact.c
+	make project PROJECT=keccak256_ref_readable_and_compact \
+        OPTIMIZATION_CLANG=-O3 \
+        OPTIMIZATION_OPT=-O3 \
+        OPTIMIZATION_LLC=-O0 \
+        OPTIMIZATION_BINARYEN=-O3
+
 keccak256_rhash: src/keccak256_rhash.c
 	make project PROJECT=keccak256_rhash \
+        OPTIMIZATION_CLANG=-O3 \
+        OPTIMIZATION_OPT=-O3 \
+        OPTIMIZATION_LLC=-O0 \
+        OPTIMIZATION_BINARYEN=-O3
+
+keccak256_openssl: src/keccak256_openssl.c
+	make project PROJECT=keccak256_openssl \
+        OPTIMIZATION_CLANG=-O3 \
+        OPTIMIZATION_OPT=-O3 \
+        OPTIMIZATION_LLC=-O0 \
+        OPTIMIZATION_BINARYEN=-O3
+
+keccak256_libkeccak-tiny: src/keccak256_libkeccak-tiny.c
+	make project PROJECT=keccak256_libkeccak-tiny \
+        OPTIMIZATION_CLANG=-O3 \
+        OPTIMIZATION_OPT=-O3 \
+        OPTIMIZATION_LLC=-O0 \
+        OPTIMIZATION_BINARYEN=-O3
+
+keccak256_libkeccak-tiny-unrolled: src/keccak256_libkeccak-tiny-unrolled.c
+	make project PROJECT=keccak256_libkeccak-tiny-unrolled \
+        OPTIMIZATION_CLANG=-O3 \
+        OPTIMIZATION_OPT=-O3 \
+        OPTIMIZATION_LLC=-O0 \
+        OPTIMIZATION_BINARYEN=-O3
+
+keccak256_rhash_init_update_final: src/keccak256_rhash_init_update_final.c
+	make project PROJECT=keccak256_rhash_init_update_final \
         OPTIMIZATION_CLANG=-O3 \
         OPTIMIZATION_OPT=-O3 \
         OPTIMIZATION_LLC=-O3 \
         OPTIMIZATION_BINARYEN=-O3
 
+
+ecrecover_libsecp256k1: src/ecrecover_libsecp256k1.c
+	make project PROJECT=ecrecover_libsecp256k1 \
+        OPTIMIZATION_CLANG=-O1 \
+        OPTIMIZATION_OPT=-O1 \
+        OPTIMIZATION_LLC=-O3 \
+	OPTIMIZATION_WASM_LD=-O3 \
+	OPTIMIZATION_BINARYEN=-O3
+	# larger optimizations result in a runtime error
+
+ecrecover_trezor: src/ecrecover_trezor.c
+	make project PROJECT=ecrecover_trezor \
+        OPTIMIZATION_CLANG=-O3 \
+        OPTIMIZATION_OPT=-O3 \
+        OPTIMIZATION_LLC=-O0 \
+	OPTIMIZATION_WASM_LD=-O3 \
+	OPTIMIZATION_BINARYEN=-O3
+	# LLC must be -O0, otherwise runtime error at ecdsa_validate_pubkey()
 
 
 sha256: sha256_bcon sha256_nacl sha256_rhash
