@@ -23,19 +23,18 @@
 
 # the c file to compile, without the ".c"
 export PROJECT := blake2b_ref
-# directory of the c file
+# directory of the c files
 export SRC_DIR := src/
 
 
 # paths to tools
-export LLVM_DIR := 
-export WABT_DIR := 
-export BINARYEN_DIR := 
+#export LLVM_DIR :=
+#export WABT_DIR :=
+#export BINARYEN_DIR :=
 export SCOUT_DIR := 
-#export LLVM_DIR := llvm-project/build/bin
-#export WABT_DIR := wabt/build/
-#export BINARYEN_DIR := binaryen/build/bin/
-#export SCOUT_DIR := scout/target/release/
+export LLVM_DIR := llvm-project/build/bin/
+export WABT_DIR := wabt/build/
+export BINARYEN_DIR := binaryen/build/bin/
 
 
 
@@ -47,98 +46,40 @@ export OPTIMIZATION_WASM_LD := -O3	#          -O0, -O1, or -O2 # see docs, this 
 export OPTIMIZATION_BINARYEN := -O3	#-Oz, -Os, -O0, -O1, -O2, or -O3
 
 
+
+
+scout-helloworld: scout-check
+	cd wasm; ../${SCOUT_DIR}scout.exec ../tests/helloworld.yaml
+
+
+
 default: project
 
-# dependencies checks and installation
-
-wabt-install:
-	git clone https://github.com/webassembly/wabt.git
-	mkdir wabt/build
-	cd wabt/build; cmake .. -DBUILD_TESTS=OFF
-	cd wabt/build; make -j4
-
-binaryen-install:
-	git clone https://github.com/WebAssembly/binaryen.git
-	cd binaryen; mkdir build
-	cd binaryen/build; cmake ..
-	cd binaryen/build; make -j4
-
-scout-install:
-	git clone https://github.com/ewasm/scout.git
-	cd scout; make
-
-llvm-install:
-	# WARNING: should do this manually. Downloads a lot, requires a lot of system resources, and takes a long time. Might require restarting with `make` again if compilation has an error.
-	git clone https://github.com/llvm/llvm-project.git
-	cd llvm-project; mkdir build
-	cd llvm-project/build; cmake -G 'Unix Makefiles' -DLLVM_ENABLE_PROJECTS="clang;libcxx;libcxxabi;lld" ../llvm
-	cd llvm-project/build; make -j4
-
-install: wabt-install binaryen-install scout-install
-	#WARNING: this does not include llvm-install because this should be done manually
-
-wabt-check:
-ifeq (, $(shell which $(WABT_DIR)/wasm2wat))
-	$(error "ERROR: Could not find wabt with wasm2wat, install it yourself and adjust path WABT_DIR in this makefile, or just install it with `make wabt-install`, and try again.")
-endif
-
-binaryen-check:
-ifeq (, $(shell which $(BINARYEN_DIR)wasm-dis))
-	$(error "ERROR: Could not find binaryen with wasm-dis, install it yourself and adjust path BINARYEN_DIR in this makefile, or just install it with `make binaryen-install`, and try again.")
-endif
-
-scout-check:
-ifeq (, $(shell which $(SCOUT_DIR)phase2-scout))
-	$(error "ERROR: Could not find scout with phase2-scout, install it yourself and adjust path SCOUT_DIR in this makefile, or just install it with `make scout-install`, and try again.")
-endif
-
-export LLVM_ERROR := "ERROR: Could not find llvm8+, install it yourself and adjust path LLVM_DIR in this makefile. It can also be found in some repositories. Install it yourself with `make llvm-install`, but this may fail and you should do it manually. WARNNG: 600MB+ download size, needs lots of RAM/disk to compile, compilation may fail the first try so need to restart multiple times.")
-
-llvm-check:
-ifeq (, $(shell which $(LLVM)clang))
-	$(error $(LLVM_ERROR))
-endif
-ifeq (, $(shell which $(LLVM)opt))
-	$(error $(LLVM_ERROR))
-endif
-ifeq (, $(shell which $(LLVM)lld))
-	$(error $(LLVM_ERROR))
-endif
-ifeq (, $(shell which $(LLVM)wasm-ld))
-	$(error $(LLVM_ERROR))
-endif
 
 
 
-test: scout-check
-	cd wasm; ../${SCOUT_DIR}phase2-scout ../tests/helloworld.yaml
-
-
-
-# Build, convert, optimize
+# This is the main recipe to build, optimize, convert
 project:
 	# compile
-	$(LLVM_DIR)clang -cc1 ${OPTIMIZATION_CLANG} -emit-llvm -triple=wasm32-unknown-unknown-wasm ${SRC_DIR}${PROJECT}.c -o ${PROJECT}.ll
-	$(LLVM_DIR)opt ${OPTIMIZATION_OPT} ${PROJECT}.ll -o ${PROJECT}.ll
-	$(LLVM_DIR)llc ${OPTIMIZATION_LLC} -filetype=obj ${PROJECT}.ll -o ${PROJECT}.o
-	# get builtin __multi3() to link against
+	$(LLVM_DIR)/clang -cc1 ${OPTIMIZATION_CLANG} -emit-llvm -triple=wasm32-unknown-unknown-wasm ${SRC_DIR}${PROJECT}.c -o ${PROJECT}.ll
+	$(LLVM_DIR)/opt ${OPTIMIZATION_OPT} ${PROJECT}.ll -o ${PROJECT}.ll
+	$(LLVM_DIR)/llc ${OPTIMIZATION_LLC} -filetype=obj ${PROJECT}.ll -o ${PROJECT}.o
 ifeq ($(PROJECT), ecrecover_libsecp256k1)
 ifeq (, $(shell if [ -e lib/wasi/libclang_rt.builtins-wasm32.a ] ; then echo blah ; fi;))
+	# getting builtin __multi3() to link against
 	wget https://github.com/CraneStation/wasi-sdk/releases/download/wasi-sdk-5/libclang_rt.builtins-wasm32-wasi-5.0.tar.gz
 	tar -xvzf libclang_rt.builtins-wasm32-wasi-5.0.tar.gz
 endif
-	$(LLVM_DIR)wasm-ld $(OPTIMIZATION_WASM_LD) ${PROJECT}.o -o ${PROJECT}.wasm --no-entry -allow-undefined-file=src/ewasm.syms -export=_main lib/wasi/libclang_rt.builtins-wasm32.a 
-else ifeq ($(PROJECT), keccak256_rhash_init_update_final)
-	$(LLVM_DIR)wasm-ld $(OPTIMIZATION_WASM_LD) ${PROJECT}.o -o ${PROJECT}.wasm --no-entry -allow-undefined-file=src/ewasm.syms -export=_main -export=rhash_keccak_init -export=rhash_keccak_update -export=rhash_keccak_final
+	$(LLVM_DIR)/wasm-ld $(OPTIMIZATION_WASM_LD) ${PROJECT}.o -o ${PROJECT}.wasm --no-entry -allow-undefined-file=src/ewasm.syms -export=_main lib/wasi/libclang_rt.builtins-wasm32.a 
 else
-	$(LLVM_DIR)wasm-ld $(OPTIMIZATION_WASM_LD) ${PROJECT}.o -o ${PROJECT}.wasm --no-entry -allow-undefined-file=src/ewasm.syms -export=_main #--stack-first -z stack-size=10000
+	$(LLVM_DIR)/wasm-ld $(OPTIMIZATION_WASM_LD) ${PROJECT}.o -o ${PROJECT}.wasm --no-entry -allow-undefined-file=src/ewasm.syms -export=_main #--stack-first -z stack-size=10000
 endif
 	# done compiling, optimize with Wasm-specific optimizer
-	$(BINARYEN_DIR)wasm-opt ${OPTIMIZATION_BINARYEN} ${PROJECT}.wasm -o ${PROJECT}.wasm -g #-g keeps function names
+	$(BINARYEN_DIR)/wasm-opt ${OPTIMIZATION_BINARYEN} ${PROJECT}.wasm -o ${PROJECT}.wasm -g #-g keeps function names
 	# hack so that we export "main" instead of "_main"
-	$(WABT_DIR)wasm2wat ${PROJECT}.wasm > ${PROJECT}.wat
+	$(WABT_DIR)/wasm2wat ${PROJECT}.wasm > ${PROJECT}.wat
 	sed -i -e 's/(export "_main" (func $$_main))/(export "main" (func $$_main))/g' ${PROJECT}.wat
-	$(WABT_DIR)wat2wasm ${PROJECT}.wat > ${PROJECT}.wasm
+	$(WABT_DIR)/wat2wasm ${PROJECT}.wat > ${PROJECT}.wasm
 	# save files
 	mv $(PROJECT).wasm wasm/$(PROJECT).wasm
 	mv $(PROJECT).wat wat/$(PROJECT).wat
@@ -146,9 +87,9 @@ endif
 	rm -f $(PROJECT).ll $(PROJECT).o
 
 
+
+
 # build individual projects
-
-
 
 blake2b: blake2b_floodyberry blake2b_mjosref blake2b_openssl blake2b_ref blake2b_ref_small
 
@@ -308,6 +249,12 @@ sha256_trezor: src/sha256_trezor.c
         OPTIMIZATION_LLC=-O3 \
         OPTIMIZATION_BINARYEN=-O3
 
+mul256: src/mul256.c
+	make project PROJECT=mul256 \
+        OPTIMIZATION_CLANG=-O0 \
+        OPTIMIZATION_OPT=-O0 \
+        OPTIMIZATION_LLC=-O0 \
+        OPTIMIZATION_BINARYEN=-O0
 
 all: blake2b helloworld keccak256_rhash sha256 
 
