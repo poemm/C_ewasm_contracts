@@ -548,12 +548,13 @@ void _main(){
   unsigned char out[64];
 
   //int ret = blake2b( out, BLAKE2B_OUTBYTES, in, length, NULL, 0 );
-#if 1   // for benchmarking
+#if 0   // for benchmarking
   int loop_iters = (50000 + (length - 1)) / (length + 1);
   int ret;
   for (int i=0; i<loop_iters; i++)
     ret = blake2b( out, BLAKE2B_OUTBYTES, in, length, NULL, 0 );
 #else
+  int ret;
   ret = blake2b( out, BLAKE2B_OUTBYTES, in, length, NULL, 0 );
 #endif
   if (ret==-1){

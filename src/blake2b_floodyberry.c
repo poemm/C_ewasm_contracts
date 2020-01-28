@@ -890,17 +890,21 @@ blake2b_blocks_bootup(blake2b_state_internal *state, const unsigned char *in, si
 
 
 
+  //uint8_t in[64] = {170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170};
+  //uint8_t out[64] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+
 
 
 void _main(){
 
   int length = eth2_blockDataSize(); //length in bytes
+  //int length = 64;
   unsigned char* in = (unsigned char*) malloc( length * sizeof(unsigned char));
   eth2_blockDataCopy( (i32ptr*)in, 0, length ); //get data to hash into memory
   unsigned char out[64];
 
-#if 1   // for benchmarking
-  int loop_iters = (50000 + (length - 1)) / (length + 1);
+#if 0   // for benchmarking
+  int loop_iters = 5000;
   for (int i=0; i<loop_iters; i++)
     blake2b(out, in, length);
 #else

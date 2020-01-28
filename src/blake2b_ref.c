@@ -20,7 +20,14 @@ this file has chunks copied from:
 */
 
 
+#if NATIVE
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdint.h>
+#include<string.h>
+#else
 #include"ewasm.h"
+#endif
 
 
 
@@ -241,8 +248,10 @@ static BLAKE2_INLINE uint64_t rotr64( const uint64_t w, const unsigned c )
 /* prevents compiler optimizing out memset() */
 static BLAKE2_INLINE void secure_zero_memory(void *v, size_t n)
 {
-  static void *(*const volatile memset_v)(void *, int, size_t) = &memset;
-  memset_v(v, 0, n);
+  // Paul commented out these two and just did it directly, since wasm had some problems with the initializing the table
+  //static void *(*const volatile memset_v)(void *, int, size_t) = &memset;
+  //memset_v(v, 0, n);
+  memset(v, 0, n);
 }
 
 
@@ -511,23 +520,23 @@ int blake2b( void *out, size_t outlen, const void *in, size_t inlen, const void 
   blake2b_state S[1];
 
   /* Verify parameters */
-  if ( NULL == in && inlen > 0 ) return -1;
+  if ( NULL == in && inlen > 0 ) return 1;
 
-  if ( NULL == out ) return -1;
+  if ( NULL == out ) return 2;
 
-  if( NULL == key && keylen > 0 ) return -1;
+  if( NULL == key && keylen > 0 ) return 3;
 
-  if( !outlen || outlen > BLAKE2B_OUTBYTES ) return -1;
+  if( !outlen || outlen > BLAKE2B_OUTBYTES ) return 4;
 
-  if( keylen > BLAKE2B_KEYBYTES ) return -1;
+  if( keylen > BLAKE2B_KEYBYTES ) return 5;
 
   if( keylen > 0 )
   {
-    if( blake2b_init_key( S, outlen, key, keylen ) < 0 ) return -1;
+    if( blake2b_init_key( S, outlen, key, keylen ) < 0 ) return 6;
   }
   else
   {
-    if( blake2b_init( S, outlen ) < 0 ) return -1;
+    if( blake2b_init( S, outlen ) < 0 ) return 7;
   }
 
   blake2b_update( S, ( const uint8_t * )in, inlen );
@@ -540,29 +549,37 @@ int blake2( void *out, size_t outlen, const void *in, size_t inlen, const void *
 }
 
 
+  //uint8_t in[64] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  //uint8_t in[64] = {170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170,170};
+  uint8_t out[64] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 
+#if NATIVE
+int main(int argc, char** argv){
+  size_t length = sizeof(in);
+  int ret = blake2b( out, BLAKE2B_OUTBYTES, in, length, NULL, 0 );
+  printf("ret %u output %u\n",ret,out[0]);
+}
+#else
 void _main(){
-
   int length = eth2_blockDataSize(); //length in bytes
-  unsigned char* in = (unsigned char*) malloc( length * sizeof(unsigned char));
+  uint8_t* in = (uint8_t*) malloc( length * sizeof(uint8_t));
+  //size_t length = sizeof(in);
   eth2_blockDataCopy( (i32ptr*)in, 0, length ); //get data to hash into memory
-  unsigned char out[64];
-
-  //int blake2b( void *out, size_t outlen, const void *in, size_t inlen, const void *key, size_t keylen )
-#if 1   // for benchmarking
-  int loop_iters = (50000 + (length - 1)) / (length + 1);
+  //int ret = blake2b( out, BLAKE2B_OUTBYTES, in, length, NULL, 0 );
+#if 0   // for benchmarking
+  int loop_iters = 5000;
   int ret;
   for (int i=0; i<loop_iters; i++)
     ret = blake2b( out, BLAKE2B_OUTBYTES, in, length, NULL, 0 );
 #else
-  ret = blake2b( out, BLAKE2B_OUTBYTES, in, length, NULL, 0 );
+  int ret = blake2b( out, BLAKE2B_OUTBYTES, in, length, NULL, 0 );
 #endif
-  if (ret==-1){
-    //TODO: return something when there is an error, or maybe out will just be zeros
-  }
-
+  //if (ret!=0){
+  //  //TODO: return something when there is an error, or maybe out will just be zeros
+  //}
   eth2_savePostStateRoot((i32ptr*)out);
-
 }
+#endif
+
 

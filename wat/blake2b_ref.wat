@@ -1,16 +1,14 @@
 (module
-  (type (;0;) (func (param i32 i32 i32) (result i32)))
-  (type (;1;) (func (result i32)))
-  (type (;2;) (func (param i32 i32 i32)))
+  (type (;0;) (func (param i32 i32)))
+  (type (;1;) (func (param i32 i32 i32)))
+  (type (;2;) (func))
   (type (;3;) (func (param i32)))
-  (type (;4;) (func (param i32) (result i32)))
-  (type (;5;) (func (param i32 i32)))
-  (type (;6;) (func))
-  (type (;7;) (func (param i32 i32 i32)))
-  (import "env" "eth2_blockDataSize" (func $eth2_blockDataSize (type 1)))
-  (import "env" "eth2_blockDataCopy" (func $eth2_blockDataCopy (type 2)))
+  (type (;4;) (func (result i32)))
+  (type (;5;) (func (param i32) (result i32)))
+  (import "env" "eth2_blockDataSize" (func $eth2_blockDataSize (type 4)))
+  (import "env" "eth2_blockDataCopy" (func $eth2_blockDataCopy (type 1)))
   (import "env" "eth2_savePostStateRoot" (func $eth2_savePostStateRoot (type 3)))
-  (func $malloc (type 4) (param i32) (result i32)
+  (func $malloc (type 5) (param i32) (result i32)
     (local i32 i32)
     memory.size
     local.set 2
@@ -44,7 +42,7 @@
     local.get 1
     local.get 0
     i32.sub)
-  (func $memcpy (type 7) (param i32 i32 i32)
+  (func $memcpy (type 1) (param i32 i32 i32)
     (local i32)
     local.get 2
     i32.const 8
@@ -100,64 +98,182 @@
         br_if 0 (;@2;)
       end
     end)
-  (func $memset (type 0) (param i32 i32 i32) (result i32)
-    (local i32 i64)
-    local.get 2
+  (func $memset (type 0) (param i32 i32)
+    (local i32)
+    local.get 1
     i32.const 9
     i32.ge_u
     if  ;; label = @1
       local.get 1
-      i32.const 16843009
-      i32.mul
-      i64.extend_i32_s
-      local.get 1
-      i64.extend_i32_s
-      i64.const 72058697844523008
-      i64.mul
-      i64.add
-      local.set 4
-      local.get 2
-      local.set 3
+      local.set 2
       loop  ;; label = @2
         local.get 0
-        local.get 4
+        i64.const 0
         i64.store
         local.get 0
         i32.const 8
         i32.add
         local.set 0
-        local.get 3
+        local.get 2
         i32.const -8
         i32.add
-        local.tee 3
+        local.tee 2
         i32.const 7
         i32.gt_u
         br_if 0 (;@2;)
       end
-      local.get 2
+      local.get 1
       i32.const 7
       i32.and
-      local.set 2
+      local.set 1
     end
-    local.get 2
+    local.get 1
     if  ;; label = @1
       loop  ;; label = @2
         local.get 0
-        local.get 1
+        i32.const 0
         i32.store8
         local.get 0
         i32.const 1
         i32.add
         local.set 0
-        local.get 2
+        local.get 1
         i32.const -1
         i32.add
-        local.tee 2
+        local.tee 1
         br_if 0 (;@2;)
       end
-    end
-    local.get 0)
-  (func $blake2b_compress (type 5) (param i32 i32)
+    end)
+  (func $blake2b_update (type 1) (param i32 i32 i32)
+    (local i32 i32 i32 i32 i64 i64)
+    local.get 2
+    if  ;; label = @1
+      block  ;; label = @2
+        i32.const 128
+        local.get 0
+        i32.load offset=224
+        local.tee 4
+        i32.sub
+        local.tee 3
+        local.get 2
+        i32.ge_u
+        br_if 0 (;@2;)
+        local.get 0
+        i32.const 0
+        i32.store offset=224
+        local.get 0
+        i32.const 96
+        i32.add
+        local.tee 5
+        local.get 4
+        i32.add
+        local.get 1
+        local.get 3
+        call $memcpy
+        local.get 0
+        local.get 0
+        i64.load offset=64
+        local.tee 7
+        i64.const 128
+        i64.add
+        local.tee 8
+        i64.store offset=64
+        local.get 0
+        i32.const 72
+        i32.add
+        local.tee 6
+        local.get 6
+        i64.load
+        local.get 8
+        local.get 7
+        i64.lt_u
+        i64.extend_i32_u
+        i64.add
+        i64.store
+        local.get 0
+        local.get 5
+        call $blake2b_compress
+        local.get 1
+        local.get 3
+        i32.add
+        local.set 1
+        local.get 2
+        local.get 3
+        i32.sub
+        local.tee 3
+        i32.const 129
+        i32.lt_u
+        if  ;; label = @3
+          local.get 3
+          local.set 2
+          br 1 (;@2;)
+        end
+        local.get 2
+        local.get 4
+        i32.add
+        local.tee 2
+        i32.const -257
+        i32.add
+        local.set 4
+        loop  ;; label = @3
+          local.get 0
+          local.get 0
+          i64.load offset=64
+          local.tee 7
+          i64.const 128
+          i64.add
+          local.tee 8
+          i64.store offset=64
+          local.get 0
+          local.get 0
+          i64.load offset=72
+          local.get 8
+          local.get 7
+          i64.lt_u
+          i64.extend_i32_u
+          i64.add
+          i64.store offset=72
+          local.get 0
+          local.get 1
+          call $blake2b_compress
+          local.get 1
+          i32.const 128
+          i32.add
+          local.set 1
+          local.get 3
+          i32.const -128
+          i32.add
+          local.tee 3
+          i32.const 128
+          i32.gt_u
+          br_if 0 (;@3;)
+        end
+        local.get 2
+        local.get 4
+        i32.const -128
+        i32.and
+        i32.sub
+        i32.const -256
+        i32.add
+        local.set 2
+      end
+      local.get 0
+      local.get 0
+      i32.load offset=224
+      i32.add
+      i32.const 96
+      i32.add
+      local.get 1
+      local.get 2
+      call $memcpy
+      local.get 0
+      local.get 0
+      i32.load offset=224
+      local.get 2
+      i32.add
+      i32.store offset=224
+    end)
+  (func $blake2b_compress (type 0) (param i32 i32)
     (local i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64)
     local.get 0
     local.get 0
@@ -3731,411 +3847,266 @@
     i64.rotl
     i64.xor
     i64.store offset=32)
-  (func $blake2b (type 7) (param i32 i32 i32)
+  (func $blake2b (type 0) (param i32 i32)
     (local i32 i32 i32 i32 i32 i64 i64)
     global.get 0
     i32.const 368
     i32.sub
-    local.tee 3
+    local.tee 2
     global.set 0
     block  ;; label = @1
       local.get 0
       i32.eqz
-      br_if 0 (;@1;)
-      local.get 1
-      i32.eqz
+      if  ;; label = @2
+        local.get 1
+        br_if 1 (;@1;)
+      end
       local.get 2
-      i32.const 0
-      i32.ne
-      i32.and
-      br_if 0 (;@1;)
-      local.get 3
       i32.const -64
       i32.sub
-      i32.const 0
       i32.const 176
       call $memset
-      drop
-      local.get 3
+      local.get 2
       i64.const 6620516959819538809
       i64.store offset=56
-      local.get 3
+      local.get 2
       i64.const 2270897969802886507
       i64.store offset=48
-      local.get 3
+      local.get 2
       i64.const -7276294671716946913
       i64.store offset=40
-      local.get 3
+      local.get 2
       i64.const 5840696475078001361
       i64.store offset=32
-      local.get 3
+      local.get 2
       i64.const -6534734903238641935
       i64.store offset=24
-      local.get 3
+      local.get 2
       i64.const 4354685564936845355
       i64.store offset=16
-      local.get 3
+      local.get 2
       i64.const -4942790177534073029
       i64.store offset=8
-      local.get 3
+      local.get 2
       i32.const 64
       i32.store offset=228
-      local.get 3
+      local.get 2
       i64.const 7640891576939301192
       i64.store
       local.get 2
-      if  ;; label = @2
-        block  ;; label = @3
-          i32.const 128
-          local.get 3
-          i32.load offset=224
-          local.tee 5
-          i32.sub
-          local.tee 4
-          local.get 2
-          i32.ge_u
-          br_if 0 (;@3;)
-          local.get 3
-          i32.const 0
-          i32.store offset=224
-          local.get 3
-          i32.const 96
-          i32.add
-          local.tee 6
-          local.get 5
-          i32.add
-          local.get 1
-          local.get 4
-          call $memcpy
-          local.get 3
-          local.get 3
-          i64.load offset=64
-          local.tee 8
-          i64.const 128
-          i64.add
-          local.tee 9
-          i64.store offset=64
-          local.get 3
-          i32.const 72
-          i32.add
-          local.tee 7
-          local.get 7
-          i64.load
-          local.get 9
-          local.get 8
-          i64.lt_u
-          i64.extend_i32_u
-          i64.add
-          i64.store
-          local.get 3
-          local.get 6
-          call $blake2b_compress
-          local.get 1
-          local.get 4
-          i32.add
-          local.set 1
-          local.get 2
-          local.get 4
-          i32.sub
-          local.tee 4
-          i32.const 129
-          i32.lt_u
-          if  ;; label = @4
-            local.get 4
-            local.set 2
-            br 1 (;@3;)
-          end
-          local.get 2
-          local.get 5
-          i32.add
-          local.set 2
-          loop  ;; label = @4
-            local.get 3
-            local.get 3
-            i64.load offset=64
-            local.tee 8
-            i64.const 128
-            i64.add
-            local.tee 9
-            i64.store offset=64
-            local.get 3
-            local.get 3
-            i64.load offset=72
-            local.get 9
-            local.get 8
-            i64.lt_u
-            i64.extend_i32_u
-            i64.add
-            i64.store offset=72
-            local.get 3
-            local.get 1
-            call $blake2b_compress
-            local.get 1
-            i32.const 128
-            i32.add
-            local.set 1
-            local.get 4
-            i32.const -128
-            i32.add
-            local.tee 4
-            i32.const 128
-            i32.gt_u
-            br_if 0 (;@4;)
-          end
-          local.get 2
-          i32.const -256
-          i32.add
-          local.get 2
-          i32.const -257
-          i32.add
-          i32.const -128
-          i32.and
-          i32.sub
-          local.set 2
-        end
-        local.get 3
-        local.get 3
-        i32.load offset=224
-        i32.add
-        i32.const 96
-        i32.add
-        local.get 1
-        local.get 2
-        call $memcpy
-        local.get 3
-        local.get 3
-        i32.load offset=224
-        local.get 2
-        i32.add
-        i32.store offset=224
-      end
-      local.get 3
+      local.get 0
+      local.get 1
+      call $blake2b_update
+      local.get 2
       i32.const 296
       i32.add
       i64.const 0
       i64.store
-      local.get 3
+      local.get 2
       i32.const 288
       i32.add
       i64.const 0
       i64.store
-      local.get 3
+      local.get 2
       i32.const 280
       i32.add
       i64.const 0
       i64.store
-      local.get 3
+      local.get 2
       i32.const 272
       i32.add
       i64.const 0
       i64.store
-      local.get 3
+      local.get 2
       i32.const 264
       i32.add
       i64.const 0
       i64.store
-      local.get 3
+      local.get 2
       i32.const 256
       i32.add
       i64.const 0
       i64.store
-      local.get 3
+      local.get 2
       i64.const 0
       i64.store offset=248
-      local.get 3
+      local.get 2
       i64.const 0
       i64.store offset=240
       block  ;; label = @2
-        local.get 3
+        local.get 2
         i32.load offset=228
         i32.const 64
         i32.gt_u
         br_if 0 (;@2;)
-        local.get 3
+        local.get 2
         i64.load offset=80
         i64.const 0
         i64.ne
         br_if 0 (;@2;)
-        local.get 3
-        local.get 3
+        local.get 2
+        local.get 2
         i64.load offset=64
-        local.tee 8
-        local.get 3
+        local.tee 7
+        local.get 2
         i32.load offset=224
-        local.tee 1
+        local.tee 0
         i64.extend_i32_u
         i64.add
-        local.tee 9
+        local.tee 8
         i64.store offset=64
-        local.get 3
+        local.get 2
         i32.const 72
         i32.add
-        local.tee 2
-        local.get 2
+        local.tee 1
+        local.get 1
         i64.load
-        local.get 9
         local.get 8
+        local.get 7
         i64.lt_u
         i64.extend_i32_u
         i64.add
         i64.store
-        local.get 3
+        local.get 2
         i32.load8_u offset=232
         if  ;; label = @3
-          local.get 3
+          local.get 2
           i32.const 88
           i32.add
           i64.const -1
           i64.store
         end
-        local.get 3
+        local.get 2
         i64.const -1
         i64.store offset=80
-        local.get 3
+        local.get 2
         i32.const 96
         i32.add
-        local.tee 2
-        local.get 1
+        local.tee 1
+        local.get 0
         i32.add
-        i32.const 0
         i32.const 128
-        local.get 1
+        local.get 0
         i32.sub
         call $memset
-        drop
-        local.get 3
         local.get 2
+        local.get 1
         call $blake2b_compress
-        local.get 3
+        local.get 2
         i32.const 296
         i32.add
-        local.get 3
+        local.tee 0
+        local.get 2
         i32.const 56
         i32.add
         i64.load
         i64.store
-        local.get 3
+        local.get 2
         i32.const 288
         i32.add
-        local.get 3
+        local.tee 1
+        local.get 2
         i32.const 48
         i32.add
         i64.load
         i64.store
-        local.get 3
+        local.get 2
         i32.const 280
         i32.add
-        local.get 3
+        local.tee 3
+        local.get 2
         i32.const 40
         i32.add
         i64.load
         i64.store
-        local.get 3
+        local.get 2
         i32.const 272
         i32.add
-        local.get 3
+        local.tee 4
+        local.get 2
         i32.const 32
         i32.add
         i64.load
         i64.store
-        local.get 3
+        local.get 2
         i32.const 264
         i32.add
-        local.get 3
+        local.tee 5
+        local.get 2
         i32.const 24
         i32.add
         i64.load
         i64.store
-        local.get 3
+        local.get 2
         i32.const 256
         i32.add
-        local.get 3
+        local.tee 6
+        local.get 2
         i32.const 16
         i32.add
         i64.load
         i64.store
-        local.get 3
-        local.get 3
+        local.get 2
+        local.get 2
         i64.load offset=8
         i64.store offset=248
-        local.get 3
-        local.get 3
+        local.get 2
+        local.get 2
         i64.load
         i64.store offset=240
-        local.get 0
-        local.get 3
+        i32.const 1040
+        local.get 2
         i32.const 240
         i32.add
-        local.get 3
+        local.get 2
         i32.load offset=228
         call $memcpy
+        local.get 0
+        i64.const 0
+        i64.store
+        local.get 1
+        i64.const 0
+        i64.store
         local.get 3
-        i32.const 240
-        i32.add
-        i32.const 0
-        i32.const 64
-        i32.const 1028
-        i32.load
-        call_indirect (type 0)
-        drop
+        i64.const 0
+        i64.store
+        local.get 4
+        i64.const 0
+        i64.store
+        local.get 5
+        i64.const 0
+        i64.store
+        local.get 6
+        i64.const 0
+        i64.store
+        local.get 2
+        i64.const 0
+        i64.store offset=248
+        local.get 2
+        i64.const 0
+        i64.store offset=240
       end
     end
-    local.get 3
+    local.get 2
     i32.const 368
     i32.add
     global.set 0)
-  (func $_main (type 6)
-    (local i32 i32 i32 i32)
-    global.get 0
-    i32.const -64
-    i32.add
-    local.tee 1
-    global.set 0
+  (func $_main (type 2)
+    (local i32 i32)
     call $eth2_blockDataSize
     local.tee 0
     call $malloc
-    local.tee 3
+    local.tee 1
     i32.const 0
     local.get 0
     call $eth2_blockDataCopy
-    local.get 0
-    i32.const 49999
-    i32.add
-    local.get 0
-    i32.const 1
-    i32.add
-    i32.div_s
-    local.tee 2
-    i32.const 1
-    i32.ge_s
-    if  ;; label = @1
-      loop  ;; label = @2
-        local.get 1
-        local.get 3
-        local.get 0
-        call $blake2b
-        local.get 2
-        i32.const -1
-        i32.add
-        local.tee 2
-        br_if 0 (;@2;)
-      end
-    end
     local.get 1
-    call $eth2_savePostStateRoot
-    local.get 1
-    i32.const -64
-    i32.sub
-    global.set 0)
-  (table (;0;) 2 2 funcref)
+    local.get 0
+    call $blake2b
+    i32.const 1040
+    call $eth2_savePostStateRoot)
   (memory (;0;) 2)
-  (global (;0;) (mut i32) (i32.const 66576))
-  (global (;1;) i32 (i32.const 66576))
-  (global (;2;) i32 (i32.const 1032))
+  (global (;0;) (mut i32) (i32.const 66640))
   (export "memory" (memory 0))
-  (export "__heap_base" (global 1))
-  (export "__data_end" (global 2))
   (export "main" (func $_main))
-  (elem (;0;) (i32.const 1) $memset)
-  (data (;0;) (i32.const 1024) "\10\04\01")
-  (data (;1;) (i32.const 1028) "\01"))
+  (data (;0;) (i32.const 1024) "P\04\01"))

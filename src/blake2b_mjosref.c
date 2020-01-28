@@ -237,12 +237,13 @@ void _main(){
   unsigned char out[64];
 
   //int blake2b( void *out, size_t outlen, const void *in, size_t inlen, const void *key, size_t keylen )
-#if 1   // for benchmarking
+#if 0   // for benchmarking
   int loop_iters = (50000 + (length - 1)) / (length + 1);
   int ret;
   for (int i=0; i<loop_iters; i++)
     ret = blake2b(out, 64, NULL, 0, in, length);
 #else
+  int ret;
   ret = blake2b(out, 64, NULL, 0, in, length);
 #endif
   if (ret==-1){

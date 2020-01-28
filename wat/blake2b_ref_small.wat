@@ -1,23 +1,20 @@
 (module
-  (type (;0;) (func (param i32 i32 i32) (result i32)))
-  (type (;1;) (func (result i32)))
-  (type (;2;) (func (param i32 i32 i32)))
-  (type (;3;) (func (param i32)))
-  (type (;4;) (func (param i32) (result i32)))
-  (type (;5;) (func (param i32 i32)))
+  (type (;0;) (func (param i32 i32 i32)))
+  (type (;1;) (func (param i32 i32)))
+  (type (;2;) (func (param i32 i32 i32) (result i32)))
+  (type (;3;) (func (param i32) (result i32)))
+  (type (;4;) (func))
+  (type (;5;) (func (param i32)))
   (type (;6;) (func (param i32 i32 i32 i32 i32 i32 i32)))
-  (type (;7;) (func))
-  (type (;8;) (func (param i32 i32)))
-  (type (;9;) (func (param i32) (result i32)))
-  (type (;10;) (func (param i32 i32 i32)))
-  (import "env" "eth2_blockDataSize" (func $eth2_blockDataSize (type 1)))
-  (import "env" "eth2_blockDataCopy" (func $eth2_blockDataCopy (type 2)))
-  (import "env" "eth2_savePostStateRoot" (func $eth2_savePostStateRoot (type 3)))
-  (func $malloc (type 4) (param i32) (result i32)
+  (type (;7;) (func (result i32)))
+  (import "env" "eth2_blockDataSize" (func $eth2_blockDataSize (type 7)))
+  (import "env" "eth2_blockDataCopy" (func $eth2_blockDataCopy (type 0)))
+  (import "env" "eth2_savePostStateRoot" (func $eth2_savePostStateRoot (type 5)))
+  (func $malloc (type 3) (param i32) (result i32)
     (local i32 i32)
     memory.size
     local.set 2
-    i32.const 1024
+    i32.const 1284
     i32.load
     local.get 0
     i32.add
@@ -41,13 +38,13 @@
       memory.grow
       drop
     end
-    i32.const 1024
+    i32.const 1284
     local.get 1
     i32.store
     local.get 1
     local.get 0
     i32.sub)
-  (func $memcpy (type 0) (param i32 i32 i32) (result i32)
+  (func $memcpy (type 2) (param i32 i32 i32) (result i32)
     (local i32 i32)
     block  ;; label = @1
       local.get 2
@@ -111,7 +108,7 @@
       end
     end
     local.get 0)
-  (func $memset (type 0) (param i32 i32 i32) (result i32)
+  (func $memset (type 2) (param i32 i32 i32) (result i32)
     (local i32 i64)
     local.get 2
     i32.const 9
@@ -168,7 +165,7 @@
       end
     end
     local.get 0)
-  (func $blake2b_init_param (type 8) (param i32 i32)
+  (func $blake2b_init_param (type 1) (param i32 i32)
     (local i32 i32)
     local.get 0
     i32.const -64
@@ -178,7 +175,7 @@
     call $memset
     drop
     local.get 0
-    i32.const 1232
+    i32.const 1216
     i32.const 64
     call $memcpy
     local.set 0
@@ -207,7 +204,7 @@
     local.get 1
     i32.load8_u
     i32.store offset=228)
-  (func $blake2b_init (type 9) (param i32) (result i32)
+  (func $blake2b_init (type 3) (param i32) (result i32)
     (local i32)
     global.get 0
     i32.const -64
@@ -253,7 +250,7 @@
     i32.sub
     global.set 0
     i32.const 0)
-  (func $blake2b_update (type 10) (param i32 i32 i32)
+  (func $blake2b_update (type 0) (param i32 i32 i32)
     (local i32 i32 i32 i32 i64 i64)
     local.get 2
     if  ;; label = @1
@@ -359,12 +356,12 @@
           br_if 0 (;@3;)
         end
         local.get 2
-        i32.const -256
-        i32.add
         local.get 4
         i32.const -128
         i32.and
         i32.sub
+        i32.const -256
+        i32.add
         local.set 2
       end
       local.get 0
@@ -384,7 +381,7 @@
       i32.add
       i32.store offset=224
     end)
-  (func $blake2b_compress (type 5) (param i32 i32)
+  (func $blake2b_compress (type 1) (param i32 i32)
     (local i32 i32 i32)
     global.get 0
     i32.const 256
@@ -511,7 +508,7 @@
     local.get 0
     i32.const 4
     i32.shl
-    i32.const 1040
+    i32.const 1024
     i32.add
     local.tee 0
     local.get 1
@@ -600,7 +597,7 @@
     i64.const 63
     i64.rotr
     i64.store)
-  (func $ROUND_ (type 2) (param i32 i32 i32)
+  (func $ROUND_ (type 0) (param i32 i32 i32)
     (local i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32)
     local.get 0
     i32.const 0
@@ -711,7 +708,7 @@
     local.get 13
     local.get 2
     call $G)
-  (func $blake2b_final (type 8) (param i32 i32)
+  (func $blake2b_final (type 1) (param i32 i32)
     (local i32 i32 i32 i32 i64 i64)
     global.get 0
     i32.const -64
@@ -815,16 +812,16 @@
       local.get 2
       i32.const 0
       i32.const 64
-      i32.const 1296
+      i32.const 1280
       i32.load
-      call_indirect (type 0)
+      call_indirect (type 2)
       drop
     end
     local.get 2
     i32.const -64
     i32.sub
     global.set 0)
-  (func $blake2b (type 10) (param i32 i32 i32)
+  (func $blake2b (type 0) (param i32 i32 i32)
     (local i32)
     global.get 0
     i32.const 240
@@ -859,58 +856,35 @@
     i32.const 240
     i32.add
     global.set 0)
-  (func $_main (type 7)
-    (local i32 i32 i32 i32)
+  (func $_main (type 4)
+    (local i32 i32 i32)
     global.get 0
     i32.const -64
     i32.add
-    local.tee 1
+    local.tee 0
     global.set 0
     call $eth2_blockDataSize
-    local.tee 0
+    local.tee 1
     call $malloc
-    local.tee 3
+    local.tee 2
     i32.const 0
-    local.get 0
+    local.get 1
     call $eth2_blockDataCopy
     local.get 0
-    i32.const 49999
-    i32.add
+    local.get 2
+    local.get 1
+    call $blake2b
     local.get 0
-    i32.const 1
-    i32.add
-    i32.div_s
-    local.tee 2
-    i32.const 1
-    i32.ge_s
-    if  ;; label = @1
-      loop  ;; label = @2
-        local.get 1
-        local.get 3
-        local.get 0
-        call $blake2b
-        local.get 2
-        i32.const -1
-        i32.add
-        local.tee 2
-        br_if 0 (;@2;)
-      end
-    end
-    local.get 1
     call $eth2_savePostStateRoot
-    local.get 1
+    local.get 0
     i32.const -64
     i32.sub
     global.set 0)
   (table (;0;) 2 2 funcref)
   (memory (;0;) 2)
-  (global (;0;) (mut i32) (i32.const 66848))
-  (global (;1;) i32 (i32.const 66848))
-  (global (;2;) i32 (i32.const 1300))
+  (global (;0;) (mut i32) (i32.const 66832))
   (export "memory" (memory 0))
-  (export "__heap_base" (global 1))
-  (export "__data_end" (global 2))
   (export "main" (func $_main))
-  (elem (;0;) (i32.const 1) $memset)
-  (data (;0;) (i32.const 1024) " \05\01")
-  (data (;1;) (i32.const 1041) "\01\02\03\04\05\06\07\08\09\0a\0b\0c\0d\0e\0f\0e\0a\04\08\09\0f\0d\06\01\0c\00\02\0b\07\05\03\0b\08\0c\00\05\02\0f\0d\0a\0e\03\06\07\01\09\04\07\09\03\01\0d\0c\0b\0e\02\06\05\0a\04\00\0f\08\09\00\05\07\02\04\0a\0f\0e\01\0b\0c\06\08\03\0d\02\0c\06\0a\00\0b\08\03\04\0d\07\05\0f\0e\01\09\0c\05\01\0f\0e\0d\04\0a\00\07\06\03\09\02\08\0b\0d\0b\07\0e\0c\01\03\09\05\00\0f\04\08\06\02\0a\06\0f\0e\09\0b\03\00\08\0c\02\0d\07\01\04\0a\05\0a\02\08\04\07\06\01\05\0f\0b\09\0e\03\0c\0d\00\00\01\02\03\04\05\06\07\08\09\0a\0b\0c\0d\0e\0f\0e\0a\04\08\09\0f\0d\06\01\0c\00\02\0b\07\05\03\08\c9\bc\f3g\e6\09j;\a7\ca\84\85\aeg\bb+\f8\94\fer\f3n<\f16\1d_:\f5O\a5\d1\82\e6\ad\7fR\0eQ\1fl>+\8ch\05\9bk\bdA\fb\ab\d9\83\1fy!~\13\19\cd\e0[\01"))
+  (elem (;0;) (i32.const 1) func $memset)
+  (data (;0;) (i32.const 1025) "\01\02\03\04\05\06\07\08\09\0a\0b\0c\0d\0e\0f\0e\0a\04\08\09\0f\0d\06\01\0c\00\02\0b\07\05\03\0b\08\0c\00\05\02\0f\0d\0a\0e\03\06\07\01\09\04\07\09\03\01\0d\0c\0b\0e\02\06\05\0a\04\00\0f\08\09\00\05\07\02\04\0a\0f\0e\01\0b\0c\06\08\03\0d\02\0c\06\0a\00\0b\08\03\04\0d\07\05\0f\0e\01\09\0c\05\01\0f\0e\0d\04\0a\00\07\06\03\09\02\08\0b\0d\0b\07\0e\0c\01\03\09\05\00\0f\04\08\06\02\0a\06\0f\0e\09\0b\03\00\08\0c\02\0d\07\01\04\0a\05\0a\02\08\04\07\06\01\05\0f\0b\09\0e\03\0c\0d\00\00\01\02\03\04\05\06\07\08\09\0a\0b\0c\0d\0e\0f\0e\0a\04\08\09\0f\0d\06\01\0c\00\02\0b\07\05\03\08\c9\bc\f3g\e6\09j;\a7\ca\84\85\aeg\bb+\f8\94\fer\f3n<\f16\1d_:\f5O\a5\d1\82\e6\ad\7fR\0eQ\1fl>+\8ch\05\9bk\bdA\fb\ab\d9\83\1fy!~\13\19\cd\e0[\01")
+  (data (;1;) (i32.const 1284) "\10\05\01"))
