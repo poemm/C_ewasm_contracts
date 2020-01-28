@@ -1,11 +1,11 @@
 (module
   (type (;0;) (func (param i32)))
-  (type (;1;) (func (result i32)))
-  (type (;2;) (func))
+  (type (;1;) (func))
+  (type (;2;) (func (result i32)))
   (import "env" "eth2_loadPreStateRoot" (func $eth2_loadPreStateRoot (type 0)))
-  (import "env" "eth2_blockDataSize" (func $eth2_blockDataSize (type 1)))
+  (import "env" "eth2_blockDataSize" (func $eth2_blockDataSize (type 2)))
   (import "env" "eth2_savePostStateRoot" (func $eth2_savePostStateRoot (type 0)))
-  (func $_main (type 2)
+  (func $_main (type 1)
     i32.const 1024
     call $eth2_loadPreStateRoot
     call $eth2_blockDataSize
@@ -31,9 +31,5 @@
       call $eth2_savePostStateRoot
     end)
   (memory (;0;) 2)
-  (global (;0;) i32 (i32.const 66624))
-  (global (;1;) i32 (i32.const 1088))
   (export "memory" (memory 0))
-  (export "__heap_base" (global 0))
-  (export "__data_end" (global 1))
   (export "main" (func $_main)))

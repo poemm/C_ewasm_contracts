@@ -1,17 +1,16 @@
 (module
-  (type (;0;) (func (result i32)))
+  (type (;0;) (func (param i32 i32)))
   (type (;1;) (func (param i32 i32 i32)))
-  (type (;2;) (func (param i32)))
-  (type (;3;) (func (param i32) (result i32)))
-  (type (;4;) (func))
-  (type (;5;) (func (param i32 i32 i32)))
-  (type (;6;) (func (param i32 i32)))
-  (import "env" "eth2_blockDataSize" (func $eth2_blockDataSize (type 0)))
+  (type (;2;) (func))
+  (type (;3;) (func (param i32)))
+  (type (;4;) (func (result i32)))
+  (type (;5;) (func (param i32) (result i32)))
+  (import "env" "eth2_blockDataSize" (func $eth2_blockDataSize (type 4)))
   (import "env" "eth2_blockDataCopy" (func $eth2_blockDataCopy (type 1)))
-  (import "env" "eth2_savePostStateRoot" (func $eth2_savePostStateRoot (type 2)))
-  (func $malloc (type 3) (param i32) (result i32)
+  (import "env" "eth2_savePostStateRoot" (func $eth2_savePostStateRoot (type 3)))
+  (func $malloc (type 5) (param i32) (result i32)
     (local i32 i32)
-    i32.const 1024
+    i32.const 1216
     i32.load
     local.get 0
     i32.add
@@ -36,13 +35,13 @@
       memory.grow
       drop
     end
-    i32.const 1024
+    i32.const 1216
     local.get 1
     i32.store
     local.get 1
     local.get 0
     i32.sub)
-  (func $memcpy (type 5) (param i32 i32 i32)
+  (func $memcpy (type 1) (param i32 i32 i32)
     (local i32 i32 i32 i32)
     local.get 1
     local.set 3
@@ -108,7 +107,7 @@
         br_if 0 (;@2;)
       end
     end)
-  (func $memset (type 6) (param i32 i32)
+  (func $memset (type 0) (param i32 i32)
     (local i32 i32 i32)
     local.get 1
     local.tee 2
@@ -160,76 +159,76 @@
         br_if 0 (;@2;)
       end
     end)
-  (func $rhash_sha3_process_block (type 6) (param i32 i32)
+  (func $rhash_sha3_process_block (type 0) (param i32 i32)
     (local i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64)
-    i32.const 1072
+    i32.const 1264
     local.get 0
     i64.load
-    i32.const 1072
+    i32.const 1264
     i64.load
     i64.xor
     local.tee 33
     i64.store
-    i32.const 1080
+    i32.const 1272
     local.get 0
     i64.load offset=8
-    i32.const 1080
+    i32.const 1272
     i64.load
     i64.xor
     local.tee 13
     i64.store
-    i32.const 1088
+    i32.const 1280
     local.get 0
     i64.load offset=16
-    i32.const 1088
+    i32.const 1280
     i64.load
     i64.xor
     local.tee 24
     i64.store
-    i32.const 1096
+    i32.const 1288
     local.get 0
     i64.load offset=24
-    i32.const 1096
+    i32.const 1288
     i64.load
     i64.xor
     local.tee 14
     i64.store
-    i32.const 1104
+    i32.const 1296
     local.get 0
     i64.load offset=32
-    i32.const 1104
+    i32.const 1296
     i64.load
     i64.xor
     local.tee 15
     i64.store
-    i32.const 1112
+    i32.const 1304
     local.get 0
     i64.load offset=40
-    i32.const 1112
+    i32.const 1304
     i64.load
     i64.xor
     local.tee 8
     i64.store
-    i32.const 1120
+    i32.const 1312
     local.get 0
     i64.load offset=48
-    i32.const 1120
+    i32.const 1312
     i64.load
     i64.xor
     local.tee 3
     i64.store
-    i32.const 1128
+    i32.const 1320
     local.get 0
     i64.load offset=56
-    i32.const 1128
+    i32.const 1320
     i64.load
     i64.xor
     local.tee 4
     i64.store
-    i32.const 1136
+    i32.const 1328
     local.get 0
     i64.load offset=64
-    i32.const 1136
+    i32.const 1328
     i64.load
     i64.xor
     local.tee 34
@@ -239,48 +238,48 @@
       i32.const 72
       i32.le_u
       if  ;; label = @2
-        i32.const 1152
+        i32.const 1344
         i64.load
         local.set 21
-        i32.const 1168
+        i32.const 1360
         i64.load
         local.set 9
-        i32.const 1144
+        i32.const 1336
         i64.load
         local.set 2
-        i32.const 1160
+        i32.const 1352
         i64.load
         local.set 7
         br 1 (;@1;)
       end
-      i32.const 1144
+      i32.const 1336
       local.get 0
       i64.load offset=72
-      i32.const 1144
+      i32.const 1336
       i64.load
       i64.xor
       local.tee 2
       i64.store
-      i32.const 1152
+      i32.const 1344
       local.get 0
       i64.load offset=80
-      i32.const 1152
+      i32.const 1344
       i64.load
       i64.xor
       local.tee 21
       i64.store
-      i32.const 1160
+      i32.const 1352
       local.get 0
       i64.load offset=88
-      i32.const 1160
+      i32.const 1352
       i64.load
       i64.xor
       local.tee 7
       i64.store
-      i32.const 1168
+      i32.const 1360
       local.get 0
       i64.load offset=96
-      i32.const 1168
+      i32.const 1360
       i64.load
       i64.xor
       local.tee 9
@@ -289,31 +288,31 @@
       i32.const 104
       i32.le_u
       br_if 0 (;@1;)
-      i32.const 1176
+      i32.const 1368
       local.get 0
       i64.load offset=104
-      i32.const 1176
+      i32.const 1368
       i64.load
       i64.xor
       i64.store
-      i32.const 1184
+      i32.const 1376
       local.get 0
       i64.load offset=112
-      i32.const 1184
+      i32.const 1376
       i64.load
       i64.xor
       i64.store
-      i32.const 1192
+      i32.const 1384
       local.get 0
       i64.load offset=120
-      i32.const 1192
+      i32.const 1384
       i64.load
       i64.xor
       i64.store
-      i32.const 1200
+      i32.const 1392
       local.get 0
       i64.load offset=128
-      i32.const 1200
+      i32.const 1392
       i64.load
       i64.xor
       i64.store
@@ -321,50 +320,50 @@
       i32.const 136
       i32.le_u
       br_if 0 (;@1;)
-      i32.const 1208
+      i32.const 1400
       local.get 0
       i64.load offset=136
-      i32.const 1208
+      i32.const 1400
       i64.load
       i64.xor
       i64.store
     end
-    i32.const 1256
+    i32.const 1448
     i64.load
     local.set 35
-    i32.const 1216
+    i32.const 1408
     i64.load
     local.set 36
-    i32.const 1176
+    i32.const 1368
     i64.load
     local.set 37
-    i32.const 1232
+    i32.const 1424
     i64.load
     local.set 25
-    i32.const 1192
+    i32.const 1384
     i64.load
     local.set 10
-    i32.const 1248
+    i32.const 1440
     i64.load
     local.set 26
-    i32.const 1208
+    i32.const 1400
     i64.load
     local.set 27
-    i32.const 1264
+    i32.const 1456
     i64.load
     local.set 38
-    i32.const 1224
+    i32.const 1416
     i64.load
     local.set 16
-    i32.const 1184
+    i32.const 1376
     i64.load
     local.set 39
     local.get 2
     local.set 22
-    i32.const 1240
+    i32.const 1432
     i64.load
     local.set 6
-    i32.const 1200
+    i32.const 1392
     i64.load
     local.set 28
     local.get 3
@@ -873,7 +872,7 @@
       local.get 0
       i32.const 3
       i32.shl
-      i32.const 1488
+      i32.const 1024
       i32.add
       i64.load
       local.get 6
@@ -948,82 +947,82 @@
       i32.ne
       br_if 0 (;@1;)
     end
-    i32.const 1080
+    i32.const 1272
     local.get 13
     i64.store
-    i32.const 1120
+    i32.const 1312
     local.get 2
     i64.store
-    i32.const 1160
+    i32.const 1352
     local.get 7
     i64.store
-    i32.const 1200
+    i32.const 1392
     local.get 28
     i64.store
-    i32.const 1240
+    i32.const 1432
     local.get 6
     i64.store
-    i32.const 1104
+    i32.const 1296
     local.get 3
     i64.store
-    i32.const 1144
+    i32.const 1336
     local.get 18
     i64.store
-    i32.const 1184
+    i32.const 1376
     local.get 17
     i64.store
-    i32.const 1224
+    i32.const 1416
     local.get 12
     i64.store
-    i32.const 1264
+    i32.const 1456
     local.get 5
     i64.store
-    i32.const 1088
+    i32.const 1280
     local.get 24
     i64.store
-    i32.const 1128
+    i32.const 1320
     local.get 4
     i64.store
-    i32.const 1168
+    i32.const 1360
     local.get 9
     i64.store
-    i32.const 1208
+    i32.const 1400
     local.get 27
     i64.store
-    i32.const 1248
+    i32.const 1440
     local.get 26
     i64.store
-    i32.const 1072
+    i32.const 1264
     local.get 32
     i64.store
-    i32.const 1112
+    i32.const 1304
     local.get 8
     i64.store
-    i32.const 1152
+    i32.const 1344
     local.get 21
     i64.store
-    i32.const 1192
+    i32.const 1384
     local.get 10
     i64.store
-    i32.const 1232
+    i32.const 1424
     local.get 25
     i64.store
-    i32.const 1096
+    i32.const 1288
     local.get 31
     i64.store
-    i32.const 1136
+    i32.const 1328
     local.get 20
     i64.store
-    i32.const 1176
+    i32.const 1368
     local.get 19
     i64.store
-    i32.const 1216
+    i32.const 1408
     local.get 11
     i64.store
-    i32.const 1256
+    i32.const 1448
     local.get 50
     i64.store)
-  (func $_main (type 4)
+  (func $_main (type 2)
     (local i32 i32 i32)
     call $eth2_blockDataSize
     local.tee 0
@@ -1032,13 +1031,13 @@
     i32.const 0
     local.get 0
     call $eth2_blockDataCopy
-    i32.const 1072
+    i32.const 1264
     i32.const 400
     call $memset
-    i32.const 1468
+    i32.const 1660
     i32.const 136
     i32.store
-    i32.const 1464
+    i32.const 1656
     local.get 0
     i32.const 136
     i32.rem_u
@@ -1053,11 +1052,11 @@
         i32.const 7
         i32.and
         if (result i32)  ;; label = @3
-          i32.const 1272
+          i32.const 1464
           local.get 1
           i32.const 136
           call $memcpy
-          i32.const 1272
+          i32.const 1464
         else
           local.get 1
         end
@@ -1079,30 +1078,30 @@
     end
     local.get 0
     if  ;; label = @1
-      i32.const 1272
+      i32.const 1464
       local.get 1
       local.get 0
       call $memcpy
     end
-    i32.const 1468
+    i32.const 1660
     i32.load
     local.set 1
-    i32.const 1464
+    i32.const 1656
     i32.load
     local.tee 0
     i32.const 0
     i32.ge_s
     if  ;; label = @1
       local.get 0
-      i32.const 1272
+      i32.const 1464
       i32.add
       local.get 1
       local.get 0
       i32.sub
       call $memset
-      i32.const 1464
+      i32.const 1656
       i32.load
-      i32.const 1272
+      i32.const 1464
       i32.add
       local.tee 0
       local.get 0
@@ -1114,35 +1113,31 @@
       i32.const -1
       i32.add
       local.get 1
-      i32.const 1271
+      i32.const 1463
       i32.add
       i32.load8_u
       i32.const -128
       i32.or
-      i32.store8 offset=1272
-      i32.const 1272
+      i32.store8 offset=1464
+      i32.const 1464
       local.get 1
       call $rhash_sha3_process_block
-      i32.const 1464
+      i32.const 1656
       i32.const -2147483648
       i32.store
     end
-    i32.const 1040
-    i32.const 1072
+    i32.const 1232
+    i32.const 1264
     i32.const 100
     local.get 1
     i32.const 1
     i32.shr_u
     i32.sub
     call $memcpy
-    i32.const 1040
+    i32.const 1232
     call $eth2_savePostStateRoot)
   (memory (;0;) 2)
-  (global (;0;) i32 (i32.const 67216))
-  (global (;1;) i32 (i32.const 1680))
   (export "memory" (memory 0))
-  (export "__heap_base" (global 0))
-  (export "__data_end" (global 1))
   (export "main" (func $_main))
-  (data (;0;) (i32.const 1024) "\90\06\01")
-  (data (;1;) (i32.const 1488) "\01\00\00\00\00\00\00\00\82\80\00\00\00\00\00\00\8a\80\00\00\00\00\00\80\00\80\00\80\00\00\00\80\8b\80\00\00\00\00\00\00\01\00\00\80\00\00\00\00\81\80\00\80\00\00\00\80\09\80\00\00\00\00\00\80\8a\00\00\00\00\00\00\00\88\00\00\00\00\00\00\00\09\80\00\80\00\00\00\00\0a\00\00\80\00\00\00\00\8b\80\00\80\00\00\00\00\8b\00\00\00\00\00\00\80\89\80\00\00\00\00\00\80\03\80\00\00\00\00\00\80\02\80\00\00\00\00\00\80\80\00\00\00\00\00\00\80\0a\80\00\00\00\00\00\00\0a\00\00\80\00\00\00\80\81\80\00\80\00\00\00\80\80\80\00\00\00\00\00\80\01\00\00\80\00\00\00\00\08\80\00\80\00\00\00\80"))
+  (data (;0;) (i32.const 1024) "\01\00\00\00\00\00\00\00\82\80\00\00\00\00\00\00\8a\80\00\00\00\00\00\80\00\80\00\80\00\00\00\80\8b\80\00\00\00\00\00\00\01\00\00\80\00\00\00\00\81\80\00\80\00\00\00\80\09\80\00\00\00\00\00\80\8a\00\00\00\00\00\00\00\88\00\00\00\00\00\00\00\09\80\00\80\00\00\00\00\0a\00\00\80\00\00\00\00\8b\80\00\80\00\00\00\00\8b\00\00\00\00\00\00\80\89\80\00\00\00\00\00\80\03\80\00\00\00\00\00\80\02\80\00\00\00\00\00\80\80\00\00\00\00\00\00\80\0a\80\00\00\00\00\00\00\0a\00\00\80\00\00\00\80\81\80\00\80\00\00\00\80\80\80\00\00\00\00\00\80\01\00\00\80\00\00\00\00\08\80\00\80\00\00\00\80")
+  (data (;1;) (i32.const 1216) "\90\06\01"))
