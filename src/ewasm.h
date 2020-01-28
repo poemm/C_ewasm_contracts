@@ -68,15 +68,16 @@ typedef uint32_t i32ptr; // same as i32 in WebAssembly, but treated as a pointer
 
 
 
-////////////////////////////
-// EEI Method Declaration //
-////////////////////////////
+/////////////////////////
+//  Method Declaration //
+/////////////////////////
 
 void eth2_loadPreStateRoot(uint32_t* offset);
 uint32_t eth2_blockDataSize();
 void eth2_blockDataCopy(uint32_t* outputOfset, uint32_t offset, uint32_t length);
 void eth2_savePostStateRoot(uint32_t* offset);
 void eth2_pushNewDeposit(uint32_t* offset, uint32_t length);
+void eth2_debugPrintMem(uint32_t* offset, uint32_t length);
 
 #ifdef NATIVE
 // dummy functions
@@ -85,6 +86,7 @@ uint32_t eth2_blockDataSize(){return 1;}
 void eth2_blockDataCopy(uint32_t offset, uint32_t length, uint32_t* outputOfset){return;}
 void eth2_savePostStateRoot(const uint32_t* offset){return;}
 void eth2_pushNewDeposit(uint32_t* offset, uint32_t length){return;}
+void eth2_debugPrintMem(uint32_t* offset, uint32_t length){return;};
 #endif
 
 
@@ -104,7 +106,7 @@ void mul256(i32ptr* out, i32ptr* x, i32ptr* y);
 extern void __builtin_unreachable();			// wasm unreachable opcode
 extern int __builtin_ctz(unsigned int); 		// wasm i32.ctz opcode
 extern int __builtin_ctzll(unsigned long long); 	// wasm i64.ctz opcode
-// there are many more like this
+// TODO: add many more like this
 
 
 
@@ -128,7 +130,6 @@ extern unsigned long __builtin_wasm_memory_size(int);	// arg must be zero until 
 
 #ifdef NATIVE
 #include<stdlib.h> //malloc
-#include<string.h> //memcpy
 #else
 __attribute__ ((noinline))
 void* malloc(const size_t size){
@@ -209,9 +210,9 @@ int memcmp ( const void * in1, const void * in2, size_t num ){
   uint8_t* in1_ptr = (uint8_t*) in1;
   uint8_t* in2_ptr = (uint8_t*) in2;
   int ret=0;
-  for (int i=0;i<num;++i){
+  for (size_t i=0;i<num;++i){
     if (in1_ptr[i]!=in2_ptr[i]){
-      if (in1_ptr[i]!=in2_ptr[i])
+      if (in1_ptr[i]>in2_ptr[i])
         ret=1;
       else
         ret=-1;
@@ -219,6 +220,44 @@ int memcmp ( const void * in1, const void * in2, size_t num ){
     }
   }
   return ret;
+}
+#endif
+
+
+
+//////////////
+// string.h //
+//////////////
+
+#ifdef NATIVE
+#include<string.h> //memcpy
+#else
+//__attribute__ ((noinline))
+int strcmp ( const char * in1_ptr, const char * in2_ptr ){
+  // TODO: do this in 64-bit chunks, then 8-bit chunks at end
+  int i=0;
+  while (in1_ptr[i]==in2_ptr[i] && in1_ptr[i]!='\0' && in2_ptr[i]!='\0')
+    i++;
+
+  int ret=0;
+  if (in1_ptr[i]=='\0' && in2_ptr[i]=='\0')
+    ret=0;
+  else if ((unsigned char)in1_ptr[i]>(unsigned char)in2_ptr[i])
+    ret=1;
+  else
+    ret=-1;
+
+  return ret;
+}
+
+//__attribute__ ((noinline))
+size_t strlen ( const char * in ){
+  // TODO: do this in 64-bit chunks, then 8-bit chunks at end
+  // TODO: do this in blocks, and if exceed some number of gigabytes, break
+  size_t idx=0;
+  while(in[idx]!='\0')
+    idx++;
+  return idx;
 }
 #endif
 
