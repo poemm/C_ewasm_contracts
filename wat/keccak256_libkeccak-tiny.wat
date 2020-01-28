@@ -1,16 +1,15 @@
 (module
-  (type (;0;) (func (result i32)))
-  (type (;1;) (func (param i32 i32 i32)))
-  (type (;2;) (func (param i32)))
-  (type (;3;) (func (param i32) (result i32)))
-  (type (;4;) (func))
-  (type (;5;) (func (param i32)))
-  (import "env" "eth2_blockDataSize" (func $eth2_blockDataSize (type 0)))
-  (import "env" "eth2_blockDataCopy" (func $eth2_blockDataCopy (type 1)))
-  (import "env" "eth2_savePostStateRoot" (func $eth2_savePostStateRoot (type 2)))
-  (func $malloc (type 3) (param i32) (result i32)
+  (type (;0;) (func (param i32)))
+  (type (;1;) (func))
+  (type (;2;) (func (param i32 i32 i32)))
+  (type (;3;) (func (result i32)))
+  (type (;4;) (func (param i32) (result i32)))
+  (import "env" "eth2_blockDataSize" (func $eth2_blockDataSize (type 3)))
+  (import "env" "eth2_blockDataCopy" (func $eth2_blockDataCopy (type 2)))
+  (import "env" "eth2_savePostStateRoot" (func $eth2_savePostStateRoot (type 0)))
+  (func $malloc (type 4) (param i32) (result i32)
     (local i32 i32)
-    i32.const 1024
+    i32.const 1216
     i32.load
     local.get 0
     i32.add
@@ -35,13 +34,13 @@
       memory.grow
       drop
     end
-    i32.const 1024
+    i32.const 1216
     local.get 1
     i32.store
     local.get 1
     local.get 0
     i32.sub)
-  (func $memset (type 5) (param i32)
+  (func $memset (type 0) (param i32)
     (local i32 i32 i32)
     i32.const 200
     local.tee 1
@@ -91,7 +90,7 @@
         br_if 0 (;@2;)
       end
     end)
-  (func $keccakf (type 2) (param i32)
+  (func $keccakf (type 0) (param i32)
     (local i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64)
     local.get 0
     i32.const 40
@@ -820,7 +819,7 @@
       local.get 1
       i32.const 3
       i32.shl
-      i32.const 1072
+      i32.const 1024
       i32.add
       i64.load
       local.get 60
@@ -912,7 +911,7 @@
     local.get 25
     local.get 53
     i64.store)
-  (func $_main (type 4)
+  (func $_main (type 1)
     (local i32 i32 i32 i32 i32)
     global.get 0
     i32.const 208
@@ -1030,30 +1029,30 @@
       end
       local.get 0
       call $keccakf
-      i32.const 1040
+      i32.const 1232
       local.get 0
       i64.load
       i64.store
-      i32.const 1064
+      i32.const 1256
       local.get 0
       i32.const 24
       i32.add
       i64.load
       i64.store
-      i32.const 1056
+      i32.const 1248
       local.get 0
       i32.const 16
       i32.add
       i64.load
       i64.store
-      i32.const 1048
+      i32.const 1240
       local.get 0
       i32.const 8
       i32.add
       i64.load
       i64.store
     end
-    i32.const 1040
+    i32.const 1232
     call $eth2_savePostStateRoot
     local.get 0
     i32.const 208
@@ -1061,11 +1060,7 @@
     global.set 0)
   (memory (;0;) 2)
   (global (;0;) (mut i32) (i32.const 66800))
-  (global (;1;) i32 (i32.const 66800))
-  (global (;2;) i32 (i32.const 1264))
   (export "memory" (memory 0))
-  (export "__heap_base" (global 1))
-  (export "__data_end" (global 2))
   (export "main" (func $_main))
-  (data (;0;) (i32.const 1024) "\f0\04\01")
-  (data (;1;) (i32.const 1072) "\01\00\00\00\00\00\00\00\82\80\00\00\00\00\00\00\8a\80\00\00\00\00\00\80\00\80\00\80\00\00\00\80\8b\80\00\00\00\00\00\00\01\00\00\80\00\00\00\00\81\80\00\80\00\00\00\80\09\80\00\00\00\00\00\80\8a\00\00\00\00\00\00\00\88\00\00\00\00\00\00\00\09\80\00\80\00\00\00\00\0a\00\00\80\00\00\00\00\8b\80\00\80\00\00\00\00\8b\00\00\00\00\00\00\80\89\80\00\00\00\00\00\80\03\80\00\00\00\00\00\80\02\80\00\00\00\00\00\80\80\00\00\00\00\00\00\80\0a\80\00\00\00\00\00\00\0a\00\00\80\00\00\00\80\81\80\00\80\00\00\00\80\80\80\00\00\00\00\00\80\01\00\00\80\00\00\00\00\08\80\00\80\00\00\00\80"))
+  (data (;0;) (i32.const 1024) "\01\00\00\00\00\00\00\00\82\80\00\00\00\00\00\00\8a\80\00\00\00\00\00\80\00\80\00\80\00\00\00\80\8b\80\00\00\00\00\00\00\01\00\00\80\00\00\00\00\81\80\00\80\00\00\00\80\09\80\00\00\00\00\00\80\8a\00\00\00\00\00\00\00\88\00\00\00\00\00\00\00\09\80\00\80\00\00\00\00\0a\00\00\80\00\00\00\00\8b\80\00\80\00\00\00\00\8b\00\00\00\00\00\00\80\89\80\00\00\00\00\00\80\03\80\00\00\00\00\00\80\02\80\00\00\00\00\00\80\80\00\00\00\00\00\00\80\0a\80\00\00\00\00\00\00\0a\00\00\80\00\00\00\80\81\80\00\80\00\00\00\80\80\80\00\00\00\00\00\80\01\00\00\80\00\00\00\00\08\80\00\80\00\00\00\80")
+  (data (;1;) (i32.const 1216) "\f0\04\01"))

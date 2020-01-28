@@ -35,6 +35,12 @@ cmake -G 'Unix Makefiles' -DLLVM_ENABLE_PROJECTS="clang;libcxx;libcxxabi;lld" ..
 make -j4	# warning: long compilation time, need lots of ram and disk, may crash and need to be restarted
 ```
 
+LLVM builtins -- Needed for things like `__multi3()` which do multiplciation of two 64-bit integers to a 128-bit integer.
+```
+wget https://github.com/CraneStation/wasi-sdk/releases/download/wasi-sdk-5/libclang_rt.builtins-wasm32-wasi-5.0.tar.gz
+tar -xvzf libclang_rt.builtins-wasm32-wasi-5.0.tar.gz
+```
+
 Scout (optional)
 ```
 git clone https://github.com/poemm/scout.cpp.git
@@ -43,12 +49,6 @@ cmake ..
 make
 cd ../..
 cp scout.cpp/build/scout.exec .
-```
-
-LLVM builtins like `__multi3()` (Needed by C code which does multiplciation of two 64-bit integers to a 128-bit integer.)
-```
-wget https://github.com/CraneStation/wasi-sdk/releases/download/wasi-sdk-5/libclang_rt.builtins-wasm32-wasi-5.0.tar.gz
-tar -xvzf libclang_rt.builtins-wasm32-wasi-5.0.tar.gz
 ```
 
 # Compile src to Wasm

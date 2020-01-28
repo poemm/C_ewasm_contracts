@@ -278,7 +278,7 @@ that use the Keccak-f[1600] permutation.
 ================================================================
 */
 
-#include <string.h>
+//#include <string.h>
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
 void Keccak(unsigned int rate, unsigned int capacity, const unsigned char *input, unsigned long long int inputByteLen, unsigned char delimitedSuffix, unsigned char *output, unsigned long long int outputByteLen)

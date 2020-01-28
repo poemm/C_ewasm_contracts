@@ -1,18 +1,17 @@
 (module
-  (type (;0;) (func (result i32)))
-  (type (;1;) (func (param i32 i32 i32)))
-  (type (;2;) (func (param i32)))
-  (type (;3;) (func (param i32) (result i32)))
-  (type (;4;) (func (param i32 i32 i32 i32) (result i32)))
-  (type (;5;) (func))
-  (type (;6;) (func (param i32 i32 i32)))
-  (type (;7;) (func (param i32 i32)))
-  (import "env" "eth2_blockDataSize" (func $eth2_blockDataSize (type 0)))
-  (import "env" "eth2_blockDataCopy" (func $eth2_blockDataCopy (type 1)))
-  (import "env" "eth2_savePostStateRoot" (func $eth2_savePostStateRoot (type 2)))
-  (func $malloc (type 3) (param i32) (result i32)
+  (type (;0;) (func (param i32 i32 i32)))
+  (type (;1;) (func (param i32)))
+  (type (;2;) (func))
+  (type (;3;) (func (param i32 i32)))
+  (type (;4;) (func (result i32)))
+  (type (;5;) (func (param i32) (result i32)))
+  (type (;6;) (func (param i32 i32 i32 i32) (result i32)))
+  (import "env" "eth2_blockDataSize" (func $eth2_blockDataSize (type 4)))
+  (import "env" "eth2_blockDataCopy" (func $eth2_blockDataCopy (type 0)))
+  (import "env" "eth2_savePostStateRoot" (func $eth2_savePostStateRoot (type 1)))
+  (func $malloc (type 5) (param i32) (result i32)
     (local i32 i32)
-    i32.const 1024
+    i32.const 1216
     i32.load
     local.get 0
     i32.add
@@ -37,13 +36,13 @@
       memory.grow
       drop
     end
-    i32.const 1024
+    i32.const 1216
     local.get 1
     i32.store
     local.get 1
     local.get 0
     i32.sub)
-  (func $memcpy (type 6) (param i32 i32 i32)
+  (func $memcpy (type 0) (param i32 i32 i32)
     (local i32 i32 i32 i32)
     local.get 1
     local.set 3
@@ -109,7 +108,7 @@
         br_if 0 (;@2;)
       end
     end)
-  (func $memset (type 7) (param i32 i32)
+  (func $memset (type 3) (param i32 i32)
     (local i32 i32 i32)
     local.get 1
     local.tee 2
@@ -161,7 +160,7 @@
         br_if 0 (;@2;)
       end
     end)
-  (func $SHA3_absorb (type 4) (param i32 i32 i32 i32) (result i32)
+  (func $SHA3_absorb (type 6) (param i32 i32 i32 i32) (result i32)
     (local i32 i32 i32 i32 i32 i32 i32 i64)
     local.get 3
     i32.const 3
@@ -422,7 +421,7 @@
       end
     end
     local.get 2)
-  (func $KeccakF1600 (type 2) (param i32)
+  (func $KeccakF1600 (type 1) (param i32)
     (local i32)
     global.get 0
     i32.const 208
@@ -529,7 +528,7 @@
     i32.const 208
     i32.add
     global.set 0)
-  (func $SHA3_squeeze (type 6) (param i32 i32 i32)
+  (func $SHA3_squeeze (type 0) (param i32 i32 i32)
     (local i32 i32 i32 i32 i32 i64 i64)
     local.get 2
     i32.const 3
@@ -543,7 +542,7 @@
       i32.const 0
       i32.ne
       local.set 7
-      i32.const 1040
+      i32.const 1232
       local.set 2
       local.get 1
       local.set 5
@@ -811,7 +810,7 @@
         br_if 0 (;@2;)
       end
     end)
-  (func $Round (type 1) (param i32 i32 i32)
+  (func $Round (type 0) (param i32 i32 i32)
     (local i32 i32 i32 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64)
     local.get 1
     i64.load offset=192
@@ -1020,7 +1019,7 @@
     local.get 2
     i32.const 3
     i32.shl
-    i32.const 1072
+    i32.const 1024
     i32.add
     i64.load
     i64.xor
@@ -1827,7 +1826,7 @@
     local.get 14
     i64.xor
     i64.store offset=192)
-  (func $_main (type 5)
+  (func $_main (type 2)
     (local i32 i32 i32 i32 i32 i32 i32 i32 i32)
     global.get 0
     i32.const 400
@@ -1961,7 +1960,7 @@
     i32.load
     local.get 2
     call $SHA3_squeeze
-    i32.const 1040
+    i32.const 1232
     call $eth2_savePostStateRoot
     local.get 1
     i32.const 400
@@ -1969,12 +1968,8 @@
     global.set 0)
   (memory (;0;) 2)
   (global (;0;) (mut i32) (i32.const 66800))
-  (global (;1;) i32 (i32.const 66800))
-  (global (;2;) i32 (i32.const 1264))
   (export "memory" (memory 0))
-  (export "__heap_base" (global 1))
-  (export "__data_end" (global 2))
   (export "main" (func $_main))
-  (data (;0;) (i32.const 1024) "\f0\04\01")
-  (data (;1;) (i32.const 1072) "\01")
-  (data (;2;) (i32.const 1084) "\89\00\00\00\00\00\00\00\8b\00\00\80\00\00\00\00\80\80\00\80\01\00\00\00\8b\00\00\00\01\00\00\00\00\80\00\00\01\00\00\00\88\80\00\80\01\00\00\00\82\00\00\80\00\00\00\00\0b\00\00\00\00\00\00\00\0a\00\00\00\01\00\00\00\82\80\00\00\00\00\00\00\03\80\00\00\01\00\00\00\8b\80\00\00\01\00\00\00\0b\00\00\80\01\00\00\00\8a\00\00\80\01\00\00\00\81\00\00\80\00\00\00\00\81\00\00\80\00\00\00\00\08\00\00\80\00\00\00\00\83\00\00\00\00\00\00\00\03\80\00\80\01\00\00\00\88\80\00\80\00\00\00\00\88\00\00\80\01\00\00\00\00\80\00\00\00\00\00\00\82\80\00\80"))
+  (data (;0;) (i32.const 1024) "\01")
+  (data (;1;) (i32.const 1036) "\89\00\00\00\00\00\00\00\8b\00\00\80\00\00\00\00\80\80\00\80\01\00\00\00\8b\00\00\00\01\00\00\00\00\80\00\00\01\00\00\00\88\80\00\80\01\00\00\00\82\00\00\80\00\00\00\00\0b\00\00\00\00\00\00\00\0a\00\00\00\01\00\00\00\82\80\00\00\00\00\00\00\03\80\00\00\01\00\00\00\8b\80\00\00\01\00\00\00\0b\00\00\80\01\00\00\00\8a\00\00\80\01\00\00\00\81\00\00\80\00\00\00\00\81\00\00\80\00\00\00\00\08\00\00\80\00\00\00\00\83\00\00\00\00\00\00\00\03\80\00\80\01\00\00\00\88\80\00\80\00\00\00\00\88\00\00\80\01\00\00\00\00\80\00\00\00\00\00\00\82\80\00\80")
+  (data (;2;) (i32.const 1216) "\f0\04\01"))

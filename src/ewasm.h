@@ -92,9 +92,8 @@ void eth2_debugPrintMem(uint32_t* offset, uint32_t length){return;};
 
 
 // testing experimental
-#define BIGINT true
-#if BIGINT==true
-void mul256(i32ptr* out, i32ptr* x, i32ptr* y);
+#if BIGINT
+void eth2_mul256(i32ptr* out, i32ptr* x, i32ptr* y);
 #endif
 
 

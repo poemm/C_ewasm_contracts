@@ -1,14 +1,13 @@
 (module
-  (type (;0;) (func (result i32)))
-  (type (;1;) (func (param i32 i32 i32)))
-  (type (;2;) (func (param i32)))
-  (type (;3;) (func (param i32) (result i32)))
-  (type (;4;) (func))
-  (type (;5;) (func (param i32)))
-  (import "env" "eth2_blockDataSize" (func $eth2_blockDataSize (type 0)))
-  (import "env" "eth2_blockDataCopy" (func $eth2_blockDataCopy (type 1)))
-  (import "env" "eth2_savePostStateRoot" (func $eth2_savePostStateRoot (type 2)))
-  (func $malloc (type 3) (param i32) (result i32)
+  (type (;0;) (func (param i32)))
+  (type (;1;) (func))
+  (type (;2;) (func (param i32 i32 i32)))
+  (type (;3;) (func (result i32)))
+  (type (;4;) (func (param i32) (result i32)))
+  (import "env" "eth2_blockDataSize" (func $eth2_blockDataSize (type 3)))
+  (import "env" "eth2_blockDataCopy" (func $eth2_blockDataCopy (type 2)))
+  (import "env" "eth2_savePostStateRoot" (func $eth2_savePostStateRoot (type 0)))
+  (func $malloc (type 4) (param i32) (result i32)
     (local i32 i32)
     i32.const 1024
     i32.load
@@ -41,7 +40,7 @@
     local.get 1
     local.get 0
     i32.sub)
-  (func $memset (type 5) (param i32)
+  (func $memset (type 0) (param i32)
     (local i32 i32 i32)
     i32.const 200
     local.tee 1
@@ -91,7 +90,7 @@
         br_if 0 (;@2;)
       end
     end)
-  (func $KeccakF1600_StatePermute (type 2) (param i32)
+  (func $KeccakF1600_StatePermute (type 0) (param i32)
     (local i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i64 i64 i64 i64 i64 i64)
     global.get 0
     i32.const 48
@@ -1668,7 +1667,7 @@
       i32.ne
       br_if 0 (;@1;)
     end)
-  (func $_main (type 4)
+  (func $_main (type 1)
     (local i32 i32 i32 i32 i32 i64 i64)
     global.get 0
     i32.const 208
@@ -1761,8 +1760,8 @@
           local.get 6
         end
         local.tee 5
-        i64.const 0
-        i64.ne
+        i64.eqz
+        i32.eqz
         br_if 0 (;@2;)
       end
       local.get 0
@@ -1816,10 +1815,6 @@
     global.set 0)
   (memory (;0;) 2)
   (global (;0;) (mut i32) (i32.const 66608))
-  (global (;1;) i32 (i32.const 66608))
-  (global (;2;) i32 (i32.const 1072))
   (export "memory" (memory 0))
-  (export "__heap_base" (global 1))
-  (export "__data_end" (global 2))
   (export "main" (func $_main))
   (data (;0;) (i32.const 1024) "0\04\01"))

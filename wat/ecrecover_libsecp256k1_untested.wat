@@ -1,29 +1,25 @@
 (module
   (type (;0;) (func (param i32 i32)))
-  (type (;1;) (func (result i32)))
-  (type (;2;) (func (param i32 i32 i32)))
-  (type (;3;) (func (param i32)))
-  (type (;4;) (func (param i32) (result i32)))
-  (type (;5;) (func (param i32 i32 i32) (result i32)))
-  (type (;6;) (func (param i32 i32) (result i32)))
-  (type (;7;) (func (param i32 i32 i32 i32)))
-  (type (;8;) (func (param i32 i32 i32 i32 i32 i32) (result i32)))
+  (type (;1;) (func (param i32 i32 i32)))
+  (type (;2;) (func (param i32 i32) (result i32)))
+  (type (;3;) (func (param i32 i32 i32) (result i32)))
+  (type (;4;) (func (param i32)))
+  (type (;5;) (func (param i32 i32 i32 i32)))
+  (type (;6;) (func (param i32) (result i32)))
+  (type (;7;) (func (result i32)))
+  (type (;8;) (func))
   (type (;9;) (func (param i32 i32 i32 i32 i32)))
-  (type (;10;) (func))
-  (type (;11;) (func (param i32 i32 i32 i32 i32 i32)))
-  (type (;12;) (func (param i32 i32) (result i32)))
-  (type (;13;) (func (result i32)))
-  (type (;14;) (func (param i32 i32 i32)))
-  (type (;15;) (func (param i32 i32 i32) (result i32)))
-  (type (;16;) (func (param i32 i64 i64 i64)))
-  (import "env" "eth2_blockDataSize" (func $eth2_blockDataSize (type 1)))
-  (import "env" "eth2_blockDataCopy" (func $eth2_blockDataCopy (type 2)))
-  (import "env" "eth2_savePostStateRoot" (func $eth2_savePostStateRoot (type 3)))
-  (func $malloc (type 4) (param i32) (result i32)
+  (type (;10;) (func (param i32 i32 i32 i32 i32 i32)))
+  (type (;11;) (func (param i32 i64 i64 i64)))
+  (type (;12;) (func (param i32 i32 i32 i32 i32 i32) (result i32)))
+  (import "env" "eth2_blockDataSize" (func $eth2_blockDataSize (type 7)))
+  (import "env" "eth2_blockDataCopy" (func $eth2_blockDataCopy (type 1)))
+  (import "env" "eth2_savePostStateRoot" (func $eth2_savePostStateRoot (type 4)))
+  (func $malloc (type 6) (param i32) (result i32)
     (local i32 i32)
     memory.size
     local.set 2
-    i32.const 1024
+    i32.const 1720
     i32.load
     local.get 0
     i32.add
@@ -47,13 +43,13 @@
       memory.grow
       drop
     end
-    i32.const 1024
+    i32.const 1720
     local.get 1
     i32.store
     local.get 1
     local.get 0
     i32.sub)
-  (func $memcpy (type 5) (param i32 i32 i32) (result i32)
+  (func $memcpy (type 3) (param i32 i32 i32) (result i32)
     (local i32 i32)
     block  ;; label = @1
       local.get 2
@@ -117,7 +113,7 @@
       end
     end
     local.get 0)
-  (func $memset (type 12) (param i32 i32) (result i32)
+  (func $memset (type 2) (param i32 i32) (result i32)
     (local i32)
     local.get 1
     i32.const 9
@@ -164,17 +160,17 @@
       end
     end
     local.get 0)
-  (func $secp256k1_context_create (type 13) (result i32)
+  (func $secp256k1_context_create (type 7) (result i32)
     (local i32)
-    i32.const 1040
+    i32.const 1024
     i32.const 192
     call $checked_malloc
     local.tee 0
-    i32.const 1040
+    i32.const 1024
     i64.load
     i64.store offset=184
     local.get 0
-    i32.const 1048
+    i32.const 1032
     i64.load
     i64.store offset=176
     local.get 0
@@ -191,13 +187,13 @@
     i32.add
     call $secp256k1_ecmult_context_build
     local.get 0)
-  (func $checked_malloc (type 6) (param i32 i32) (result i32)
+  (func $checked_malloc (type 2) (param i32 i32) (result i32)
     local.get 1
     call $malloc
     local.tee 1
     i32.eqz
     if  ;; label = @1
-      i32.const 1395
+      i32.const 1379
       local.get 0
       i32.load offset=4
       local.get 0
@@ -217,7 +213,7 @@
     i32.eqz
     if  ;; label = @1
       local.get 2
-      i32.const 1416
+      i32.const 1400
       call $secp256k1_gej_set_ge
       local.get 0
       local.get 1
@@ -315,7 +311,7 @@
     i32.add
     i32.const 1
     call $secp256k1_fe_set_int)
-  (func $secp256k1_fe_set_b32 (type 6) (param i32 i32) (result i32)
+  (func $secp256k1_fe_set_b32 (type 2) (param i32 i32) (result i32)
     (local i64 i64 i64 i64 i64)
     local.get 0
     local.get 1
@@ -520,7 +516,7 @@
       end
       i32.const 1
     end)
-  (func $secp256k1_ge_set_xo_var (type 5) (param i32 i32 i32) (result i32)
+  (func $secp256k1_ge_set_xo_var (type 3) (param i32 i32 i32) (result i32)
     local.get 0
     local.get 1
     call $secp256k1_ge_set_xquad
@@ -547,7 +543,7 @@
       call $secp256k1_fe_negate
     end
     i32.const 1)
-  (func $secp256k1_gej_add_ge_var (type 7) (param i32 i32 i32 i32)
+  (func $secp256k1_gej_add_ge_var (type 5) (param i32 i32 i32 i32)
     (local i32 i32)
     global.get 0
     i32.const 448
@@ -933,7 +929,7 @@
     i32.const 448
     i32.add
     global.set 0)
-  (func $secp256k1_gej_double_var (type 2) (param i32 i32 i32)
+  (func $secp256k1_gej_double_var (type 1) (param i32 i32 i32)
     (local i32 i32)
     global.get 0
     i32.const 160
@@ -1650,7 +1646,7 @@
     i32.const 640
     i32.add
     global.set 0)
-  (func $secp256k1_ec_pubkey_serialize (type 14) (param i32 i32 i32)
+  (func $secp256k1_ec_pubkey_serialize (type 1) (param i32 i32 i32)
     (local i32 i32)
     global.get 0
     i32.const 96
@@ -1661,7 +1657,7 @@
       local.get 1
       i32.eqz
       if  ;; label = @2
-        i32.const 1070
+        i32.const 1054
         local.get 0
         i32.const 176
         i32.add
@@ -1678,7 +1674,7 @@
       i32.const 65
       i32.lt_u
       if  ;; label = @2
-        i32.const 1088
+        i32.const 1072
         local.get 0
         i32.const 176
         i32.add
@@ -1695,14 +1691,14 @@
       local.get 3
       local.get 4
       i32.store offset=4
-      i32.const 1872
+      i32.const 1856
       local.get 4
       call $memset
       local.set 4
       local.get 2
       i32.eqz
       if  ;; label = @2
-        i32.const 1171
+        i32.const 1155
         local.get 0
         i32.const 176
         i32.add
@@ -1740,7 +1736,7 @@
     i32.const 96
     i32.add
     global.set 0)
-  (func $secp256k1_pubkey_load (type 5) (param i32 i32 i32) (result i32)
+  (func $secp256k1_pubkey_load (type 3) (param i32 i32 i32) (result i32)
     (local i32)
     global.get 0
     i32.const -64
@@ -1830,7 +1826,7 @@
       i32.eqz
       br_if 0 (;@1;)
       drop
-      i32.const 1664
+      i32.const 1648
       local.get 0
       i32.const 176
       i32.add
@@ -1845,7 +1841,7 @@
     i32.const -64
     i32.sub
     global.set 0)
-  (func $secp256k1_eckey_pubkey_serialize (type 15) (param i32 i32 i32) (result i32)
+  (func $secp256k1_eckey_pubkey_serialize (type 3) (param i32 i32 i32) (result i32)
     (local i32 i32)
     local.get 0
     i32.load offset=80
@@ -1892,7 +1888,7 @@
     local.get 0
     i32.const 0
     i32.store offset=80)
-  (func $secp256k1_fe_normalize_var (type 3) (param i32)
+  (func $secp256k1_fe_normalize_var (type 4) (param i32)
     (local i64 i64 i64 i64 i64 i64 i64)
     local.get 0
     i64.load offset=8
@@ -2220,7 +2216,7 @@
     local.get 1
     i64.load
     i64.store8 offset=31)
-  (func $secp256k1_ecdsa_recoverable_signature_parse_compact (type 14) (param i32 i32 i32)
+  (func $secp256k1_ecdsa_recoverable_signature_parse_compact (type 1) (param i32 i32 i32)
     (local i32)
     global.get 0
     i32.const 80
@@ -2234,7 +2230,7 @@
       local.get 1
       i32.eqz
       if  ;; label = @2
-        i32.const 1258
+        i32.const 1242
         local.get 0
         i32.const 176
         i32.add
@@ -2249,7 +2245,7 @@
       i32.const 4
       i32.ge_u
       if  ;; label = @2
-        i32.const 1286
+        i32.const 1270
         local.get 0
         i32.const 176
         i32.add
@@ -2263,7 +2259,7 @@
       local.get 3
       i32.const 48
       i32.add
-      i32.const 1808
+      i32.const 1792
       local.get 3
       i32.const 12
       i32.add
@@ -2273,7 +2269,7 @@
       local.get 3
       i32.const 16
       i32.add
-      i32.const 1840
+      i32.const 1824
       local.get 3
       i32.const 12
       i32.add
@@ -2303,7 +2299,7 @@
     i32.const 80
     i32.add
     global.set 0)
-  (func $secp256k1_scalar_set_b32 (type 2) (param i32 i32 i32)
+  (func $secp256k1_scalar_set_b32 (type 1) (param i32 i32 i32)
     (local i64)
     local.get 0
     local.get 1
@@ -2504,7 +2500,7 @@
       local.get 0
       i32.store
     end)
-  (func $secp256k1_ecdsa_recoverable_signature_save (type 7) (param i32 i32 i32 i32)
+  (func $secp256k1_ecdsa_recoverable_signature_save (type 5) (param i32 i32 i32 i32)
     local.get 0
     local.get 1
     i64.load align=1
@@ -2564,7 +2560,7 @@
     local.get 0
     local.get 3
     i32.store8 offset=64)
-  (func $secp256k1_scalar_check_overflow (type 4) (param i32) (result i32)
+  (func $secp256k1_scalar_check_overflow (type 6) (param i32) (result i32)
     (local i32 i32 i64 i64)
     local.get 0
     i64.load offset=24
@@ -2605,7 +2601,7 @@
     local.get 2
     i32.and
     i32.or)
-  (func $secp256k1_scalar_reduce (type 6) (param i32 i32) (result i32)
+  (func $secp256k1_scalar_reduce (type 2) (param i32 i32) (result i32)
     (local i64 i64 i64 i64 i64)
     local.get 0
     local.get 0
@@ -2669,7 +2665,7 @@
     i64.add
     i64.store offset=24
     local.get 1)
-  (func $secp256k1_ecdsa_recover (type 14) (param i32 i32 i32)
+  (func $secp256k1_ecdsa_recover (type 1) (param i32 i32 i32)
     (local i32)
     global.get 0
     i32.const 192
@@ -2681,7 +2677,7 @@
       i32.load
       i32.eqz
       if  ;; label = @2
-        i32.const 1311
+        i32.const 1295
         local.get 0
         i32.const 176
         i32.add
@@ -2695,7 +2691,7 @@
       local.get 2
       i32.eqz
       if  ;; label = @2
-        i32.const 1377
+        i32.const 1361
         local.get 0
         i32.const 176
         i32.add
@@ -2709,7 +2705,7 @@
       local.get 1
       i32.eqz
       if  ;; label = @2
-        i32.const 1171
+        i32.const 1155
         local.get 0
         i32.const 176
         i32.add
@@ -2734,7 +2730,7 @@
       local.get 3
       i32.const 8
       i32.add
-      i32.const 1744
+      i32.const 1728
       i32.const 0
       call $secp256k1_scalar_set_b32
       local.get 0
@@ -2804,7 +2800,7 @@
     i32.const 192
     i32.add
     global.set 0)
-  (func $secp256k1_ecdsa_recoverable_signature_load (type 7) (param i32 i32 i32 i32)
+  (func $secp256k1_ecdsa_recoverable_signature_load (type 5) (param i32 i32 i32 i32)
     local.get 0
     local.get 3
     i64.load align=1
@@ -2865,7 +2861,7 @@
     local.get 3
     i32.load8_u offset=64
     i32.store)
-  (func $secp256k1_ecdsa_sig_recover (type 8) (param i32 i32 i32 i32 i32 i32) (result i32)
+  (func $secp256k1_ecdsa_sig_recover (type 12) (param i32 i32 i32 i32 i32 i32) (result i32)
     (local i32 i32)
     global.get 0
     i32.const 512
@@ -2926,7 +2922,7 @@
         local.get 6
         i32.const 440
         i32.add
-        i32.const 1696
+        i32.const 1680
         call $secp256k1_fe_add
       end
       local.get 6
@@ -3254,7 +3250,7 @@
     local.get 1
     i64.load
     i64.store8 offset=31)
-  (func $secp256k1_fe_cmp_var (type 4) (param i32) (result i32)
+  (func $secp256k1_fe_cmp_var (type 6) (param i32) (result i32)
     (local i32 i64)
     block  ;; label = @1
       block  ;; label = @2
@@ -3346,7 +3342,7 @@
     i64.load offset=32
     i64.add
     i64.store offset=32)
-  (func $secp256k1_scalar_mul (type 2) (param i32 i32 i32)
+  (func $secp256k1_scalar_mul (type 1) (param i32 i32 i32)
     (local i32)
     global.get 0
     i32.const -64
@@ -3617,7 +3613,7 @@
     i32.const 80
     i32.add
     global.set 0)
-  (func $_main (type 10)
+  (func $_main (type 8)
     (local i32 i32 i32)
     global.get 0
     i32.const 144
@@ -3629,11 +3625,11 @@
       i32.const 128
       i32.ne
       br_if 0 (;@1;)
-      i32.const 1744
+      i32.const 1728
       i32.const 0
       i32.const 128
       call $eth2_blockDataCopy
-      i32.const 1807
+      i32.const 1791
       i32.load8_u
       i32.const -27
       i32.add
@@ -3641,7 +3637,7 @@
       i32.const 1
       i32.gt_u
       br_if 0 (;@1;)
-      i32.const 1744
+      i32.const 1728
       i32.const 0
       i32.const 128
       call $eth2_blockDataCopy
@@ -3671,7 +3667,7 @@
       i32.const 8
       i32.add
       call $secp256k1_ec_pubkey_serialize
-      i32.const 1872
+      i32.const 1856
       call $eth2_savePostStateRoot
     end
     local.get 0
@@ -3703,7 +3699,7 @@
     i32.add
     i64.const 0
     i64.store)
-  (func $secp256k1_ge_set_xquad (type 6) (param i32 i32) (result i32)
+  (func $secp256k1_ge_set_xquad (type 2) (param i32 i32) (result i32)
     (local i32)
     global.get 0
     i32.const 128
@@ -3785,7 +3781,7 @@
     i32.const 128
     i32.add
     global.set 0)
-  (func $secp256k1_fe_negate (type 2) (param i32 i32 i32)
+  (func $secp256k1_fe_negate (type 1) (param i32 i32 i32)
     (local i64 i64)
     local.get 0
     local.get 2
@@ -3832,7 +3828,7 @@
     local.get 0
     local.get 1
     call $secp256k1_fe_sqr_inner)
-  (func $secp256k1_fe_normalize_weak (type 3) (param i32)
+  (func $secp256k1_fe_normalize_weak (type 4) (param i32)
     (local i64 i64)
     local.get 0
     local.get 0
@@ -3891,12 +3887,12 @@
     i64.shr_u
     i64.add
     i64.store offset=32)
-  (func $secp256k1_fe_mul (type 2) (param i32 i32 i32)
+  (func $secp256k1_fe_mul (type 1) (param i32 i32 i32)
     local.get 0
     local.get 1
     local.get 2
     call $secp256k1_fe_mul_inner)
-  (func $secp256k1_fe_normalizes_to_zero_var (type 4) (param i32) (result i32)
+  (func $secp256k1_fe_normalizes_to_zero_var (type 6) (param i32) (result i32)
     (local i64 i64 i64 i64 i64)
     local.get 0
     i64.load
@@ -4024,7 +4020,7 @@
     local.get 0
     local.get 1
     call $secp256k1_fe_inv)
-  (func $secp256k1_ge_set_gej_zinv (type 2) (param i32 i32 i32)
+  (func $secp256k1_ge_set_gej_zinv (type 1) (param i32 i32 i32)
     (local i32)
     global.get 0
     i32.const 80
@@ -4064,7 +4060,7 @@
     i32.const 80
     i32.add
     global.set 0)
-  (func $secp256k1_fe_normalize (type 3) (param i32)
+  (func $secp256k1_fe_normalize (type 4) (param i32)
     (local i64 i64 i64 i64 i64)
     local.get 0
     local.get 0
@@ -4222,7 +4218,7 @@
     i64.shr_u
     i64.or
     i64.store offset=24)
-  (func $secp256k1_fe_clear (type 3) (param i32)
+  (func $secp256k1_fe_clear (type 4) (param i32)
     local.get 0
     i64.const 0
     i64.store
@@ -4246,7 +4242,7 @@
     i32.add
     i64.const 0
     i64.store)
-  (func $secp256k1_fe_sqrt (type 6) (param i32 i32) (result i32)
+  (func $secp256k1_fe_sqrt (type 2) (param i32 i32) (result i32)
     (local i32 i32 i32 i32 i32 i32)
     global.get 0
     i32.const 480
@@ -5769,7 +5765,7 @@
     i32.const 336
     i32.add
     global.set 0)
-  (func $secp256k1_fe_mul_inner (type 2) (param i32 i32 i32)
+  (func $secp256k1_fe_mul_inner (type 1) (param i32 i32 i32)
     (local i32 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64)
     global.get 0
     i32.const 496
@@ -6569,7 +6565,7 @@
     i32.const 496
     i32.add
     global.set 0)
-  (func $secp256k1_fe_equal (type 6) (param i32 i32) (result i32)
+  (func $secp256k1_fe_equal (type 2) (param i32 i32) (result i32)
     (local i32)
     global.get 0
     i32.const 48
@@ -6595,7 +6591,7 @@
     i32.const 48
     i32.add
     global.set 0)
-  (func $secp256k1_fe_normalizes_to_zero (type 4) (param i32) (result i32)
+  (func $secp256k1_fe_normalizes_to_zero (type 6) (param i32) (result i32)
     (local i64 i64 i64 i64 i64)
     local.get 0
     i64.load offset=8
@@ -7603,7 +7599,7 @@
     i32.const 480
     i32.add
     global.set 0)
-  (func $secp256k1_scalar_get_bits (type 5) (param i32 i32 i32) (result i32)
+  (func $secp256k1_scalar_get_bits (type 3) (param i32 i32 i32) (result i32)
     i64.const -1
     local.get 2
     i64.extend_i32_u
@@ -9440,7 +9436,7 @@
     i32.const 448
     i32.add
     global.set 0)
-  (func $secp256k1_scalar_mul_512 (type 2) (param i32 i32 i32)
+  (func $secp256k1_scalar_mul_512 (type 1) (param i32 i32 i32)
     (local i32 i64 i64 i64 i64 i64 i64 i64 i64 i64)
     global.get 0
     i32.const 256
@@ -9905,50 +9901,34 @@
     i32.add
     global.set 0)
   (func $secp256k1_scalar_reduce_512 (type 0) (param i32 i32)
-    (local i32 i64 i64 i64 i64 i64 i64 i64 i64 i64 i64)
+    (local i32 i64 i64 i64 i64 i64 i64 i64 i64 i64)
     global.get 0
-    i32.const 256
+    i32.const 224
     i32.sub
     local.tee 2
     global.set 0
     local.get 2
-    i32.const 240
-    i32.add
-    local.get 1
-    i64.load offset=32
-    local.tee 4
-    i64.const 0
-    i64.const 4624529908474429119
-    call $__multi3
-    local.get 2
     i32.const 208
     i32.add
     local.get 1
-    i64.load offset=40
-    local.tee 7
+    i64.load offset=32
+    local.tee 3
     i64.const 0
     i64.const 4624529908474429119
-    call $__multi3
-    local.get 2
-    i32.const 224
-    i32.add
-    local.get 4
-    i64.const 0
-    i64.const 4994812053365940164
     call $__multi3
     local.get 2
     i32.const 176
     i32.add
     local.get 1
-    i64.load offset=48
-    local.tee 5
+    i64.load offset=40
+    local.tee 6
     i64.const 0
     i64.const 4624529908474429119
     call $__multi3
     local.get 2
     i32.const 192
     i32.add
-    local.get 7
+    local.get 3
     i64.const 0
     i64.const 4994812053365940164
     call $__multi3
@@ -9956,283 +9936,38 @@
     i32.const 144
     i32.add
     local.get 1
-    i64.load offset=56
-    local.tee 8
+    i64.load offset=48
+    local.tee 7
     i64.const 0
     i64.const 4624529908474429119
     call $__multi3
     local.get 2
     i32.const 160
     i32.add
-    local.get 5
-    i64.const 0
-    i64.const 4994812053365940164
-    call $__multi3
-    local.get 2
-    i32.const 128
-    i32.add
-    local.get 8
-    i64.const 0
-    i64.const 4994812053365940164
-    call $__multi3
-    local.get 2
-    i32.const 32
-    i32.add
-    local.get 2
-    i32.const 216
-    i32.add
-    i64.load
-    local.get 1
-    i64.load
-    local.tee 3
-    local.get 2
-    i64.load offset=240
-    i64.add
-    local.tee 9
-    local.get 3
-    i64.lt_u
-    i64.extend_i32_u
-    local.get 1
-    i64.load offset=8
-    local.tee 11
-    local.get 2
-    i32.const 248
-    i32.add
-    i64.load
-    i64.add
-    i64.add
-    local.tee 3
-    local.get 2
-    i64.load offset=208
-    i64.add
-    local.tee 6
-    local.get 3
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    local.tee 10
-    local.get 3
-    local.get 11
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    local.tee 3
-    local.get 2
-    i32.const 232
-    i32.add
-    i64.load
     local.get 6
-    local.get 2
-    i64.load offset=224
-    i64.add
-    local.tee 11
-    local.get 6
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    i64.add
-    local.tee 6
-    local.get 3
-    i64.lt_u
-    i64.extend_i32_u
-    local.get 3
-    local.get 10
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    local.get 6
-    local.get 1
-    i64.load offset=16
-    i64.add
-    local.tee 3
-    local.get 6
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    local.tee 12
-    local.get 2
-    i32.const 184
-    i32.add
-    i64.load
-    local.get 3
-    local.get 2
-    i64.load offset=176
-    i64.add
-    local.tee 6
-    local.get 3
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    i64.add
-    local.tee 3
-    local.get 2
-    i32.const 200
-    i32.add
-    i64.load
-    local.get 6
-    local.get 2
-    i64.load offset=192
-    i64.add
-    local.tee 10
-    local.get 6
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    i64.add
-    local.tee 6
-    local.get 3
-    i64.lt_u
-    i64.extend_i32_u
-    local.get 3
-    local.get 12
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    local.get 6
-    local.get 4
-    local.get 10
-    i64.add
-    local.tee 12
-    local.get 10
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    local.tee 4
-    local.get 6
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    local.get 4
-    local.get 1
-    i64.load offset=24
-    i64.add
-    local.tee 3
-    local.get 4
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    local.tee 10
-    local.get 2
-    i32.const 152
-    i32.add
-    i64.load
-    local.get 3
-    local.get 2
-    i64.load offset=144
-    i64.add
-    local.tee 4
-    local.get 3
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    i64.add
-    local.tee 3
-    local.get 2
-    i32.const 168
-    i32.add
-    i64.load
-    local.get 4
-    local.get 2
-    i64.load offset=160
-    i64.add
-    local.tee 6
-    local.get 4
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    i64.add
-    local.tee 4
-    local.get 3
-    i64.lt_u
-    i64.extend_i32_u
-    local.get 3
-    local.get 10
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    local.get 4
-    local.get 6
-    local.get 7
-    i64.add
-    local.tee 10
-    local.get 6
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    local.tee 7
-    local.get 4
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    local.tee 6
-    local.get 2
-    i32.const 136
-    i32.add
-    i64.load
-    local.get 7
-    local.get 2
-    i64.load offset=128
-    i64.add
-    local.tee 3
-    local.get 7
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    i64.add
-    local.tee 7
-    local.get 3
-    local.get 5
-    i64.add
-    local.tee 4
-    local.get 3
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    local.tee 5
-    local.get 7
-    i64.lt_u
-    local.get 7
-    local.get 6
-    i64.lt_u
-    i32.add
-    local.get 5
-    local.get 8
-    i64.add
-    local.tee 7
-    local.get 5
-    i64.lt_u
-    i32.add
-    local.tee 1
-    i64.extend_i32_u
-    local.tee 5
     i64.const 0
     i64.const 4994812053365940164
     call $__multi3
     local.get 2
     i32.const 112
     i32.add
-    local.get 4
+    local.get 1
+    i64.load offset=56
+    local.tee 5
     i64.const 0
     i64.const 4624529908474429119
     call $__multi3
     local.get 2
-    i32.const 80
+    i32.const 128
     i32.add
     local.get 7
     i64.const 0
-    i64.const 4624529908474429119
-    call $__multi3
-    local.get 2
-    i32.const 48
-    i32.add
-    local.get 5
-    i64.const 0
-    i64.const 4624529908474429119
+    i64.const 4994812053365940164
     call $__multi3
     local.get 2
     i32.const 96
     i32.add
-    local.get 4
+    local.get 5
     i64.const 0
     i64.const 4994812053365940164
     call $__multi3
@@ -10240,241 +9975,397 @@
     i32.const -64
     i32.sub
     local.get 7
+    local.get 1
+    i64.load
+    local.tee 8
+    local.get 2
+    i64.load offset=208
+    i64.add
+    local.tee 9
+    local.get 8
+    i64.lt_u
+    i64.extend_i32_u
+    local.get 1
+    i64.load offset=8
+    local.tee 4
+    local.get 2
+    i32.const 216
+    i32.add
+    i64.load
+    i64.add
+    i64.add
+    local.tee 8
+    local.get 4
+    i64.lt_u
+    i64.extend_i32_u
+    local.get 1
+    i64.load offset=16
+    local.tee 10
+    local.get 2
+    i32.const 184
+    i32.add
+    i64.load
+    local.get 2
+    i32.const 200
+    i32.add
+    i64.load
+    i64.add
+    i64.add
+    i64.add
+    local.get 8
+    local.get 2
+    i64.load offset=176
+    i64.add
+    local.tee 4
+    local.get 8
+    i64.lt_u
+    i64.extend_i32_u
+    i64.add
+    local.get 4
+    local.get 2
+    i64.load offset=192
+    i64.add
+    local.tee 8
+    local.get 4
+    i64.lt_u
+    i64.extend_i32_u
+    i64.add
+    local.tee 4
+    local.get 10
+    i64.lt_u
+    i64.extend_i32_u
+    local.get 1
+    i64.load offset=24
+    local.tee 11
+    local.get 2
+    i32.const 152
+    i32.add
+    i64.load
+    local.get 2
+    i32.const 168
+    i32.add
+    i64.load
+    i64.add
+    i64.add
+    i64.add
+    local.get 4
+    local.get 2
+    i64.load offset=144
+    i64.add
+    local.tee 10
+    local.get 4
+    i64.lt_u
+    i64.extend_i32_u
+    i64.add
+    local.get 10
+    local.get 2
+    i64.load offset=160
+    i64.add
+    local.tee 4
+    local.get 10
+    i64.lt_u
+    i64.extend_i32_u
+    i64.add
+    local.get 3
+    local.get 4
+    i64.add
+    local.tee 10
+    local.get 4
+    i64.lt_u
+    i64.extend_i32_u
+    i64.add
+    local.tee 3
+    local.get 11
+    i64.lt_u
+    i64.extend_i32_u
+    local.get 2
+    i32.const 120
+    i32.add
+    i64.load
+    local.get 2
+    i64.load offset=96
+    local.tee 11
+    local.get 2
+    i32.const 136
+    i32.add
+    i64.load
+    i64.add
+    i64.add
+    i64.add
+    local.get 3
+    local.get 2
+    i64.load offset=112
+    i64.add
+    local.tee 4
+    local.get 3
+    i64.lt_u
+    i64.extend_i32_u
+    i64.add
+    local.get 4
+    local.get 2
+    i64.load offset=128
+    i64.add
+    local.tee 3
+    local.get 4
+    i64.lt_u
+    i64.extend_i32_u
+    i64.add
+    local.get 3
+    local.get 6
+    i64.add
+    local.tee 4
+    local.get 3
+    i64.lt_u
+    i64.extend_i32_u
+    i64.add
+    local.tee 6
+    i64.add
+    local.tee 3
+    i64.const 0
+    i64.const 4994812053365940164
+    call $__multi3
+    local.get 2
+    i32.const 48
+    i32.add
+    local.get 3
+    local.get 6
+    i64.lt_u
+    i64.extend_i32_u
+    local.get 6
+    local.get 11
+    i64.lt_u
+    i64.extend_i32_u
+    local.get 5
+    local.get 2
+    i32.const 104
+    i32.add
+    i64.load
+    i64.add
+    i64.add
+    i64.add
+    local.tee 6
+    i64.const 0
+    i64.const 4624529908474429119
+    call $__multi3
+    local.get 2
+    i32.const 80
+    i32.add
+    local.get 3
+    i64.const 0
+    i64.const 4624529908474429119
+    call $__multi3
+    local.get 2
+    i32.const 32
+    i32.add
+    local.get 6
     i64.const 0
     i64.const 4994812053365940164
     call $__multi3
     local.get 2
     i32.const 16
     i32.add
-    local.get 1
+    local.get 9
     local.get 2
-    i32.const 40
-    i32.add
-    i32.load
-    i32.add
-    local.get 2
-    i32.const 56
-    i32.add
-    i64.load
+    i64.load offset=80
+    i64.add
+    local.tee 11
+    local.get 9
+    i64.lt_u
+    i64.extend_i32_u
+    local.get 8
     local.get 2
     i32.const 88
     i32.add
     i64.load
-    local.get 9
-    local.get 2
-    i64.load offset=112
     i64.add
-    local.tee 3
-    local.get 9
+    i64.add
+    local.tee 7
+    local.get 8
     i64.lt_u
     i64.extend_i32_u
-    local.get 11
     local.get 2
-    i32.const 120
+    i32.const 56
     i32.add
     i64.load
-    i64.add
-    i64.add
-    local.tee 5
-    local.get 2
-    i64.load offset=80
-    i64.add
-    local.tee 8
-    local.get 5
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    local.tee 9
-    local.get 5
-    local.get 11
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    local.tee 5
-    local.get 9
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    local.get 5
-    local.get 2
-    i32.const 104
-    i32.add
-    i64.load
-    local.get 8
-    local.get 2
-    i64.load offset=96
-    i64.add
-    local.tee 9
-    local.get 8
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    i64.add
-    local.tee 8
-    local.get 5
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    local.get 8
-    local.get 12
-    i64.add
-    local.tee 5
-    local.get 8
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    local.get 5
-    local.get 2
-    i64.load offset=48
-    i64.add
-    local.tee 8
-    local.get 5
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    local.tee 6
+    local.get 10
     local.get 2
     i32.const 72
     i32.add
     i64.load
-    local.get 8
+    i64.add
+    i64.add
+    i64.add
+    local.get 7
+    local.get 2
+    i64.load offset=48
+    i64.add
+    local.tee 9
+    local.get 7
+    i64.lt_u
+    i64.extend_i32_u
+    i64.add
+    local.get 9
     local.get 2
     i64.load offset=64
     i64.add
-    local.tee 5
-    local.get 8
-    i64.lt_u
-    i64.extend_i32_u
-    i64.add
-    i64.add
     local.tee 8
-    local.get 6
-    i64.lt_u
-    i32.add
-    local.get 8
-    local.get 4
-    local.get 5
-    i64.add
-    local.tee 6
-    local.get 5
+    local.get 9
     i64.lt_u
     i64.extend_i32_u
     i64.add
-    local.tee 4
-    local.get 8
-    i64.lt_u
-    i32.add
-    local.get 4
+    local.tee 7
     local.get 10
+    i64.lt_u
+    i64.extend_i32_u
+    local.get 4
+    local.get 2
+    i32.const 40
+    i32.add
+    i64.load
+    i64.add
+    i64.add
+    local.get 7
+    i64.const 4624529908474429119
+    i64.const 0
+    local.get 6
+    local.get 5
+    i64.lt_u
+    local.tee 1
+    select
     i64.add
     local.tee 5
-    local.get 4
+    local.get 7
     i64.lt_u
-    i32.add
+    i64.extend_i32_u
+    i64.add
     local.get 5
     local.get 2
     i64.load offset=32
     i64.add
-    local.tee 4
+    local.tee 7
+    local.get 5
+    i64.lt_u
+    i64.extend_i32_u
+    i64.add
+    local.get 3
+    local.get 7
+    i64.add
+    local.tee 9
+    local.get 7
+    i64.lt_u
+    i64.extend_i32_u
+    i64.add
+    local.tee 5
+    local.get 4
+    i64.lt_u
+    local.get 1
+    i32.add
+    local.get 5
+    i64.const 4994812053365940164
+    i64.const 0
+    local.get 1
+    select
+    i64.add
+    local.tee 3
     local.get 5
     i64.lt_u
     i32.add
-    local.get 4
-    local.get 7
+    local.get 3
+    local.get 6
     i64.add
-    local.tee 8
-    local.get 4
+    local.tee 7
+    local.get 3
     i64.lt_u
     i32.add
     i64.extend_i32_u
-    local.tee 4
+    local.tee 5
     i64.const 0
     i64.const 4624529908474429119
     call $__multi3
     local.get 2
-    local.get 4
+    local.get 5
     i64.const 0
     i64.const 4994812053365940164
     call $__multi3
     local.get 0
     local.get 2
     i64.load offset=16
-    local.tee 5
-    local.get 3
+    local.tee 6
+    local.get 11
     i64.add
-    local.tee 3
+    local.tee 4
     i64.store
     local.get 0
-    local.get 9
+    local.get 8
     local.get 2
     i64.load
-    local.tee 9
+    local.tee 8
     i64.add
-    local.tee 7
+    local.tee 3
     local.get 2
     i32.const 24
     i32.add
     i64.load
-    local.get 3
-    local.get 5
+    local.get 4
+    local.get 6
     i64.lt_u
     i64.extend_i32_u
     i64.add
     i64.add
-    local.tee 3
+    local.tee 4
     i64.store offset=8
     local.get 0
-    local.get 4
-    local.get 6
+    local.get 5
+    local.get 9
     i64.add
-    local.tee 5
+    local.tee 6
+    local.get 4
     local.get 3
-    local.get 7
     i64.lt_u
     i64.extend_i32_u
     local.get 2
     i32.const 8
     i32.add
     i64.load
-    local.get 7
-    local.get 9
+    local.get 3
+    local.get 8
     i64.lt_u
     i64.extend_i32_u
     i64.add
     i64.add
     i64.add
-    local.tee 7
+    local.tee 3
     i64.store offset=16
     local.get 0
+    local.get 6
     local.get 5
-    local.get 4
     i64.lt_u
     i64.extend_i32_u
+    local.get 3
+    local.get 6
+    i64.lt_u
+    i64.extend_i32_u
+    i64.add
+    local.tee 5
     local.get 7
-    local.get 5
-    i64.lt_u
-    i64.extend_i32_u
     i64.add
-    local.tee 4
-    local.get 8
-    i64.add
-    local.tee 7
+    local.tee 3
     i64.store offset=24
     local.get 0
     local.get 0
     call $secp256k1_scalar_check_overflow
-    local.get 7
-    local.get 4
+    local.get 3
+    local.get 5
     i64.lt_u
     i32.add
     call $secp256k1_scalar_reduce
     drop
     local.get 2
-    i32.const 256
+    i32.const 224
     i32.add
     global.set 0)
-  (func $secp256k1_ecmult_strauss_wnaf (type 11) (param i32 i32 i32 i32 i32 i32)
-    (local i32 i32 i32 i32 i32 i32 i32)
+  (func $secp256k1_ecmult_strauss_wnaf (type 10) (param i32 i32 i32 i32 i32 i32)
+    (local i32 i32 i32 i32)
     global.get 0
     i32.const 1152
     i32.sub
@@ -10552,15 +10443,21 @@
       i32.const 0
     end
     local.set 4
-    local.get 5
-    if  ;; label = @1
+    block  ;; label = @1
+      local.get 5
+      i32.eqz
+      if  ;; label = @2
+        i32.const 0
+        local.set 7
+        br 1 (;@1;)
+      end
       local.get 6
       local.get 5
       i32.const 16
       call $secp256k1_ecmult_wnaf
-      local.tee 10
+      local.tee 7
       local.get 4
-      local.get 10
+      local.get 7
       local.get 4
       i32.gt_s
       select
@@ -10583,146 +10480,113 @@
     i32.const 1
     i32.ge_s
     if  ;; label = @1
-      local.get 9
-      i32.const 1032
-      i32.mul
-      local.set 12
       local.get 4
       i32.const 2
       i32.shl
       i32.const -4
       i32.add
-      local.set 7
+      local.set 3
       loop  ;; label = @2
         local.get 4
-        local.set 3
+        local.set 5
         local.get 2
         local.get 2
         i32.const 0
         call $secp256k1_gej_double_var
-        local.get 9
-        if  ;; label = @3
-          i32.const 0
-          local.set 5
-          i32.const 0
-          local.set 4
-          loop  ;; label = @4
-            block  ;; label = @5
-              local.get 3
-              local.get 1
-              i32.load offset=12
-              local.tee 8
-              local.get 4
-              i32.add
-              i32.const 1024
-              i32.add
-              i32.load
-              i32.gt_s
-              br_if 0 (;@5;)
-              local.get 7
-              local.get 8
-              i32.add
-              local.get 4
-              i32.add
-              i32.load
-              local.tee 8
-              i32.eqz
-              br_if 0 (;@5;)
-              local.get 1
-              i32.load offset=8
-              local.set 11
-              block  ;; label = @6
-                local.get 8
-                i32.const 1
-                i32.ge_s
-                if  ;; label = @7
-                  local.get 6
-                  i32.const 1064
-                  i32.add
-                  local.get 11
-                  local.get 8
-                  i32.const -1
-                  i32.add
-                  i32.const 2
-                  i32.div_s
-                  i32.const 88
-                  i32.mul
-                  i32.add
-                  local.get 5
-                  i32.add
-                  i32.const 88
-                  call $memcpy
-                  drop
-                  br 1 (;@6;)
-                end
-                local.get 6
-                i32.const 1064
-                i32.add
-                local.get 11
-                local.get 8
-                i32.const -1
-                i32.xor
-                i32.const 2
-                i32.div_s
-                i32.const 88
-                i32.mul
-                i32.add
-                local.get 5
-                i32.add
-                call $secp256k1_ge_neg
-              end
-              local.get 2
-              local.get 2
-              local.get 6
-              i32.const 1064
-              i32.add
-              i32.const 0
-              call $secp256k1_gej_add_ge_var
-            end
-            local.get 5
-            i32.const 704
-            i32.add
-            local.set 5
-            local.get 12
-            local.get 4
-            i32.const 1032
-            i32.add
-            local.tee 4
-            i32.ne
-            br_if 0 (;@4;)
-          end
-        end
-        local.get 3
-        i32.const -1
-        i32.add
-        local.set 4
         block  ;; label = @3
-          local.get 3
-          local.get 10
-          i32.gt_s
-          br_if 0 (;@3;)
-          local.get 6
-          local.get 4
-          i32.const 2
-          i32.shl
-          i32.add
-          i32.load
-          local.tee 3
+          local.get 9
           i32.eqz
           br_if 0 (;@3;)
-          local.get 0
+          local.get 5
+          local.get 1
+          i32.load offset=12
+          local.tee 4
+          i32.load offset=1024
+          i32.gt_s
+          br_if 0 (;@3;)
+          local.get 3
+          local.get 4
+          i32.add
           i32.load
-          local.set 5
+          local.tee 4
+          i32.eqz
+          br_if 0 (;@3;)
+          local.get 1
+          i32.load offset=8
+          local.set 8
           block  ;; label = @4
-            local.get 3
+            local.get 4
             i32.const 1
             i32.ge_s
             if  ;; label = @5
               local.get 6
               i32.const 1064
               i32.add
+              local.get 8
+              local.get 4
+              i32.const -1
+              i32.add
+              i32.const 2
+              i32.div_s
+              i32.const 88
+              i32.mul
+              i32.add
+              i32.const 88
+              call $memcpy
+              drop
+              br 1 (;@4;)
+            end
+            local.get 6
+            i32.const 1064
+            i32.add
+            local.get 8
+            local.get 4
+            i32.const -1
+            i32.xor
+            i32.const 2
+            i32.div_s
+            i32.const 88
+            i32.mul
+            i32.add
+            call $secp256k1_ge_neg
+          end
+          local.get 2
+          local.get 2
+          local.get 6
+          i32.const 1064
+          i32.add
+          i32.const 0
+          call $secp256k1_gej_add_ge_var
+        end
+        local.get 5
+        i32.const -1
+        i32.add
+        local.set 4
+        block  ;; label = @3
+          local.get 5
+          local.get 7
+          i32.gt_s
+          br_if 0 (;@3;)
+          local.get 3
+          local.get 6
+          i32.add
+          i32.load
+          local.tee 5
+          i32.eqz
+          br_if 0 (;@3;)
+          local.get 0
+          i32.load
+          local.set 8
+          block  ;; label = @4
+            local.get 5
+            i32.const 1
+            i32.ge_s
+            if  ;; label = @5
+              local.get 6
+              i32.const 1064
+              i32.add
+              local.get 8
               local.get 5
-              local.get 3
               i32.const -1
               i32.add
               i32.const 2
@@ -10736,8 +10600,8 @@
             local.get 6
             i32.const 1064
             i32.add
+            local.get 8
             local.get 5
-            local.get 3
             i32.const -1
             i32.xor
             i32.const 2
@@ -10764,10 +10628,10 @@
           i32.add
           call $secp256k1_gej_add_zinv_var
         end
-        local.get 7
+        local.get 3
         i32.const -4
         i32.add
-        local.set 7
+        local.set 3
         local.get 4
         i32.const 0
         i32.gt_s
@@ -11252,7 +11116,7 @@
     i32.const 160
     i32.add
     global.set 0)
-  (func $secp256k1_ecmult_wnaf (type 5) (param i32 i32 i32) (result i32)
+  (func $secp256k1_ecmult_wnaf (type 3) (param i32 i32 i32) (result i32)
     (local i32 i32 i32 i32 i32 i32)
     global.get 0
     i32.const 32
@@ -11376,7 +11240,7 @@
     local.get 4
     i32.const 1
     i32.add)
-  (func $secp256k1_ecmult_odd_multiples_table (type 2) (param i32 i32 i32)
+  (func $secp256k1_ecmult_odd_multiples_table (type 1) (param i32 i32 i32)
     (local i32 i32 i32)
     global.get 0
     i32.const 304
@@ -11700,7 +11564,7 @@
     i32.const 304
     i32.add
     global.set 0)
-  (func $secp256k1_ge_globalz_set_table_gej (type 7) (param i32 i32 i32 i32)
+  (func $secp256k1_ge_globalz_set_table_gej (type 5) (param i32 i32 i32 i32)
     (local i32)
     global.get 0
     i32.const 48
@@ -12005,7 +11869,7 @@
     local.get 0
     i32.const 1
     call $secp256k1_fe_negate)
-  (func $secp256k1_gej_add_zinv_var (type 7) (param i32 i32 i32 i32)
+  (func $secp256k1_gej_add_zinv_var (type 5) (param i32 i32 i32 i32)
     (local i32 i32)
     global.get 0
     i32.const 480
@@ -12417,7 +12281,7 @@
     i32.const 480
     i32.add
     global.set 0)
-  (func $secp256k1_scalar_get_bits_var (type 5) (param i32 i32 i32) (result i32)
+  (func $secp256k1_scalar_get_bits_var (type 3) (param i32 i32 i32) (result i32)
     (local i32)
     local.get 1
     i32.const 6
@@ -12469,7 +12333,7 @@
     i64.xor
     i64.and
     i32.wrap_i64)
-  (func $__multi3 (type 16) (param i32 i64 i64 i64)
+  (func $__multi3 (type 11) (param i32 i64 i64 i64)
     (local i64 i64)
     local.get 0
     local.get 2
@@ -12530,18 +12394,14 @@
     i64.store)
   (table (;0;) 3 3 funcref)
   (memory (;0;) 2)
-  (global (;0;) (mut i32) (i32.const 67488))
-  (global (;1;) i32 (i32.const 67488))
-  (global (;2;) i32 (i32.const 1937))
+  (global (;0;) (mut i32) (i32.const 67472))
   (export "memory" (memory 0))
-  (export "__heap_base" (global 1))
-  (export "__data_end" (global 2))
   (export "main" (func $_main))
-  (elem (;0;) (i32.const 1) $default_error_callback_fn $default_error_callback_fn)
-  (data (;0;) (i32.const 1024) "\a0\07\01")
-  (data (;1;) (i32.const 1040) "\01\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00Invalid flags\00outputlen != NULL\00*outputlen >= ((flags & SECP256K1_FLAGS_BIT_COMPRESSION) ? 33 : 65)\00output != NULL\00pubkey != NULL\00(flags & SECP256K1_FLAGS_TYPE_MASK) == SECP256K1_FLAGS_TYPE_COMPRESSION\00sig != NULL\00input64 != NULL\00recid >= 0 && recid <= 3\00secp256k1_ecmult_context_is_built(&ctx->ecmult_ctx)\00msg32 != NULL\00signature != NULL\00Out of memory")
-  (data (;2;) (i32.const 1416) "\98\17\f8\16[\81\02\00\9f\95\8d\e2\dc\b2\0d\00\fc\9b\02\07\0b\87\0e\00\5c)\06Z\c5\ba\0b\00\dc\f9~f\bey\00\00\b8\d4\10\fb\8f\d0\07\00\c4\99AUh\8a\04\00\b4\17\fd\a8\08\11\0e\00\c0\bfO\daUF\0c\00\a3&w\da:H")
-  (data (;3;) (i32.const 1504) "The scalar for this x is unknown\00\00\01")
-  (data (;4;) (i32.const 1552) "\80")
-  (data (;5;) (i32.const 1624) "\01")
-  (data (;6;) (i32.const 1664) "!secp256k1_fe_is_zero(&ge->x)\00\00\00AA6\d0\8c^\02\00\fd\bb\03\8a\f4j\0e\00\dc\ae\ba\fe\ff\ff\0f\00\ff\ff\ff\ff\ff\ff\0f\00\ff\ff\ff\ff\ff\ff"))
+  (elem (;0;) (i32.const 1) func $default_error_callback_fn $default_error_callback_fn)
+  (data (;0;) (i32.const 1024) "\01\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00Invalid flags\00outputlen != NULL\00*outputlen >= ((flags & SECP256K1_FLAGS_BIT_COMPRESSION) ? 33 : 65)\00output != NULL\00pubkey != NULL\00(flags & SECP256K1_FLAGS_TYPE_MASK) == SECP256K1_FLAGS_TYPE_COMPRESSION\00sig != NULL\00input64 != NULL\00recid >= 0 && recid <= 3\00secp256k1_ecmult_context_is_built(&ctx->ecmult_ctx)\00msg32 != NULL\00signature != NULL\00Out of memory")
+  (data (;1;) (i32.const 1400) "\98\17\f8\16[\81\02\00\9f\95\8d\e2\dc\b2\0d\00\fc\9b\02\07\0b\87\0e\00\5c)\06Z\c5\ba\0b\00\dc\f9~f\bey\00\00\b8\d4\10\fb\8f\d0\07\00\c4\99AUh\8a\04\00\b4\17\fd\a8\08\11\0e\00\c0\bfO\daUF\0c\00\a3&w\da:H")
+  (data (;2;) (i32.const 1488) "The scalar for this x is unknown\00\00\01")
+  (data (;3;) (i32.const 1536) "\80")
+  (data (;4;) (i32.const 1608) "\01")
+  (data (;5;) (i32.const 1648) "!secp256k1_fe_is_zero(&ge->x)\00\00\00AA6\d0\8c^\02\00\fd\bb\03\8a\f4j\0e\00\dc\ae\ba\fe\ff\ff\0f\00\ff\ff\ff\ff\ff\ff\0f\00\ff\ff\ff\ff\ff\ff")
+  (data (;6;) (i32.const 1720) "\90\07\01"))
